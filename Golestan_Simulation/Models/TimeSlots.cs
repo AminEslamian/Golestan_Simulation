@@ -2,9 +2,9 @@
 {
     public class TimeSlots
     {
-        public int TimeSlot_Id { get; set; }
-        public string? TimeSlot_Day { get; set; }
-        public DateTime TimeSlot_StartTime { get; set; }
-        public DateTime TimeSlot_EndTime { get; set; }
+        public int Id { get; set; }
+        public string? Day { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }
