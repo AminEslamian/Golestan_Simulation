@@ -1,6 +1,6 @@
 ﻿namespace Golestan_Simulation.Models
 {
-    public class Section
+    public class Sections
     {
         public int Id {  get; set; }
         public int Course_Id { get; set; }
