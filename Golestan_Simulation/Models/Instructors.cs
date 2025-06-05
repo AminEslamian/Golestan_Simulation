@@ -6,5 +6,7 @@
         public int UserId { get; set; }
         public decimal Salary { get; set; }
         public DateTime HireDate { get; set; }
+
+        public Users User { get; set; } = null!;
     }
 }

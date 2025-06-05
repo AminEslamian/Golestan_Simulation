@@ -5,5 +5,7 @@
         public int StudentId { set; get; }
         public int UserId { get; set; }
         public DateTime Enrollment_Id { get; set; }
+
+        public Users User { get; set; } = null!;
     }
 }
