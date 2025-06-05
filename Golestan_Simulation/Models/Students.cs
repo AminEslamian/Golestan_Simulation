@@ -2,8 +2,8 @@
 {
     public class Students
     {
-        public int Student_Id { set; get; }
-        public int User_Id { get; set; }
+        public int StudentId { set; get; }
+        public int UserId { get; set; }
         public DateTime Enrollment_Id { get; set; }
     }
 }

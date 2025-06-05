@@ -2,8 +2,8 @@
 {
     public class Takes
     {
-        public int Student_Id { get; set; }
-        public int Section_Id { get; set; }
+        public int StudentId { get; set; }
+        public int SectionId { get; set; }
         public int Grade { get; set; }
     }
 }
