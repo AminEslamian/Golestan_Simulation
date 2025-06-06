@@ -1,6 +1,6 @@
 ﻿namespace Golestan_Simulation.Models
 {
-    public class Classroom
+    public class Classrooms
     {
         public int Id { get; set; }
         public string? Building { get; set; }

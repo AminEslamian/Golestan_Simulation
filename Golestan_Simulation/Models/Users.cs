@@ -3,10 +3,10 @@
     public class Users
     {
         public int Id { get; set; }
-        public DateTime Created_At { get; set; }
-        public string First_Name { get; set; }
-        public string Last_Name { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
-        public string Hashed_Password { get; set; }
+        public string HashedPassword { get; set; }
     }
 }
