@@ -2,7 +2,10 @@
 {
     public class Teachs
     {
-        public int Instructor_Id { get; set; }
-        public int Section_Id { get; set; }
+        public int InstructorId { get; set; }
+        public int SectionId { get; set; }
+
+        public Instructors Instructor { get; set; } = null!;
+        public Sections Section { get; set; } = null!;
     }
 }
