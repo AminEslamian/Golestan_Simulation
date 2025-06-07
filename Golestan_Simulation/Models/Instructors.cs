@@ -8,5 +8,6 @@
         public DateTime HireDate { get; set; }
 
         public Users User { get; set; } = null!;
+        private ICollection<Teachs>? Teachs { get; set; }
     }
 }

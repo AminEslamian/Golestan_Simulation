@@ -12,5 +12,7 @@
         public Courses Course { get; set; } = null!;
         public Classrooms Classroom { get; set; } = null!;
         public TimeSlots TimeSlot { get; set; } = null!;
+        private ICollection<Teachs>? Teachs { get; set; }
+        private ICollection<Takes>? Takes { get; set; }
     }
 }

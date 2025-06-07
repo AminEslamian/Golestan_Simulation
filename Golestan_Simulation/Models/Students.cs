@@ -7,5 +7,6 @@
         public DateTime Enrollment_Id { get; set; }
 
         public Users User { get; set; } = null!;
+        private ICollection<Takes>? Takes { get; set; }
     }
 }

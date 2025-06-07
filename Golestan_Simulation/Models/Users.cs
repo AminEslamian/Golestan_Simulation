@@ -8,5 +8,8 @@
         public string LastName { get; set; }
         public string Email { get; set; }
         public string HashedPassword { get; set; }
+
+        private ICollection<Instructors>? Instructors { get; set; }
+        private ICollection<UserRoles>? Role { get; set; }
     }
 }
