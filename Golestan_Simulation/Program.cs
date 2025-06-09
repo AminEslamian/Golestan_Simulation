@@ -1,7 +1,13 @@
+using Golestan_Simulation.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer("DefaultConnection")); // ### configure the DefaultConnection ConnectionString in the appsettings.json file
 
 var app = builder.Build();
 
