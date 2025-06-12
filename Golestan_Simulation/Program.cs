@@ -8,7 +8,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("DefaultConnection")); // ### configure the DefaultConnection ConnectionString in the appsettings.json file
-
+/* 
+ * Consider configuring DefaultConnection later inside the appsettings.json file lik this:
+ *  "ConnectionStrings": {
+ *      "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=MyAppDb;Trusted_Connection=True;"
+ *   },
+ */
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
