@@ -1,4 +1,5 @@
-﻿namespace Golestan_Simulation.Models
+﻿using System.ComponentModel.DataAnnotations;
+namespace Golestan_Simulation.Models
 {
     /// <summary>
     /// this model has:
@@ -7,6 +8,7 @@
     /// </summary>
     public class Students
     {
+        [Key]
         public int StudentId { set; get; }
         public int UserId { get; set; }
         public DateTime Enrollment_Id { get; set; }
