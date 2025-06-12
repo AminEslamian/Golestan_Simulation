@@ -1,4 +1,7 @@
-﻿namespace Golestan_Simulation.Models
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace Golestan_Simulation.Models
 {
     /// <summary>
     /// this model is to join "Instructors" & "Sections"
@@ -6,6 +9,7 @@
     /// - "many to one" relationship: to "Instructors: as "dependent" side
     /// - "many to one" relationship: to "Sections": as "dependent" side
     /// </summary>
+    [Keyless]
     public class Teachs
     {
         public int InstructorId { get; set; }
