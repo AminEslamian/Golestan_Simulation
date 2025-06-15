@@ -9,8 +9,8 @@
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public decimal Salary { get; set; }
-        public DateOnly HireDate { get; set; }
+        public decimal? Salary { get; set; }
+        public DateOnly? HireDate { get; set; }
 
         private Users User { get; set; } = null!;                          //navigation reference
         private ICollection<Teachs>? Teachs { get; set; }
