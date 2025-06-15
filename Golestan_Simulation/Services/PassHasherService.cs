@@ -3,9 +3,15 @@ using System.Text;
 
 namespace Golestan_Simulation.Services
 {
-    public static class PassHasher
+    public interface IPassHasherService
     {
-        public static string HashPassword(string password)
+        string HashPassword(string password);
+    }
+
+
+    public class PassHasherService: IPassHasherService
+    {
+        public string HashPassword(string password)
         {
             using (SHA256 sha = SHA256.Create())
             {
