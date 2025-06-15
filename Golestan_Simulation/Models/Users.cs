@@ -1,4 +1,6 @@
-﻿namespace Golestan_Simulation.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Golestan_Simulation.Models
 {
     /// <summary>
     /// Users model have these relationships:
@@ -9,10 +11,19 @@
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string HashedPassword { get; set; }
+
+        [StringLength(50)]
+        public string? FirstName { get; set; }
+
+        [StringLength(50)]
+        public string? LastName { get; set; }
+
+        [StringLength(50)]
+        public string UserName { get; set; } = null!;
+
+        [StringLength(50)]
+        public string? Email { get; set; }
+        public string HashedPassword { get; set; }= null!;
 
         private ICollection<Instructors>? Instructors { get; set; }       //navigation reference
         private ICollection<UserRoles>? Role { get; set; }

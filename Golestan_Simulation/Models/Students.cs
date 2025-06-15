@@ -10,7 +10,7 @@ namespace Golestan_Simulation.Models
     {
         public int Id { set; get; }
         public int UserId { get; set; }
-        public DateTime Enrollment_Id { get; set; }
+        public DateOnly EnrollmenDate { get; set; }
 
         public Users User { get; set; } = null!;                          //reference navigation
         private ICollection<Takes>? Takes { get; set; }

@@ -10,9 +10,9 @@
         public int Id { get; set; }
         public int UserId { get; set; }
         public decimal Salary { get; set; }
-        public DateTime HireDate { get; set; }
+        public DateOnly HireDate { get; set; }
 
-        public Users User { get; set; } = null!;                          //navigation reference
+        private Users User { get; set; } = null!;                          //navigation reference
         private ICollection<Teachs>? Teachs { get; set; }
     }
 }
