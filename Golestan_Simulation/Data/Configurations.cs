@@ -113,12 +113,27 @@ namespace Golestan_Simulation.Data
             builder.HasKey(e => new { e.RoleId, e.UserId });
 
             builder.HasOne(ur => ur.User)
-                .WithMany(u => u.Role) // Change User.Role propery to User.Roles
+                .WithMany(u => u.Roles) // Change User.Role propery to User.Roles
                 .HasForeignKey(ur => ur.UserId);
             builder.HasOne(ur => ur.Role)
                 .WithMany(u => u.Roless) // Change Roles.Role to Roles.Role
                 .HasForeignKey(ur => ur.RoleId);
-            
+        }
+    }
+
+    public class RoleConfiguration : IEntityTypeConfiguration<Roles>
+    {
+        public void Configure(EntityTypeBuilder<Roles> builder)
+        {
+            builder.ToTable("Roles");
+            builder.HasKey(e => e.Id);
+
+            builder.HasMany(e => e.Roless)
+                .WithOne(e => e.Role)
+                .HasForeignKey(e => e.RoleId);
+
+            builder.Property(e => e.Name)
+                .HasColumnName("Name");
         }
     }
 }
