@@ -249,4 +249,28 @@ namespace Golestan_Simulation.Data
 
         }
     }
+
+    public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlots>
+    {
+        public void Configure(EntityTypeBuilder<TimeSlots> builder)
+        {
+            builder.ToTable("TimeSlots");
+            builder.HasKey(e => e.Id);
+
+            builder.HasMany(t => t.Sections)
+                .WithOne(s => s.TimeSlot);
+            //.HasForeignKey(t => t.) // ### CONFIGURE HERE
+
+            builder.Property(e => e.Day)
+                .HasColumnName("Day");
+            builder.Property(e => e.StartTime)
+                .HasColumnName("StartTime")
+                .HasColumnType("date")
+                .HasDefaultValueSql("getdate()");
+            builder.Property(e => e.EndTime)
+                .HasColumnName("EndTime")
+                .HasColumnType("date")
+                .HasDefaultValueSql("getdate()");
+        }
+    }
 }
