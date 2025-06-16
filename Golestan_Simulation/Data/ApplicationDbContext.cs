@@ -40,5 +40,12 @@ namespace Golestan_Simulation.Data
         //    modelBuilder.ApplyConfigurationsFromAssembly(typeof(YourDbContext).Assembly);
         //    base.OnModelCreating(modelBuilder);
         //}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new StudentConfiguration());
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

@@ -25,7 +25,10 @@ namespace Golestan_Simulation.Data
             // 2) Property‑level Configuration
             // ────────────────
 
-
+            builder.Property(e => e.EnrollmentDate)
+                .HasColumnName("EnrollmentDate")
+                .HasColumnType("date")
+                .HasDefaultValueSql("getdate()");
         }
     }
 
