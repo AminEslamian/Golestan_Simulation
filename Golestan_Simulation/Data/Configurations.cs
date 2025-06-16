@@ -116,7 +116,7 @@ namespace Golestan_Simulation.Data
                 .WithMany(u => u.Role) // Change User.Role propery to User.Roles
                 .HasForeignKey(ur => ur.UserId);
             builder.HasOne(ur => ur.Role)
-                .WithMany(u => u.Role) // Change Roles.Role to Roles.Role
+                .WithMany(u => u.Roless) // Change Roles.Role to Roles.Role
                 .HasForeignKey(ur => ur.RoleId);
             
         }

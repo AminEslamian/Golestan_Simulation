@@ -16,7 +16,7 @@
         public string HashedPassword { get; set; }
 
         public ICollection<Instructors>? Instructors { get; set; }       //navigation reference
-        public ICollection<UserRoles>? Role { get; set; }
+        public ICollection<UserRoles>? Roles { get; set; }
         public ICollection<Students>? Students { get; set; }
     }
 }

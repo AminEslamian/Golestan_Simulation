@@ -15,6 +15,6 @@
         public int Id { get; set; }
         public RolesEnum Name {get; set;}
 
-        public ICollection<UserRoles>? Role { get; set; }                //navigation reference
+        public ICollection<UserRoles>? Roless { get; set; }                //navigation reference
     }
 }
