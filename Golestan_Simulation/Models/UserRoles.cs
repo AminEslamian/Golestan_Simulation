@@ -6,7 +6,7 @@ namespace Golestan_Simulation.Models
     /// <summary>
     /// this is to join "Users" & "Roles" and has:
     /// - "many to one" relationship: to "Users": as "dependent" side
-    /// - "many" relationship: to "Roles": as "dependent" side
+    /// - "many to one" relationship: to "Roles": as "dependent" side
     /// </summary>
     [Keyless]
     public class UserRoles

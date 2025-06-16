@@ -1,4 +1,5 @@
 ﻿using Golestan_Simulation.Models;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -89,7 +90,7 @@ namespace Golestan_Simulation.Data
 
             builder.HasOne(i => i.User) 
                 .WithMany(u => u.Instructors) 
-                .HasForeignKey(s => s.UserId); 
+                .HasForeignKey(i => i.UserId); 
             
 
             builder.Property(e => e.HireDate)
@@ -101,6 +102,23 @@ namespace Golestan_Simulation.Data
                 .HasColumnType("decimal(10,2)");
 
             // ### Teaches prperty is left unconfigured! ###
+        }
+    }
+
+    public class UserRoleConfiguration : IEntityTypeConfiguration<UserRoles>
+    {
+        public void Configure(EntityTypeBuilder<UserRoles> builder)
+        {
+            // The composite primar key:
+            builder.HasKey(e => new { e.RoleId, e.UserId });
+
+            builder.HasOne(ur => ur.User)
+                .WithMany(u => u.Role) // Change User.Role propery to User.Roles
+                .HasForeignKey(ur => ur.UserId);
+            builder.HasOne(ur => ur.Role)
+                .WithMany(u => u.Role) // Change Roles.Role to Roles.Role
+                .HasForeignKey(ur => ur.RoleId);
+            
         }
     }
 }
