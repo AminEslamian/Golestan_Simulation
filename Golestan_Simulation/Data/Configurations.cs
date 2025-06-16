@@ -171,7 +171,7 @@ namespace Golestan_Simulation.Data
 
             builder.Property(e => e.Grade)
                 .HasColumnName("Grade"); // ### may needs more configurations! ###
-                
+
         }
     }
 
@@ -228,5 +228,25 @@ namespace Golestan_Simulation.Data
                 .HasDefaultValueSql("getdate()");
         }
     }
-}
 
+    public class ClassroomConfiguration : IEntityTypeConfiguration<Classrooms>
+    {
+        public void Configure(EntityTypeBuilder<Classrooms> builder)
+        {
+            builder.ToTable("Classrooms");
+            builder.HasKey(e => e.Id);
+
+            builder.HasMany(c => c.Sections)
+                .WithOne(s => s.Classroom);
+            //.HasForeignKey( c => c.i) // ### Configure here ###
+
+            builder.Property(e => e.Building)
+                .HasColumnName("Building");
+            builder.Property(e => e.RoomNumber)
+                .HasColumnName("RoomNumber");
+            builder.Property(e => e.Capacity)
+                .HasColumnName("Capacity");
+
+        }
+    }
+}
