@@ -8,7 +8,7 @@ namespace Golestan_Simulation.Models
     /// - "many to one" relationship: to "Users": as "dependent" side
     /// - "many to one" relationship: to "Roles": as "dependent" side
     /// </summary>
-    [Keyless]
+    // -- [Keyless]
     public class UserRoles
     {
         public int UserId { get; set; }

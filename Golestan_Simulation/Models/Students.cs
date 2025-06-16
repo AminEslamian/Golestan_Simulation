@@ -8,7 +8,7 @@ namespace Golestan_Simulation.Models
     /// </summary>
     public class Students
     {
-        [Key]
+        // -- [Key]
         public int StudentId { set; get; }
         public int UserId { get; set; }
         public DateTime EnrollmentDate { get; set; }
