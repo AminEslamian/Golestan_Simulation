@@ -182,11 +182,6 @@ namespace Golestan_Simulation.Data
             builder.ToTable("Sections");
             builder.HasKey(e => e.Id);
 
-            // ### COMPLETE HERE: managing one to one relationship with Coourses
-            //builder.HasOne(s => s.Course)
-            //    .WithOne(c => c.Section)
-            //    .HasForeignKey<Courses>(s => s.)
-
             builder.HasOne(s => s.Classroom)
                 .WithMany(c => c.Sections)
                 .HasForeignKey(s => s.ClassroomId);
@@ -209,10 +204,10 @@ namespace Golestan_Simulation.Data
             builder.ToTable("Courses");
             builder.HasKey(e => e.Id);
 
-            // COMPLETE HERE: manage one to one relationship with Section
-            //builder.HasOne(c => c.Section)
-            //    .WithOne(s => s.Course)
-            //    .HasForeignKey(c => c)
+            // manage one to one relationship with Section:
+            builder.HasOne(c => c.Section)
+                .WithOne(s => s.Course)
+                .HasForeignKey<Sections>(s => s.Id);
 
             builder.Property(e => e.Name)
                 .HasColumnName("Name");
@@ -237,8 +232,8 @@ namespace Golestan_Simulation.Data
             builder.HasKey(e => e.Id);
 
             builder.HasMany(c => c.Sections)
-                .WithOne(s => s.Classroom);
-            //.HasForeignKey( c => c.i) // ### Configure here ###
+                .WithOne(s => s.Classroom)
+                .HasForeignKey(c => c.ClassroomId);
 
             builder.Property(e => e.Building)
                 .HasColumnName("Building");
@@ -258,8 +253,8 @@ namespace Golestan_Simulation.Data
             builder.HasKey(e => e.Id);
 
             builder.HasMany(t => t.Sections)
-                .WithOne(s => s.TimeSlot);
-            //.HasForeignKey(t => t.) // ### CONFIGURE HERE
+                .WithOne(s => s.TimeSlot)
+                .HasForeignKey(t => t.TimeSlotId);
 
             builder.Property(e => e.Day)
                 .HasColumnName("Day");
