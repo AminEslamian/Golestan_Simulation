@@ -88,10 +88,10 @@ namespace Golestan_Simulation.Data
             builder.ToTable("Instructors");
             builder.HasKey(e => e.Id);
 
-            builder.HasOne(i => i.User) 
-                .WithMany(u => u.Instructors) 
-                .HasForeignKey(i => i.UserId); 
-            
+            builder.HasOne(i => i.User)
+                .WithMany(u => u.Instructors)
+                .HasForeignKey(i => i.UserId);
+
 
             builder.Property(e => e.HireDate)
                 .HasColumnName("HireDate")
@@ -113,10 +113,10 @@ namespace Golestan_Simulation.Data
             builder.HasKey(e => new { e.RoleId, e.UserId });
 
             builder.HasOne(ur => ur.User)
-                .WithMany(u => u.Roles) // Change User.Role propery to User.Roles
+                .WithMany(u => u.Roles)
                 .HasForeignKey(ur => ur.UserId);
             builder.HasOne(ur => ur.Role)
-                .WithMany(u => u.Roless) // Change Roles.Role to Roles.Role
+                .WithMany(u => u.Roless)
                 .HasForeignKey(ur => ur.RoleId);
         }
     }
@@ -136,4 +136,43 @@ namespace Golestan_Simulation.Data
                 .HasColumnName("Name");
         }
     }
+
+    public class TeachesConfiguration : IEntityTypeConfiguration<Teachs>
+    {
+        public void Configure(EntityTypeBuilder<Teachs> builder)
+        {
+            // The compoiste primar key:
+            builder.HasKey(e => new { e.InstructorId, e.SectionId });
+
+            builder.HasOne(t => t.Instructor)
+                .WithMany(i => i.Teachs)
+                .HasForeignKey(t => t.InstructorId);
+
+            builder.HasOne(t => t.Section)
+                .WithMany(i => i.Teachs)
+                .HasForeignKey(t => t.SectionId);
+        }
+    }
+
+    public class TakesConfiguration : IEntityTypeConfiguration<Takes>
+    {
+        public void Configure(EntityTypeBuilder<Takes> builder)
+        {
+            // The compoiste primar key:
+            builder.HasKey(e => new { e.StudentId, e.SectionId });
+
+            builder.HasOne(t => t.Student)
+                .WithMany(s => s.Takes)
+                .HasForeignKey(t => t.StudentId);
+
+            builder.HasOne(t => t.Section)
+                .WithMany(s => s.Takes)
+                .HasForeignKey(t => t.SectionId);
+
+            builder.Property(e => e.Grade)
+                .HasColumnName("Grade"); // ### may needs more configurations! ###
+                
+        }
+    }
 }
+

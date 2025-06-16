@@ -14,6 +14,6 @@ namespace Golestan_Simulation.Models
         public DateTime EnrollmentDate { get; set; }
 
         public Users User { get; set; } = null!;                          //reference navigation
-        private ICollection<Takes>? Takes { get; set; }
+        public ICollection<Takes>? Takes { get; set; }
     }
 }

@@ -13,6 +13,6 @@
         public DateTime HireDate { get; set; }
 
         public Users User { get; set; } = null!;                          //navigation reference
-        private ICollection<Teachs>? Teachs { get; set; }
+        public ICollection<Teachs>? Teachs { get; set; }
     }
 }
