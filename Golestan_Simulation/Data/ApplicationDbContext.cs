@@ -23,5 +23,22 @@ namespace Golestan_Simulation.Data
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<Users> Users { get; set; }
 
+        // WAY 1:
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.ApplyConfiguration(new StudentConfiguration());
+        //    modelBuilder.ApplyConfiguration(new CourseConfiguration());
+        //    ...
+
+        //    base.OnModelCreating(modelBuilder);
+        //}
+
+        // WAY 2:
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    // This will scan the current assembly for all IEntityTypeConfiguration<> implementations
+        //    modelBuilder.ApplyConfigurationsFromAssembly(typeof(YourDbContext).Assembly);
+        //    base.OnModelCreating(modelBuilder);
+        //}
     }
 }
