@@ -6,22 +6,23 @@ namespace Golestan_Simulation.Services
 {
     public static class AppDbInitializer
     {
-        public static async void SeedAdminUser(ApplicationDbContext context)
+        private static readonly IPassHasherService _passHasher = new PassHasherService();
+        public static async Task SeedAdminUser(ApplicationDbContext context)
         {
-            if(!await context.UserRoles.AnyAsync(ur => ur.Roles.Name == Models.RolesEnum.Admin))
+            if(!context.UserRoles.Any(ur => ur.Roles.Name == Models.RolesEnum.Admin))
             {
                 context.Roles.Add(new Models.Roles { Name = Models.RolesEnum.Admin });
                 await context.SaveChangesAsync();
             }
 
-            if(!await context.Users.AllAsync(u => u.UserName == "Admin"))
+            if(!context.Users.Any(u => u.UserName == "Admin"))
             {
                 context.Users.Add(
                     new Models.Users
                     {
                         CreatedAt = DateTime.Now,
                         UserName = "Admin",
-                        HashedPassword = PassHasher.HashPassword("@Admin1234")
+                        HashedPassword = _passHasher.HashPassword("@Admin1234")
                     }
                     );
                 await context.SaveChangesAsync();
@@ -31,7 +32,7 @@ namespace Golestan_Simulation.Services
                 new Models.UserRoles
                 {
                     UserId = context.Users.First(u => u.UserName == "Admin").Id,
-                    RoleId = context.Roles.First(r => r.Name == Models.RolesEnum.Admin).Id,
+                    RoleId = context.Roles.First(r => r.Name == Models.RolesEnum.Admin).Id
                 }
             );
 
