@@ -23,7 +23,7 @@ namespace Golestan_Simulation.Models
 
         [StringLength(50)]
         public string? Email { get; set; }
-        public string HashedPassword { get; set; }= null!;
+        public string HashedPassword { get; set; } = null!;
 
         private ICollection<Instructors>? Instructors { get; set; }       //navigation reference
         private ICollection<UserRoles>? Role { get; set; }
