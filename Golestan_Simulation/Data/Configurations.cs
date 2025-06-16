@@ -201,5 +201,32 @@ namespace Golestan_Simulation.Data
                 .HasColumnName("Year");
         }
     }
+
+    public class CourseConfiguration : IEntityTypeConfiguration<Courses>
+    {
+        public void Configure(EntityTypeBuilder<Courses> builder)
+        {
+            builder.ToTable("Courses");
+            builder.HasKey(e => e.Id);
+
+            // COMPLETE HERE: manage one to one relationship with Section
+            //builder.HasOne(c => c.Section)
+            //    .WithOne(s => s.Course)
+            //    .HasForeignKey(c => c)
+
+            builder.Property(e => e.Name)
+                .HasColumnName("Name");
+            builder.Property(e => e.Code)
+                .HasColumnName("Code");
+            builder.Property(e => e.Unit)
+                .HasColumnName("Unit");
+            builder.Property(e => e.Description)
+                .HasColumnName("Description");
+            builder.Property(e => e.ExameDate)
+                .HasColumnName("ExamDate")
+                .HasColumnType("date")
+                .HasDefaultValueSql("getdate()");
+        }
+    }
 }
 
