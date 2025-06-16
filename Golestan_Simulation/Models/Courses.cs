@@ -12,6 +12,6 @@
         public string? Description { get; set; }
         public DateTime ExameDate { get; set; }
 
-        private Sections? Section { get; set; }
+        public Sections? Section { get; set; }
     }
 }
