@@ -29,6 +29,8 @@ namespace Golestan_Simulation.Data
                 .HasColumnName("EnrollmentDate")
                 .HasColumnType("date")
                 .HasDefaultValueSql("getdate()");
+
+            // ### Takes prperty is left unconfigured! ###
         }
     }
 
@@ -78,4 +80,27 @@ namespace Golestan_Simulation.Data
         }
     }
 
+    public class InstructorConfiguration : IEntityTypeConfiguration<Instructors>
+    {
+        public void Configure(EntityTypeBuilder<Instructors> builder)
+        {
+            builder.ToTable("Instructors");
+            builder.HasKey(e => e.Id);
+
+            builder.HasOne(i => i.User) 
+                .WithMany(u => u.Instructors) 
+                .HasForeignKey(s => s.UserId); 
+            
+
+            builder.Property(e => e.HireDate)
+                .HasColumnName("HireDate")
+                .HasColumnType("date")
+                .HasDefaultValueSql("getdate()");
+            builder.Property(e => e.Salary)
+                .HasColumnName("Salary")
+                .HasColumnType("decimal(10,2)");
+
+            // ### Teaches prperty is left unconfigured! ###
+        }
+    }
 }
