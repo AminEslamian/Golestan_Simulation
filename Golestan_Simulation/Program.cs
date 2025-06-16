@@ -11,7 +11,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"))); // ### configure the DefaultConnection ConnectionString in the appsettings.json file
 
-builder.Services.AddSingleton<IPassHasherService, PassHasherService>();
+builder.Services.AddScoped<IPassHasherService, PassHasherService>();
+builder.Services.AddScoped<IUserAccountServices, UserAccountServices>();
 
 var app = builder.Build();
 
@@ -39,7 +40,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
-    AppDbInitializer.SeedAdminUser(context);
+    await AppDbInitializer.SeedAdminUser(context);
 }
 
 app.Run();

@@ -23,5 +23,14 @@ namespace Golestan_Simulation.Data
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<Users> Users { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Instructors>()
+                .Property(i => i.Salary)
+                .HasPrecision(10, 2);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }
