@@ -22,6 +22,11 @@ namespace Golestan_Simulation.Data
                 .WithMany(u => u.Students) // User has many Students
                 .HasForeignKey(s => s.UserId); // FK is on Student.UserId
 
+            builder.HasMany(s => s.Takes)
+                .WithOne(t => t.Student)
+                .HasForeignKey(s => s.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // ────────────────
             // 2) Property‑level Configuration
             // ────────────────
@@ -50,12 +55,14 @@ namespace Golestan_Simulation.Data
 
             builer.HasMany(u => u.Students)
                 .WithOne(s => s.User)
-                .HasForeignKey(s => s.UserId);
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ─────────── Instructor relationship ───────────
             builer.HasMany(u => u.Instructors)
                 .WithOne(i => i.User)
-                .HasForeignKey(i => i.Id);
+                .HasForeignKey(i => i.Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ─────────── User roles relationship ───────────
             // ### is it needed to add or not?
@@ -92,6 +99,10 @@ namespace Golestan_Simulation.Data
                 .WithMany(u => u.Instructors)
                 .HasForeignKey(i => i.UserId);
 
+            builder.HasMany(i => i.Teachs)
+                .WithOne(t => t.Instructor)
+                .HasForeignKey(i => i.InstructorId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(e => e.HireDate)
                 .HasColumnName("HireDate")
@@ -101,7 +112,6 @@ namespace Golestan_Simulation.Data
                 .HasColumnName("Salary")
                 .HasColumnType("decimal(10,2)");
 
-            // ### Teaches prperty is left unconfigured! ###
         }
     }
 
