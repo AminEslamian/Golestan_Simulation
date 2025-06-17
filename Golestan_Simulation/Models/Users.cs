@@ -6,6 +6,7 @@ namespace Golestan_Simulation.Models
     /// Users model have these relationships:
     /// - one to many: to "UserRoles": as "principal" side
     /// - one to many: to "Instructors": as "principal" side
+    /// - one to many: to "Students": as "principal" side
     /// </summary>
     public class Users
     {
@@ -27,5 +28,6 @@ namespace Golestan_Simulation.Models
 
         private ICollection<Instructors>? Instructors { get; set; }       //navigation reference
         private ICollection<UserRoles>? Role { get; set; }
+        public ICollection<Students>? Students { get; set; }
     }
 }

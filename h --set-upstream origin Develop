@@ -1,0 +1,221 @@
+[33mcommit a974887624d7ecf3845b250cc0570fac4e1fc390[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mDevelop[m[33m)[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 18:02:35 2025 +0330
+
+    feat: Scaffole CheetsheetController based on User model
+
+[33mcommit 406fbfb9dd227b2653e988a9d5e2bcb71f5bb942[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 18:00:51 2025 +0330
+
+    feat: add 3 role-based controllers
+
+[33mcommit 72a9fcbf26c0a30b73be1acc35587f90f799501a[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:57:45 2025 +0330
+
+    docs: remove unneccesary comments
+
+[33mcommit 5de5b889f2098bd33c93c6687334c9a3e2ff3e19[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:53:46 2025 +0330
+
+    fix: fix connection configuration in [Program.cs]
+
+[33mcommit c7d731c11990e317beeb4cac6454991a4b756734[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:52:36 2025 +0330
+
+    feat: configure connection settings in [appsettings.json]
+
+[33mcommit f11ef402e37365936464d7c1949466bfcced3468[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:50:03 2025 +0330
+
+    feat: configure Teachs & UserRoles models to 'Keyless'
+
+[33mcommit 302043e2f85493310d62a239487a8985420db33f[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:47:12 2025 +0330
+
+    feat: configure Takes model to 'Keyless' via data annotation
+
+[33mcommit 9fabeb0b69ce1082f57071357f05a6f81e374313[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:44:55 2025 +0330
+
+    fix: uncommented a disabled DbSet in DbContext
+
+[33mcommit ad7da08ff93482ec2e3425edfcf599de59bbad8f[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:44:16 2025 +0330
+
+    fix: made the StudentId as primarlyKey
+
+[33mcommit 8cdee05a55f2bac61c5f9c0f1846cd5a70eed8a2[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:43:13 2025 +0330
+
+    docs: add connection configuration guidance
+
+[33mcommit 953da1106cf75b677c439f4b08030a011a2be70d[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:42:23 2025 +0330
+
+    feat: add DbContext to [Program.cs]
+
+[33mcommit b7c4a612d1bdbf47c5617ada4e5a2ec55bb3cd8f[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:41:34 2025 +0330
+
+    chore: install packages
+
+[33mcommit e52f31dd4332531b458c30bbcf27f186e4c4443d[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Thu Jun 12 17:39:32 2025 +0330
+
+    feat: add the DbContext class
+
+[33mcommit 54e498a483e115903ae918d4f38fcac2b2269e29[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: EhsnAbdllh <sha.m.a.r.8315@gmail.com>
+Date:   Sun Jun 8 07:26:22 2025 +0330
+
+    feat (model): configure models properties based on model-to-model relationships
+    
+    * feat (model): add navigation reference from principal entities to dependent ones
+    
+    * chore (model): add some comments about relationships
+    
+    * feat (model): complete relationships
+    
+    ---------
+    
+    Co-authored-by: EhsnAbdllh <sha.m.a.r.8315@gamil.com>
+
+[33mcommit a9d6539a4528231e3785266477e5dd51355eaa92[m
+Author: EhsnAbdllh <sha.m.a.r.8315@gmail.com>
+Date:   Fri Jun 6 12:00:29 2025 +0330
+
+    Branch3 (#4)
+    
+    * refactor (model): rename some data models class
+    
+    * refactor (model): change some variables name style
+    
+    * feat (model): add relations between tables
+    #one to one from "UserRoles" to "Users"
+    #one to one from "UserRoles" to "Roles"
+    
+    * Revert "feat (model): add relations between tables"
+    
+    This reverts commit 34f19ed3cf900722ba7a1fc53c825c977ad4bd7d.
+    
+    * feat (model): Add relations between entities:
+    #one to one from "UserRoles" to "Users"
+    #one to one from "UserRoles" to "Roles"
+    
+    * feat (model): Add relations between entities
+    #one to one from "Instructors" to "Users"
+    #one to one from "Students" to "Users"
+    
+    * feat (model): Add relations between entities
+    #one to one from "Sections" to "Courses"
+    #one to one from "Sections" to "Classrooms"
+    #one to one from "Sections" to "TimeSlots"
+    
+    * feat (model): Add relations between entities
+    #one to one from "Teachs" to "Instructors"
+    #one to one from "Teachs" to "Sections"
+    #one to one from "Takes" to "Students"
+    #one to one from "Takes" to "Sections"
+    
+    ---------
+    
+    Co-authored-by: EhsnAbdllh <sha.m.a.r.8315@gamil.com>
+
+[33mcommit e3e711b9d2ccdd3c7db703f23950aed072ede998[m
+Author: EhsnAbdllh <sha.m.a.r.8315@gmail.com>
+Date:   Wed Jun 4 16:51:13 2025 +0330
+
+    feat: Add new data models
+    
+    * feat: (New data model)
+    
+    * feat: (New data model)
+    
+    * feat: (New data model)
+    
+    * feat: (New data model)
+    
+    * feat: (New data model)
+    
+    * feat: Add "Section" data model
+    
+    * refactor: Renaming some varilables
+    
+    ---------
+    
+    Co-authored-by: EhsnAbdllh <sha.m.a.r.8315@gamil.com>
+
+[33mcommit 60cb12bd1a8997c2a37a29e6100cc95bb9f7ff11[m
+Merge: 60d1521 ce6676e
+Author: Amin <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:47:03 2025 +0330
+
+    Merge pull request #1 from AminEslamian/Develope
+    
+    add 5 data models
+
+[33mcommit ce6676e2fc5e8f2e73e95de9f2d30fa04a4235ca[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:40:29 2025 +0330
+
+    feat: add Takes module
+
+[33mcommit 764a9a9e1bc055d115028ba88f466a926de5d70d[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:38:14 2025 +0330
+
+    feat: add Students module
+
+[33mcommit a225c4b799b94bdedfaf505d42bab2339a47794f[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:35:45 2025 +0330
+
+    chore: change name of User_Roles file to UserRoles
+
+[33mcommit 96042e185105b152a31d0e8cc373da3e848f97cc[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:31:47 2025 +0330
+
+    chore: fixed User_Roles module name to UserRoles
+
+[33mcommit f337fd0c420d2d180ff041311de39de6ae8fbf7d[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:29:07 2025 +0330
+
+    feat: add Roles module
+
+[33mcommit bead7173c66fbe2d38341d5ff74448524efdace8[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:20:13 2025 +0330
+
+    feat: add User_Roles module
+
+[33mcommit 2128e622fcb3ce2f0f0e0b65046a9218aebf5a58[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 19:17:14 2025 +0330
+
+    feat: add Users module
+
+[33mcommit 60d1521cd7ebdf48ec60b69d090342c16c2852bb[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 18:52:15 2025 +0330
+
+    Add project files.
+
+[33mcommit f1d314221b9cba293eff37f430744fa2686d6f41[m
+Author: AminEslamian <90086058+AminEslamian@users.noreply.github.com>
+Date:   Sun Jun 1 18:52:12 2025 +0330
+
+    Add .gitattributes and .gitignore.
