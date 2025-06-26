@@ -15,7 +15,7 @@ namespace Golestan_Simulation.Data
 
             builder.ToTable("Students");
 
-            builder.HasKey(e => e.Id);
+            builder.HasKey(e => e.StudentId);
 
             builder.HasOne(s => s.User) // Student has one User
                 .WithMany(u => u.Students) // User has many Students
@@ -25,7 +25,7 @@ namespace Golestan_Simulation.Data
             // 2) Property‑level Configuration
             // ────────────────
 
-            builder.Property(e => e.EnrollmenDate)
+            builder.Property(e => e.EnrollmentDate)
                 .HasColumnName("EnrollmentDate")
                 .HasColumnType("date")
                 .HasDefaultValueSql("getdate()");
