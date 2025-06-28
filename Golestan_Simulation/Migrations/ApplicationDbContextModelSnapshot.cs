@@ -85,8 +85,8 @@ namespace Golestan_Simulation.Migrations
                         .HasColumnType("date");
 
                     b.Property<decimal?>("Salary")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("decimal(10,2)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -154,8 +154,11 @@ namespace Golestan_Simulation.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("EnrollmenDate")
-                        .HasColumnType("date");
+                    b.Property<DateOnly>("EnrollmentDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasColumnName("EnrollmentDate")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -164,23 +167,23 @@ namespace Golestan_Simulation.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Golestan_Simulation.Models.Takes", b =>
                 {
-                    b.Property<int>("Grade")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<int>("SectionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
+                    b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.HasIndex("SectionId");
+                    b.HasKey("StudentId", "SectionId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Takes");
                 });
@@ -193,7 +196,7 @@ namespace Golestan_Simulation.Migrations
                     b.Property<int>("SectionId")
                         .HasColumnType("int");
 
-                    b.HasIndex("InstructorId");
+                    b.HasKey("InstructorId", "SectionId");
 
                     b.HasIndex("SectionId");
 
@@ -307,7 +310,7 @@ namespace Golestan_Simulation.Migrations
             modelBuilder.Entity("Golestan_Simulation.Models.Students", b =>
                 {
                     b.HasOne("Golestan_Simulation.Models.Users", "User")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -370,6 +373,11 @@ namespace Golestan_Simulation.Migrations
                     b.Navigation("Roles");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Golestan_Simulation.Models.Users", b =>
+                {
+                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

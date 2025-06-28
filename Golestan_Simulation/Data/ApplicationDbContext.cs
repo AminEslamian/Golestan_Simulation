@@ -46,6 +46,10 @@ namespace Golestan_Simulation.Data
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Instructors>()
+            .Property(i => i.Salary)
+            .HasPrecision(18, 2);
         }
     }
 }
