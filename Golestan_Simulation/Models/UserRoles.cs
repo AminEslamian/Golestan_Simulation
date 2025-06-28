@@ -8,7 +8,7 @@ namespace Golestan_Simulation.Models
     /// - "many to one" relationship: to "Users": as "dependent" side
     /// - "many" relationship: to "Roles": as "dependent" side
     /// </summary>
-    [Keyless]
+    [PrimaryKey(nameof(UserId), nameof(RoleId))]
     public class UserRoles
     {
         public int UserId { get; set; }
