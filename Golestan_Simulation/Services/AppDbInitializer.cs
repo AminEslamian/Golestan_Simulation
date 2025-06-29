@@ -7,9 +7,9 @@ namespace Golestan_Simulation.Services
     public static class AppDbInitializer
     {
         private static readonly IPassHasherService _passHasher = new PassHasherService();
-        public static async Task SeedAdminUser(ApplicationDbContext context)
+        public static async Task SeedAdminAsync(ApplicationDbContext context)
         {
-            if(!context.UserRoles.Any(ur => ur.Roles.Name == Models.RolesEnum.Admin))
+            if(!context.Roles.Any(r => r.Name == Models.RolesEnum.Admin))
             {
                 context.Roles.Add(new Models.Roles { Name = Models.RolesEnum.Admin });
                 await context.SaveChangesAsync();
@@ -24,19 +24,23 @@ namespace Golestan_Simulation.Services
                         UserName = "Admin",
                         HashedPassword = _passHasher.HashPassword("@Admin1234")
                     }
-                    );
+                );
                 await context.SaveChangesAsync();
             }
 
-            context.UserRoles.Add(
-                new Models.UserRoles
-                {
-                    UserId = context.Users.First(u => u.UserName == "Admin").Id,
-                    RoleId = context.Roles.First(r => r.Name == Models.RolesEnum.Admin).Id
-                }
-            );
+            if(!context.UserRoles.Any(ur => ur.User.UserName == "Admin" && ur.Role.Name == Models.RolesEnum.Admin))
+            {
+                context.UserRoles.Add(
+                    new Models.UserRoles
+                    {
+                        UserId = context.Users.First(u => u.UserName == "Admin").Id,
+                        RoleId = context.Roles.First(r => r.Name == Models.RolesEnum.Admin).Id
+                    }
+                );
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
+
         }
     }
 }

@@ -15,6 +15,6 @@ namespace Golestan_Simulation.Models
         public int RoleId { get; set; }
 
         public Users User { get; set; } = null!;                          //navigation reference
-        public Roles Roles { get; set; } = null!;
+        public Roles Role { get; set; } = null!;
     }
 }
