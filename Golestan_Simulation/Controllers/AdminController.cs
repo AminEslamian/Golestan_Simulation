@@ -38,12 +38,12 @@ namespace Golestan_Simulation.Controllers
             {
                 if (await _accountServices.IsUserNameAvailableAsync(instructorAccount.UserName))
                 {
-                    ModelState.AddModelError("UserName", "the user name is not available");
+                    ModelState.AddModelError("UserName", "This user name is not available");
                     return View(instructorAccount);
                 }
                 if(await _accountServices.IsEmailAvailableAsync(instructorAccount.Email))
                 {
-                    ModelState.AddModelError("Email", "the email is not available");
+                    ModelState.AddModelError("Email", "This email is not available");
                     return View(instructorAccount);
                 }
 
@@ -59,21 +59,34 @@ namespace Golestan_Simulation.Controllers
                 _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
 
-                var newUserRole = new UserRoles
+                var role = _context.Roles.FirstOrDefault(r => r.Name == RolesEnum.Instructor);
+                if(role == null)
                 {
-                    UserId = newUser.Id,
-                    RoleId = 1
-                };
+                    role = new Roles
+                    {
+                        Name = RolesEnum.Instructor
+                    };
+                    _context.Roles.Add(role);
+                    await _context.SaveChangesAsync();
+                }
 
-                var newInstructor = new Instructors
-                {
-                    UserId = newUser.Id,
-                    Salary = instructorAccount.Salary,
-                    HireDate = instructorAccount.HireDate
-                };
+                _context.UserRoles.Add(
+                    new UserRoles
+                    {
+                        UserId = newUser.Id,
+                        Role = role
+                    }
+                );
 
-                _context.UserRoles.Add(newUserRole);
-                _context.Instructors.Add(newInstructor);
+                _context.Instructors.Add(
+                    new Instructors
+                    {
+                        UserId = newUser.Id,
+                        Salary = instructorAccount.Salary,
+                        HireDate = instructorAccount.HireDate
+                    }
+                );
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));

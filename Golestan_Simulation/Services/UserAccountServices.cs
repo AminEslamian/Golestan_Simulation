@@ -7,7 +7,7 @@ namespace Golestan_Simulation.Services
     public interface IUserAccountServices
     {
         Task<bool> IsUserNameAvailableAsync(string userName);
-        Task<bool> IsEmailAvailableAsync(string userName);
+        Task<bool> IsEmailAvailableAsync(string? email);
     }
 
 

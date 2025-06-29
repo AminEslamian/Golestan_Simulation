@@ -12,7 +12,6 @@ namespace Golestan_Simulation.ViewModels
         public string? LastName { get; set; }
 
         [StringLength(50)]
-        [Remote("IsUserNameAvailable", "Admin")]
         public string UserName { get; set; } = null!;
 
         [StringLength(50)]
