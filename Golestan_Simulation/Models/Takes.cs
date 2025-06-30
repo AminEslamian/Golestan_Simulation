@@ -9,7 +9,7 @@ namespace Golestan_Simulation.Models
     /// - "many to one" relationship: to "Students": as "dependent" side
     /// - "many to one" relationship: to "Sections": as "dependent" side
     /// </summary>
-    [Keyless]
+    // -- [Keyless]
     public class Takes
     {
         public int StudentId { get; set; }

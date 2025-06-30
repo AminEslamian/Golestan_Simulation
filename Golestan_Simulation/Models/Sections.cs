@@ -19,7 +19,7 @@
         public Courses Course { get; set; } = null!;                      //reference navigation
         public Classrooms Classroom { get; set; } = null!;
         public TimeSlots TimeSlot { get; set; } = null!;
-        private ICollection<Teachs>? Teachs { get; set; }
-        private ICollection<Takes>? Takes { get; set; }
+        public ICollection<Teachs>? Teachs { get; set; }
+        public ICollection<Takes>? Takes { get; set; }
     }
 }
