@@ -8,11 +8,12 @@ namespace Golestan_Simulation.Models
     /// </summary>
     public class Students
     {
-        public int Id { set; get; }
+        public int Id { set; get; } // !! Previous name was StudentId, if it is used elswhere
+
         public int UserId { get; set; }
         public DateOnly? EnrollmentDate { get; set; }
 
         public Users User { get; set; } = null!;                          //reference navigation
-        private ICollection<Takes>? Takes { get; set; }
+        public ICollection<Takes>? Takes { get; set; }
     }
 }

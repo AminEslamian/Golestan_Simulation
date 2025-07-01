@@ -44,6 +44,17 @@ namespace Golestan_Simulation.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new InstructorConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new TeachesConfiguration());
+            modelBuilder.ApplyConfiguration(new TakesConfiguration());
+            modelBuilder.ApplyConfiguration(new SectionConfiguration());
+            modelBuilder.ApplyConfiguration(new CourseConfiguration());
+            modelBuilder.ApplyConfiguration(new ClassroomConfiguration());
+            modelBuilder.ApplyConfiguration(new TimeSlotConfiguration());
+            
 
             base.OnModelCreating(modelBuilder);
 

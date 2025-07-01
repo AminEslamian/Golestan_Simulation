@@ -10,6 +10,6 @@
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
-        private ICollection<Sections>? Sections { get; set; }             //reference navigation
+        public ICollection<Sections>? Sections { get; set; }             //reference navigation
     }
 }

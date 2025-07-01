@@ -14,6 +14,6 @@ namespace Golestan_Simulation.Models
         public int RoomNumber { get; set; }
         public int Capacity { get; set; }
 
-        private ICollection<Sections>? Sections { get; set; }             //reference navigaion
+        public ICollection<Sections>? Sections { get; set; }             //reference navigaion
     }
 }
