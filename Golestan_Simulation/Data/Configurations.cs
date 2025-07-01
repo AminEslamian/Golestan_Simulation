@@ -16,7 +16,7 @@ namespace Golestan_Simulation.Data
 
             builder.ToTable("Students");
 
-            builder.HasKey(e => e.StudentId);
+            builder.HasKey(e => e.Id);
 
             builder.HasOne(s => s.User) // Student has one User
                 .WithMany(u => u.Students) // User has many Students

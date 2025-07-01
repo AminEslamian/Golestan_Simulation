@@ -9,9 +9,10 @@
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public decimal Salary { get; set; }
-        public DateTime HireDate { get; set; }
-
+        public decimal? Salary { get; set; }
+        public DateOnly? HireDate { get; set; }
+        
+        // !!! The properties below, may need to be private
         public Users User { get; set; } = null!;                          //navigation reference
         public ICollection<Teachs>? Teachs { get; set; }
     }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Golestan_Simulation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250612142113_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250628172114__initialcreate")]
+    partial class _initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,8 @@ namespace Golestan_Simulation.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Building")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
@@ -83,18 +84,17 @@ namespace Golestan_Simulation.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("HireDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("HireDate")
+                        .HasColumnType("date");
 
-                    b.Property<decimal>("Salary")
+                    b.Property<decimal?>("Salary")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Instructors");
                 });
@@ -151,39 +151,42 @@ namespace Golestan_Simulation.Migrations
 
             modelBuilder.Entity("Golestan_Simulation.Models.Students", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Enrollment_Id")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("EnrollmentDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasColumnName("EnrollmentDate")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("StudentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Golestan_Simulation.Models.Takes", b =>
                 {
-                    b.Property<int>("Grade")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<int>("SectionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
+                    b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.HasIndex("SectionId");
+                    b.HasKey("StudentId", "SectionId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Takes");
                 });
@@ -196,7 +199,7 @@ namespace Golestan_Simulation.Migrations
                     b.Property<int>("SectionId")
                         .HasColumnType("int");
 
-                    b.HasIndex("InstructorId");
+                    b.HasKey("InstructorId", "SectionId");
 
                     b.HasIndex("SectionId");
 
@@ -255,35 +258,29 @@ namespace Golestan_Simulation.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Golestan_Simulation.Models.Instructors", b =>
-                {
-                    b.HasOne("Golestan_Simulation.Models.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Golestan_Simulation.Models.Sections", b =>
@@ -316,7 +313,7 @@ namespace Golestan_Simulation.Migrations
             modelBuilder.Entity("Golestan_Simulation.Models.Students", b =>
                 {
                     b.HasOne("Golestan_Simulation.Models.Users", "User")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -379,6 +376,11 @@ namespace Golestan_Simulation.Migrations
                     b.Navigation("Roles");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Golestan_Simulation.Models.Users", b =>
+                {
+                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

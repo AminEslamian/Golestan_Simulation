@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Golestan_Simulation/Controllers/CheetsheetController.cs
+/Golestan_Simulation/Views/Cheetsheet/Create.cshtml
+/Golestan_Simulation/Views/Cheetsheet/Delete.cshtml
+/Golestan_Simulation/Views/Cheetsheet/Details.cshtml
+/Golestan_Simulation/Views/Cheetsheet/Edit.cshtml
+/Golestan_Simulation/Views/Cheetsheet/Index.cshtml
