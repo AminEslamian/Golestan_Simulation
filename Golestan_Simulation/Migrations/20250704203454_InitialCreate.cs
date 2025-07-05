@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Golestan_Simulation.Migrations
 {
     /// <inheritdoc />
-    public partial class _initialcreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,26 +36,11 @@ namespace Golestan_Simulation.Migrations
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExameDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ExamDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Instructors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    Salary = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
-                    HireDate = table.Column<DateOnly>(type: "date", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Instructors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,8 +63,8 @@ namespace Golestan_Simulation.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Day = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    StartTime = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "getdate()"),
+                    EndTime = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -92,7 +77,7 @@ namespace Golestan_Simulation.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "getdate()"),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -108,8 +93,7 @@ namespace Golestan_Simulation.Migrations
                 name: "Sections",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     Semester = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
@@ -126,8 +110,8 @@ namespace Golestan_Simulation.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Sections_Courses_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_Sections_Courses_Id",
+                        column: x => x.Id,
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -140,13 +124,34 @@ namespace Golestan_Simulation.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Instructors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Salary = table.Column<decimal>(type: "decimal(10,2)", precision: 18, scale: 2, nullable: true),
+                    HireDate = table.Column<DateOnly>(type: "date", nullable: true, defaultValueSql: "getdate()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Instructors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Instructors_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    EnrollmentDate = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "getdate()")
+                    EnrollmentDate = table.Column<DateOnly>(type: "date", nullable: true, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -164,14 +169,14 @@ namespace Golestan_Simulation.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    RolesId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.RoleId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RolesId",
-                        column: x => x.RolesId,
+                        name: "FK_UserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -233,14 +238,14 @@ namespace Golestan_Simulation.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Instructors_UserId",
+                table: "Instructors",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sections_ClassroomId",
                 table: "Sections",
                 column: "ClassroomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sections_CourseId",
-                table: "Sections",
-                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sections_TimeSlotId",
@@ -261,11 +266,6 @@ namespace Golestan_Simulation.Migrations
                 name: "IX_Teaches_SectionId",
                 table: "Teaches",
                 column: "SectionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_RolesId",
-                table: "UserRoles",
-                column: "RolesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_UserId",
