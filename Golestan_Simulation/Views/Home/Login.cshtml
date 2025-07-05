@@ -1,0 +1,37 @@
+﻿@model Golestan_Simulation.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="Role" value="@ViewBag.Role" />
+            <div class="form-group">
+                <label asp-for="UsernameOrEmail" class="control-label">Username or Email</label>
+                <input asp-for="UsernameOrEmail" class="form-control" />
+                <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RawPassword" class="control-label">Password</label>
+                <input asp-for="RawPassword" class="form-control" type="password" />
+                <span asp-validation-for="RawPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Home">Back</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
