@@ -40,10 +40,17 @@ namespace Golestan_Simulation.Services
         }
         public async Task<UserRoles?> IsAccountExistingAsync(UserViewModel account, RolesEnum roleName)
         {
-            var ur = await _context.UserRoles.Where(ur => ur.Role.Name == roleName)
-                .SingleAsync(ur => ur.User.UserName == account.UsernameOrEmail || ur.User.Email == account.UsernameOrEmail);
-            
-            return ur;
+            try
+            {
+                var ur = await _context.UserRoles.Where(ur => ur.Role.Name == roleName)
+                        .SingleAsync(ur => ur.User.UserName == account.UsernameOrEmail || ur.User.Email == account.UsernameOrEmail);
+
+                return ur;
+            }
+            catch (ArgumentNullException)
+            {
+                return null;
+            }
         }
         public bool IsPasswordCorrect(UserRoles ur, string rawPass)
         {
