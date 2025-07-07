@@ -71,7 +71,10 @@ public class HomeController : Controller
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                return RedirectToAction(nameof(Index), "Instructor");
+                if (role == RolesEnum.Instructor)
+                    return RedirectToAction("Dashboard", "Instructor");
+                if (role == RolesEnum.Student)
+                    return RedirectToAction("Dashboard", "Student");
             }
             else
             {
