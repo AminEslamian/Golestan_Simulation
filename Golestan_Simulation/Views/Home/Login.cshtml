@@ -16,8 +16,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="RawPassword" class="control-label">Password</label>
-                <input asp-for="RawPassword" class="form-control" type="password" />
+                <input asp-for="RawPassword" class="form-control" id="passwordInput" type="password" />
                 <span asp-validation-for="RawPassword" class="text-danger"></span>
+            </div>
+            <div>
+                <input type="checkbox" onclick="togglePassword()" />Show password
             </div>
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-primary" />
@@ -34,4 +37,10 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("passwordInput");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+    </script>
 }
