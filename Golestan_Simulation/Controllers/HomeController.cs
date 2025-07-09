@@ -6,6 +6,7 @@ using Golestan_Simulation.ViewModels;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Golestan_Simulation.Controllers;
 
@@ -40,9 +41,23 @@ public class HomeController : Controller
     }
 
 
-    public IActionResult Login(RolesEnum role)
+    public IActionResult Login(string? returnUrl = null)
     {
-        ViewBag.Role = role;
+        RolesEnum expectedRole = RolesEnum.None;
+        if (!string.IsNullOrEmpty(returnUrl))
+        {
+            if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
+                expectedRole = RolesEnum.Admin;
+            else if (returnUrl.StartsWith("/instructor", StringComparison.OrdinalIgnoreCase))
+                expectedRole = RolesEnum.Instructor;
+            else if (returnUrl.StartsWith("/student", StringComparison.OrdinalIgnoreCase))
+                expectedRole = RolesEnum.Student;
+        }
+        else
+            return NotFound();
+
+            ViewBag.Role = expectedRole;
+
         return View();
     }
     [HttpPost]
@@ -72,13 +87,13 @@ public class HomeController : Controller
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 if (role == RolesEnum.Instructor)
-                    return RedirectToAction("Dashboard", "Instructor");
+                    return RedirectToAction("Index", "Instructor");
                 if (role == RolesEnum.Student)
-                    return RedirectToAction("Dashboard", "Student");
+                    return RedirectToAction("Index", "Student");
             }
             else
             {
-                ModelState.AddModelError("Password", "The password is not correct");
+                ModelState.AddModelError("RawPassword", "The password is not correct");
                 return View(user);
             }
 
