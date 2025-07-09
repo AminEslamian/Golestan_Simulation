@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Golestan_Simulation.Models;
 using Golestan_Simulation.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Golestan_Simulation.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
