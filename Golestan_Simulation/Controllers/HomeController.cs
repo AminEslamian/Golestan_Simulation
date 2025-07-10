@@ -74,17 +74,7 @@ public class HomeController : Controller
 
             if (_accountServices.IsPasswordCorrect(userRole, user.RawPassword))
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, userRole.User.UserName),
-                    new Claim(ClaimTypes.Role, userRole.Role.Name.ToString()),
-                    new Claim("UserId", userRole.UserId.ToString())
-                };
-
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                await _accountServices.AuthenticateUserAsync(userRole, HttpContext);
 
                 if (role == RolesEnum.Instructor)
                     return RedirectToAction("Index", "Instructor");
