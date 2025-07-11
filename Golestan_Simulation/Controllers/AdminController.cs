@@ -44,7 +44,7 @@ namespace Golestan_Simulation.Controllers
                     ModelState.AddModelError("UserName", "This user name is not available");
                     return View(instructorAccount);
                 }
-                if(await _accountServices.IsEmailAvailableAsync(instructorAccount.Email))
+                if (await _accountServices.IsEmailAvailableAsync(instructorAccount.Email))
                 {
                     ModelState.AddModelError("Email", "This email is not available");
                     return View(instructorAccount);
@@ -63,7 +63,7 @@ namespace Golestan_Simulation.Controllers
                 await _context.SaveChangesAsync();
 
                 var role = _context.Roles.FirstOrDefault(r => r.Name == RolesEnum.Instructor);
-                if(role == null)
+                if (role == null)
                 {
                     role = new Roles
                     {
@@ -108,12 +108,12 @@ namespace Golestan_Simulation.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(await _accountServices.IsUserNameAvailableAsync(studentAccount.UserName))
+                if (await _accountServices.IsUserNameAvailableAsync(studentAccount.UserName))
                 {
                     ModelState.AddModelError("UserName", "This user name is not available");
                     return View(studentAccount);
                 }
-                if(await _accountServices.IsEmailAvailableAsync(studentAccount.Email))
+                if (await _accountServices.IsEmailAvailableAsync(studentAccount.Email))
                 {
                     ModelState.AddModelError("Email", "This email is not available");
                     return View(studentAccount);
@@ -185,6 +185,16 @@ namespace Golestan_Simulation.Controllers
                 await _context.SaveChangesAsync();
             }
             return View(course);
+        }
+
+        public IActionResult AddClassroomToCourse()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddClassroomToCourse(SectionViewModel sectionInfo) //Unlike the name, this method creates a section
+        {
+
         }
     }
 }
