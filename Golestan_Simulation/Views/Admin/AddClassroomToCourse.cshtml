@@ -1,0 +1,30 @@
+﻿@using Golestan_Simulation.ViewModels
+@model SectionViewModel
+
+
+<form asp-action="AddClassroomToCourse" method="post">
+    <div>
+        <label asp-for="Semester"></label>
+        <input asp-for="Semester" />
+    </div>
+    <div>
+        <label asp-for="Year"></label>
+        <input asp-for="Year" />
+    </div>
+
+    <div>
+        <label asp-for="SelectedCourseId">Course</label>
+        <select asp-for="SelectedCourseId" asp-items="Model.Courses">
+            <option value="">-- pick a course --</option>
+        </select>
+    </div>
+
+    <div>
+        <label asp-for="SelectedClassroomId">Classroom</label>
+        <select asp-for="SelectedClassroomId" asp-items="Model.Classrooms">
+            <option value="">-- pick a room --</option>
+        </select>
+    </div>
+
+    <button type="submit">Create Section</button>
+</form>
