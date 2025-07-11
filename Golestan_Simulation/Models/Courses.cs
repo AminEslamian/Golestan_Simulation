@@ -10,7 +10,7 @@
         public string? Code { get; set; }
         public string? Unit { get; set; }
         public string? Description { get; set; }
-        public DateTime ExameDate { get; set; }
+        public DateOnly? ExameDate { get; set; }
 
         public Sections? Section { get; set; }
     }

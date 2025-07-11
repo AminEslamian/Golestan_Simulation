@@ -6,6 +6,7 @@ using Golestan_Simulation.Models;
 using Golestan_Simulation.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Golestan_Simulation.Controllers
 {
@@ -161,6 +162,29 @@ namespace Golestan_Simulation.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(studentAccount);
+        }
+
+        public IActionResult CreateCourse()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateCourse(CourseViewModel course)
+        {
+            if (ModelState.IsValid)
+            {
+                var newCourse = new Courses
+                {
+                    Name = course.Name,
+                    Code = course.Code,
+                    Unit = course.Unit,
+                    Description = course.Description,
+                    ExameDate = course.ExamDate,
+                };
+                _context.Courses.Add(newCourse);
+                await _context.SaveChangesAsync();
+            }
+            return View(course);
         }
     }
 }
