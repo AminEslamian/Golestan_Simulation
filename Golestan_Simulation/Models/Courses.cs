@@ -1,7 +1,7 @@
 ﻿namespace Golestan_Simulation.Models
 {
     /// <summary>
-    /// this model has "one to one" relationship to "Sections" as "principal" side
+    /// this model has "one to many" relationship to "Sections" as "principal" side
     /// </summary>
     public class Courses
     {
@@ -12,6 +12,7 @@
         public string? Description { get; set; }
         public DateOnly? ExameDate { get; set; }
 
-        public Sections? Section { get; set; }
+        public ICollection<Sections> Sections { get; set; } = new List<Sections>();
+
     }
 }

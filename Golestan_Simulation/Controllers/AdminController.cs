@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Golestan_Simulation.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -171,22 +171,24 @@ namespace Golestan_Simulation.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken] 
-        public async Task<IActionResult> CreateCourse(CourseViewModel course)
+        public async Task<IActionResult> CreateCourse(CourseViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 var newCourse = new Courses
                 {
-                    Name = course.Name,
-                    Code = course.Code,
-                    Unit = course.Unit,
-                    Description = course.Description,
-                    ExameDate = course.ExamDate,
+                    Name = vm.Name,
+                    Code = vm.Code,
+                    Unit = vm.Unit,
+                    Description = vm.Description,
+                    ExameDate = vm.ExamDate,
                 };
                 await _context.Courses.AddAsync(newCourse);
                 await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(vm);
         }
 
         public IActionResult CreateClassroom()
@@ -214,6 +216,7 @@ namespace Golestan_Simulation.Controllers
             return View(vm);
         }
 
+
         public IActionResult AddClassroomToCourse()
         {
             var vm = new SectionViewModel
@@ -236,7 +239,6 @@ namespace Golestan_Simulation.Controllers
             };
             return View(vm);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken] // For security

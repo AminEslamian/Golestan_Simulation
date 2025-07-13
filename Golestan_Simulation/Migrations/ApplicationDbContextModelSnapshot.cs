@@ -64,7 +64,7 @@ namespace Golestan_Simulation.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Description");
 
-                    b.Property<DateTime>("ExameDate")
+                    b.Property<DateOnly?>("ExameDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
                         .HasColumnName("ExamDate")
@@ -132,12 +132,18 @@ namespace Golestan_Simulation.Migrations
             modelBuilder.Entity("Golestan_Simulation.Models.Sections", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ClassroomId")
                         .HasColumnType("int");
 
                     b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CoursesId")
                         .HasColumnType("int");
 
                     b.Property<int>("Semester")
@@ -154,6 +160,10 @@ namespace Golestan_Simulation.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClassroomId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("CoursesId");
 
                     b.HasIndex("TimeSlotId");
 
@@ -326,10 +336,14 @@ namespace Golestan_Simulation.Migrations
                         .IsRequired();
 
                     b.HasOne("Golestan_Simulation.Models.Courses", "Course")
-                        .WithOne("Section")
-                        .HasForeignKey("Golestan_Simulation.Models.Sections", "Id")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Golestan_Simulation.Models.Courses", null)
+                        .WithMany("Sections")
+                        .HasForeignKey("CoursesId");
 
                     b.HasOne("Golestan_Simulation.Models.TimeSlots", "TimeSlot")
                         .WithMany("Sections")
@@ -419,7 +433,7 @@ namespace Golestan_Simulation.Migrations
 
             modelBuilder.Entity("Golestan_Simulation.Models.Courses", b =>
                 {
-                    b.Navigation("Section");
+                    b.Navigation("Sections");
                 });
 
             modelBuilder.Entity("Golestan_Simulation.Models.Instructors", b =>
