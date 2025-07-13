@@ -2,29 +2,68 @@
 @model SectionViewModel
 
 
-<form asp-action="AddClassroomToCourse" method="post">
-    <div>
-        <label asp-for="Semester"></label>
-        <input asp-for="Semester" />
-    </div>
-    <div>
-        <label asp-for="Year"></label>
-        <input asp-for="Year" />
-    </div>
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4>Add Section</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddClassroomToCourse" method="post">
 
-    <div>
-        <label asp-for="SelectedCourseId">Course</label>
-        <select asp-for="SelectedCourseId" asp-items="Model.Courses">
-            <option value="">-- pick a course --</option>
-        </select>
-    </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label asp-for="Semester" class="form-label"></label>
+                        <input asp-for="Semester" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <label asp-for="Year" class="form-label"></label>
+                        <input asp-for="Year" class="form-control" />
+                    </div>
+                </div>
 
-    <div>
-        <label asp-for="SelectedClassroomId">Classroom</label>
-        <select asp-for="SelectedClassroomId" asp-items="Model.Classrooms">
-            <option value="">-- pick a room --</option>
-        </select>
-    </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label asp-for="StartTime" class="form-label"></label>
+                        <input asp-for="StartTime" class="form-control" type="time" />
+                    </div>
+                    <div class="col">
+                        <label asp-for="EndTime" class="form-label"></label>
+                        <input asp-for="EndTime" class="form-control" type="time" />
+                    </div>
+                    <div class="col">
+                        <label asp-for="Day" class="form-label"></label>
+                        <select asp-for="Day" class="form-control">
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuseday">Tuseday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                        </select>
+                    </div>
+                </div>
 
-    <button type="submit">Create Section</button>
-</form>
+                <div class="mb-3">
+                    <label asp-for="SelectedCourseId" class="form-label">Course</label>
+                    <select asp-for="SelectedCourseId" asp-items="Model.Courses"
+                            class="form-select">
+                        <option value="">-- pick a course --</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SelectedClassroomId" class="form-label">Classroom</label>
+                    <select asp-for="SelectedClassroomId" asp-items="Model.Classrooms"
+                            class="form-select">
+                        <option value="">-- pick a room --</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Create Section
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

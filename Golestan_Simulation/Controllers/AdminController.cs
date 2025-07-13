@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Golestan_Simulation.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -188,28 +188,6 @@ namespace Golestan_Simulation.Controllers
             return View(course);
         }
 
-        //public IActionResult AddClassroomToCourse()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> AddClassroomToCourse(SectionViewModel vm) //Unlike the name, this method creates a section. And so on, the vm holds beyond only section itself
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // -> may need to create a ready-to-use section for each course after the course is created, instead of handling it here
-        //        var newSection = new Sections
-        //        {
-        //            Semester = vm.Semester,
-        //            Year = vm.Year,
-
-        //        };
-        //        _context.Sections.Add(newSection);
-        //        await _context.SaveChangesAsync();
-
-        //    }
-        //    return View(vm);
-        //}
         public IActionResult AddClassroomToCourse()
         {
             var vm = new SectionViewModel
@@ -235,10 +213,10 @@ namespace Golestan_Simulation.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] // For security
         public async Task<IActionResult> AddClassroomToCourse(SectionViewModel vm)
         {
-            // 1️⃣ Re‑populate selects if we need to redisplay the form
+            // 1️) Re‑populate selects if we need to redisplay the form
             vm.Courses = _context.Courses.Select(c => new SelectListItem
             {
                 Value = c.Id.ToString(),
@@ -253,35 +231,45 @@ namespace Golestan_Simulation.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            // 2️⃣ Optionally check for duplicates
-            bool exists = await _context.Sections.AnyAsync(s =>
-                s.CourseId == vm.SelectedCourseId &&
-                s.ClassroomId == vm.SelectedClassroomId &&
-                s.Semester == vm.Semester &&
-                s.Year == vm.Year
-            );
+            //// 2️) Optionally check for duplicates
+            //bool exists = await _context.Sections.AnyAsync(s =>
+            //    s.CourseId == vm.SelectedCourseId &&
+            //    s.ClassroomId == vm.SelectedClassroomId &&
+            //    s.Semester == vm.Semester &&
+            //    s.Year == vm.Year
+            //);
 
-            if (exists)
+            //if (exists)
+            //{
+            //    ModelState.AddModelError("", "This section already exists for that course & classroom.");
+            //    return View(vm);
+            //}
+
+
+            // 3️) Create and assign *all* the ID‐based FKs
+            var newTimeSlot = new TimeSlots
             {
-                ModelState.AddModelError("", "This section already exists for that course & classroom.");
-                return View(vm);
-            }
+                Day = vm.Day,
+                StartTime = vm.StartTime,
+                EndTime = vm.EndTime
+            };
 
-            // 3️⃣ Create and assign *all* the ID‐based FKs
+            await _context.TimeSlots.AddAsync(newTimeSlot);
+            await _context.SaveChangesAsync();
+
             var newSection = new Sections
             {
                 Semester = vm.Semester,
                 Year = vm.Year,
                 CourseId = vm.SelectedCourseId,
-                ClassroomId = vm.SelectedClassroomId
+                ClassroomId = vm.SelectedClassroomId,
+                TimeSlotId = newTimeSlot.Id
             };
 
-            _context.Sections.Add(newSection);
+            await _context.Sections.AddAsync(newSection);
             await _context.SaveChangesAsync();
 
-            // newSection.SectionId is now populated by EF Core!
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)); // Used nameof for compile-time safety
         }
 
     }
