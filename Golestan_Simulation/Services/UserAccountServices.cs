@@ -1,8 +1,11 @@
 ﻿using Golestan_Simulation.Data;
 using Golestan_Simulation.Models;
 using Golestan_Simulation.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Golestan_Simulation.Services
 {
@@ -12,6 +15,7 @@ namespace Golestan_Simulation.Services
         Task<bool> IsEmailAvailableAsync(string? email);
         Task<UserRoles?> IsAccountExistingAsync(UserViewModel account, RolesEnum roleName);
         bool IsPasswordCorrect(UserRoles userRoles, string rawPass);
+        Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext);
     }
 
 
@@ -42,11 +46,38 @@ namespace Golestan_Simulation.Services
         {
             try
             {
-                var ur = await _context.UserRoles.Include(s => s.User).Include(s => s.Role)
+                if(roleName == RolesEnum.Student)
+                {
+                    var ur = await _context.UserRoles
                     .Where(ur => ur.Role.Name == roleName)
+                    .Include(s => s.User).ThenInclude(u => u.Students)
+                    .Include(s => s.Role)
                     .SingleAsync(ur => ur.User.UserName == account.UsernameOrEmail || ur.User.Email == account.UsernameOrEmail);
-                
-                return ur;
+                    
+                    return ur;
+                }
+                else if(roleName == RolesEnum.Instructor)
+                {
+                    var ur = await _context.UserRoles
+                    .Where(ur => ur.Role.Name == roleName)
+                    .Include(s => s.User).ThenInclude(u => u.Instructors)
+                    .Include(s => s.Role)
+                    .SingleAsync(ur => ur.User.UserName == account.UsernameOrEmail || ur.User.Email == account.UsernameOrEmail);
+
+                    return ur;
+                }
+                else if(roleName == RolesEnum.Admin)
+                {
+                    var ur = await _context.UserRoles
+                    .Where(ur => ur.Role.Name == roleName)
+                    .Include(s => s.User)
+                    .Include(s => s.Role)
+                    .SingleAsync(ur => ur.User.UserName == account.UsernameOrEmail || ur.User.Email == account.UsernameOrEmail);
+
+                    return ur;
+                }
+                else
+                    return null;
             }
             catch (InvalidOperationException)
             {
@@ -61,6 +92,33 @@ namespace Golestan_Simulation.Services
             var isCorrect = ur.User.HashedPassword.Equals(hashedPass);
 
             return isCorrect;
+        }
+        public async Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext)
+        {
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, userRole.User.UserName),
+                    new Claim(ClaimTypes.Role, userRole.Role.Name.ToString()),
+                    new Claim("UserId", userRole.UserId.ToString())
+                };
+
+            if(userRole.Role.Name == RolesEnum.Student)
+            {
+                var defaultStudentId = userRole.User.Students.First().Id;
+               
+                claims.Add(new Claim("DefaultStudentId", defaultStudentId.ToString()));
+            }
+            else if(userRole.Role.Name == RolesEnum.Instructor)
+            {
+                var defaultInstructorId = userRole.User.Instructors.First().Id;
+
+                claims.Add(new Claim("DefaultInstructorId", defaultInstructorId.ToString()));
+            }
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
 }
