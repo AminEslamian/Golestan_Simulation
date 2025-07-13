@@ -41,23 +41,30 @@ public class HomeController : Controller
     }
 
 
-    public IActionResult Login(string? returnUrl = null)
+    public IActionResult Login(RolesEnum role = RolesEnum.None, string? returnUrl = null)
     {
-        RolesEnum expectedRole = RolesEnum.None;
-        if (!string.IsNullOrEmpty(returnUrl))
+        if(role != RolesEnum.None)
         {
-            if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
-                expectedRole = RolesEnum.Admin;
-            else if (returnUrl.StartsWith("/instructor", StringComparison.OrdinalIgnoreCase))
-                expectedRole = RolesEnum.Instructor;
-            else if (returnUrl.StartsWith("/student", StringComparison.OrdinalIgnoreCase))
-                expectedRole = RolesEnum.Student;
+            ViewBag.Role = role;
         }
         else
-            return NotFound();
+        {
+            RolesEnum expectedRole = RolesEnum.None;
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Admin;
+                else if (returnUrl.StartsWith("/instructor", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Instructor;
+                else if (returnUrl.StartsWith("/student", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Student;
+            }
+            else
+                return NotFound();
 
             ViewBag.Role = expectedRole;
-
+        }
+            
         return View();
     }
     [HttpPost]
@@ -89,6 +96,14 @@ public class HomeController : Controller
 
         }
         return View(user);
+    }
+
+
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return RedirectToAction("Index", "Home");
     }
 
 
