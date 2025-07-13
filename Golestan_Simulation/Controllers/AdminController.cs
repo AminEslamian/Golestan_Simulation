@@ -170,6 +170,7 @@ namespace Golestan_Simulation.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken] 
         public async Task<IActionResult> CreateCourse(CourseViewModel course)
         {
             if (ModelState.IsValid)
@@ -182,10 +183,35 @@ namespace Golestan_Simulation.Controllers
                     Description = course.Description,
                     ExameDate = course.ExamDate,
                 };
-                _context.Courses.Add(newCourse);
+                await _context.Courses.AddAsync(newCourse);
                 await _context.SaveChangesAsync();
             }
             return View(course);
+        }
+
+        public IActionResult CreateClassroom()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateClassroom(ClassroomViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var newClass = new Classrooms
+                {
+                    Building = vm.Building,
+                    RoomNumber = vm.RoomNumber,
+                    Capacity = vm.Capacity
+                };
+
+                await _context.Classrooms.AddAsync(newClass);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(vm);
         }
 
         public IActionResult AddClassroomToCourse()
