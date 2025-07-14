@@ -6,6 +6,7 @@
     /// - "one to many" relationship: to "Courses": as "dependet" side
     /// - "many to one" relationship: to "Classrooms": as "dependent" side
     /// - "many to one" relationship: to "TimeSlots": as "dependent" side
+    /// - "many to one" relationship: to "Takes": as "principle" side
     /// </summary>
     public class Sections
     {

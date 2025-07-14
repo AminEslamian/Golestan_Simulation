@@ -61,7 +61,7 @@ namespace Golestan_Simulation.Data
             // ─────────── Instructor relationship ───────────
             builer.HasMany(u => u.Instructors)
                 .WithOne(i => i.User)
-                .HasForeignKey(i => i.Id)
+                .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // ─────────── User roles relationship ───────────
@@ -201,7 +201,7 @@ namespace Golestan_Simulation.Data
                 .HasForeignKey(s => s.TimeSlotId);
 
             builder.HasOne(s => s.Course)
-                .WithMany()
+                .WithMany(c => c.Sections)
                 .HasForeignKey(s => s.CourseId);
 
 
@@ -271,11 +271,11 @@ namespace Golestan_Simulation.Data
                 .HasColumnName("Day");
             builder.Property(e => e.StartTime)
                 .HasColumnName("StartTime")
-                .HasColumnType("date")
+                .HasColumnType("time")
                 .HasDefaultValueSql("getdate()");
             builder.Property(e => e.EndTime)
                 .HasColumnName("EndTime")
-                .HasColumnType("date")
+                .HasColumnType("time")
                 .HasDefaultValueSql("getdate()");
         }
     }
