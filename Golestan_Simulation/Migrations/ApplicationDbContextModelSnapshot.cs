@@ -143,9 +143,6 @@ namespace Golestan_Simulation.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CoursesId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Semester")
                         .HasColumnType("int")
                         .HasColumnName("Semester");
@@ -162,8 +159,6 @@ namespace Golestan_Simulation.Migrations
                     b.HasIndex("ClassroomId");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("CoursesId");
 
                     b.HasIndex("TimeSlotId");
 
@@ -240,17 +235,13 @@ namespace Golestan_Simulation.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Day");
 
-                    b.Property<DateTime>("EndTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasColumnName("EndTime")
-                        .HasDefaultValueSql("getdate()");
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time")
+                        .HasColumnName("EndTime");
 
-                    b.Property<DateTime>("StartTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasColumnName("StartTime")
-                        .HasDefaultValueSql("getdate()");
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time")
+                        .HasColumnName("StartTime");
 
                     b.HasKey("Id");
 
@@ -336,14 +327,10 @@ namespace Golestan_Simulation.Migrations
                         .IsRequired();
 
                     b.HasOne("Golestan_Simulation.Models.Courses", "Course")
-                        .WithMany()
+                        .WithMany("Sections")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Golestan_Simulation.Models.Courses", null)
-                        .WithMany("Sections")
-                        .HasForeignKey("CoursesId");
 
                     b.HasOne("Golestan_Simulation.Models.TimeSlots", "TimeSlot")
                         .WithMany("Sections")

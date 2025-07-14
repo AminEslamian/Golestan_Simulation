@@ -271,12 +271,12 @@ namespace Golestan_Simulation.Data
                 .HasColumnName("Day");
             builder.Property(e => e.StartTime)
                 .HasColumnName("StartTime")
-                .HasColumnType("time")
-                .HasDefaultValueSql("getdate()");
+                .HasColumnType("time");
+
             builder.Property(e => e.EndTime)
                 .HasColumnName("EndTime")
-                .HasColumnType("time")
-                .HasDefaultValueSql("getdate()");
+                .HasColumnType("time");
+
         }
     }
 }
