@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Golestan_Simulation.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class FixCourseSectionRelations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,7 +36,7 @@ namespace Golestan_Simulation.Migrations
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExamDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "getdate()")
+                    ExamDate = table.Column<DateOnly>(type: "date", nullable: true, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -93,12 +93,14 @@ namespace Golestan_Simulation.Migrations
                 name: "Sections",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     Semester = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
                     ClassroomId = table.Column<int>(type: "int", nullable: false),
-                    TimeSlotId = table.Column<int>(type: "int", nullable: false)
+                    TimeSlotId = table.Column<int>(type: "int", nullable: false),
+                    CoursesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -110,11 +112,16 @@ namespace Golestan_Simulation.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Sections_Courses_Id",
-                        column: x => x.Id,
+                        name: "FK_Sections_Courses_CourseId",
+                        column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Sections_Courses_CoursesId",
+                        column: x => x.CoursesId,
+                        principalTable: "Courses",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Sections_TimeSlots_TimeSlotId",
                         column: x => x.TimeSlotId,
@@ -246,6 +253,16 @@ namespace Golestan_Simulation.Migrations
                 name: "IX_Sections_ClassroomId",
                 table: "Sections",
                 column: "ClassroomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sections_CourseId",
+                table: "Sections",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sections_CoursesId",
+                table: "Sections",
+                column: "CoursesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sections_TimeSlotId",

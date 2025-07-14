@@ -3,7 +3,7 @@
     /// <summary>
     /// this model is to join "Courses", "Classrooms" & "TimeSlots"
     /// this model has:
-    /// - "one to one" relationship: to "Courses": as "dependet" side
+    /// - "one to many" relationship: to "Courses": as "dependet" side
     /// - "many to one" relationship: to "Classrooms": as "dependent" side
     /// - "many to one" relationship: to "TimeSlots": as "dependent" side
     /// </summary>
