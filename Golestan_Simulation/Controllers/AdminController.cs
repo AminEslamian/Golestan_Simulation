@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace Golestan_Simulation.Controllers
 {
@@ -17,11 +18,13 @@ namespace Golestan_Simulation.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IPassHasherService _passHasher;
         private readonly IUserAccountServices _accountServices;
-        public AdminController(ApplicationDbContext context, IPassHasherService passHasher, IUserAccountServices accountServices)
+        private readonly IAssignmentServices _assignmentServices;
+        public AdminController(ApplicationDbContext context, IPassHasherService passHasher, IUserAccountServices accountServices, IAssignmentServices assignment)
         {
             _context = context;
             _passHasher = passHasher;
             _accountServices = accountServices;
+            _assignmentServices = assignment;
         }
 
 
@@ -165,6 +168,7 @@ namespace Golestan_Simulation.Controllers
             return View(studentAccount);
         }
 
+
         public IActionResult CreateCourse()
         {
             return View();
@@ -190,6 +194,7 @@ namespace Golestan_Simulation.Controllers
             }
             return View(vm);
         }
+
 
         public IActionResult CreateClassroom()
         {
@@ -239,7 +244,6 @@ namespace Golestan_Simulation.Controllers
             };
             return View(vm);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken] // For security
         public async Task<IActionResult> AddSection(SectionViewModel vm)
@@ -300,5 +304,30 @@ namespace Golestan_Simulation.Controllers
             return RedirectToAction(nameof(Index)); // Used nameof for compile-time safety
         }
 
+
+        public IActionResult AssignInstructorToSection()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignInstructorToSection(int sectionId, int InstructorId)
+        {
+            if(await _assignmentServices.InstructorHaveTimeConflictAsync(sectionId, InstructorId))
+            {
+                ModelState.AddModelError("InstructorId", "The instructor schedule have time conflict");
+                return View();
+            }
+
+            var newTeachs = new Teachs
+            {
+                InstructorId = InstructorId,
+                SectionId = sectionId
+            };
+
+            await _context.Teaches.AddAsync(newTeachs);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

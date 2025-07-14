@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IPassHasherService, PassHasherService>();
 builder.Services.AddScoped<IUserAccountServices, UserAccountServices>();
+builder.Services.AddScoped<IAssignmentServices, AssignmentServices>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
