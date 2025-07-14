@@ -172,7 +172,7 @@ namespace Golestan_Simulation.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken] 
         public async Task<IActionResult> CreateCourse(CourseViewModel vm)
-        {
+        { 
             if (ModelState.IsValid)
             {
                 var newCourse = new Courses
@@ -217,7 +217,7 @@ namespace Golestan_Simulation.Controllers
         }
 
 
-        public IActionResult AddClassroomToCourse()
+        public IActionResult AddSection()
         {
             var vm = new SectionViewModel
             {
@@ -242,7 +242,7 @@ namespace Golestan_Simulation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken] // For security
-        public async Task<IActionResult> AddClassroomToCourse(SectionViewModel vm)
+        public async Task<IActionResult> AddSection(SectionViewModel vm)
         {
             // 1️) Re‑populate selects if we need to redisplay the form
             vm.Courses = _context.Courses.Select(c => new SelectListItem
