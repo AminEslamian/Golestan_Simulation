@@ -305,23 +305,33 @@ namespace Golestan_Simulation.Controllers
         }
 
 
-        public IActionResult AssignInstructorToSection()
+        public IActionResult AssignInstructorToSection(int sectionId)
         {
-            return View();
+            var vm = new TeachsViewModel
+            {
+                SectionId = sectionId,
+                Instructors = _context.Instructors.Select(i => new SelectListItem
+                {
+                    Value = i.Id.ToString(),
+                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
+                })
+            };
+
+            return View(vm);
         }
         [HttpPost]
-        public async Task<IActionResult> AssignInstructorToSection(int sectionId, int InstructorId)
+        public async Task<IActionResult> AssignInstructorToSection(TeachsViewModel model)
         {
-            if(await _assignmentServices.InstructorHaveTimeConflictAsync(sectionId, InstructorId))
+            if(await _assignmentServices.InstructorHaveTimeConflictAsync(model.SectionId, model.InstructorId))
             {
-                ModelState.AddModelError("InstructorId", "The instructor schedule have time conflict");
-                return View();
-            }
+                ModelState.AddModelError("InstructorId", "The instructor schedule has time conflict");
+                return View(model);
+            }   
 
             var newTeachs = new Teachs
             {
-                InstructorId = InstructorId,
-                SectionId = sectionId
+                InstructorId = model.InstructorId,
+                SectionId = model.SectionId
             };
 
             await _context.Teaches.AddAsync(newTeachs);
