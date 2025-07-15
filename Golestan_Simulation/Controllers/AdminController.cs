@@ -322,7 +322,7 @@ namespace Golestan_Simulation.Controllers
         [HttpPost]
         public async Task<IActionResult> AssignInstructorToSection(TeachsViewModel model)
         {
-            if(await _assignmentServices.InstructorHaveTimeConflictAsync(model.SectionId, model.InstructorId))
+            if(await _assignmentServices.InstructorHasTimeConflictAsync(model.SectionId, model.InstructorId))
             {
                 ModelState.AddModelError("InstructorId", "The instructor schedule has time conflict");
                 return View(model);
@@ -335,6 +335,42 @@ namespace Golestan_Simulation.Controllers
             };
 
             await _context.Teaches.AddAsync(newTeachs);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public IActionResult AssignStudentToSection(int sectionId)
+        {
+            var vm = new TakesViewModel
+            {
+                SectionId = sectionId,
+                Students = _context.Students.Select(i => new SelectListItem
+                {
+                    Value = i.Id.ToString(),
+                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
+                })
+            };
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignStudentToSection(TakesViewModel model)
+        {
+            if (await _assignmentServices.StudentHasTimeConflict(model.SectionId, model.StudentId))
+            {
+                ModelState.AddModelError("StudentId", "The student schedule has time conflict");
+                return View(model);
+            }
+
+            var newTakes = new Takes
+            {
+                StudentId = model.StudentId,
+                SectionId = model.SectionId
+            };
+
+            await _context.Takes.AddAsync(newTakes);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
