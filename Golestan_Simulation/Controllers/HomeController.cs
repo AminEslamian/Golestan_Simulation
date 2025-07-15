@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Golestan_Simulation.Controllers;
 
@@ -76,6 +77,7 @@ public class HomeController : Controller
             if (userRole == null)
             {
                 ModelState.AddModelError("UsernameOrEmail", "No account found with this user name or email");
+                ViewBag.Role = role;
                 return View(user);
             }
 
@@ -85,12 +87,16 @@ public class HomeController : Controller
 
                 if (role == RolesEnum.Instructor)
                     return RedirectToAction("Index", "Instructor");
-                if (role == RolesEnum.Student)
+                else if (role == RolesEnum.Student)
                     return RedirectToAction("Index", "Student");
+                else if (role == RolesEnum.Admin)
+                    return RedirectToAction("Index", "Admin");
+
             }
             else
             {
                 ModelState.AddModelError("RawPassword", "The password is not correct");
+                ViewBag.Role = role;
                 return View(user);
             }
 
