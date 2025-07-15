@@ -37,17 +37,14 @@ namespace Golestan_Simulation.Services
 
             foreach(var time in teachsTimeSlots)
             {
-                if (time.Day.Equals(sectionTimeSlot.Day, StringComparison.CurrentCultureIgnoreCase))
+                if (!time.Day.Equals(sectionTimeSlot.Day, StringComparison.CurrentCultureIgnoreCase))
                     return false;
 
-                else if(time.StartTime > sectionTimeSlot.StartTime && time.StartTime < sectionTimeSlot.EndTime)
+                else if(sectionTimeSlot.StartTime > time.StartTime && sectionTimeSlot.StartTime < time.EndTime)
                     return true;
 
-                else if(time.EndTime > sectionTimeSlot.StartTime && time.EndTime < sectionTimeSlot.EndTime)
+                else if(sectionTimeSlot.EndTime > time.StartTime && sectionTimeSlot.EndTime < time.EndTime)
                     return true;
-
-                else
-                    return false;
             }
 
             return false;
