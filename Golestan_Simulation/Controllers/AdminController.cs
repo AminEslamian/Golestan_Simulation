@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace Golestan_Simulation.Controllers
 {
@@ -17,11 +18,13 @@ namespace Golestan_Simulation.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IPassHasherService _passHasher;
         private readonly IUserAccountServices _accountServices;
-        public AdminController(ApplicationDbContext context, IPassHasherService passHasher, IUserAccountServices accountServices)
+        private readonly IAssignmentServices _assignmentServices;
+        public AdminController(ApplicationDbContext context, IPassHasherService passHasher, IUserAccountServices accountServices, IAssignmentServices assignment)
         {
             _context = context;
             _passHasher = passHasher;
             _accountServices = accountServices;
+            _assignmentServices = assignment;
         }
 
 
@@ -165,6 +168,7 @@ namespace Golestan_Simulation.Controllers
             return View(studentAccount);
         }
 
+
         public IActionResult CreateCourse()
         {
             return View();
@@ -190,6 +194,7 @@ namespace Golestan_Simulation.Controllers
             }
             return View(vm);
         }
+
 
         public IActionResult CreateClassroom()
         {
@@ -239,7 +244,6 @@ namespace Golestan_Simulation.Controllers
             };
             return View(vm);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken] // For security
         public async Task<IActionResult> AddSection(SectionViewModel vm)
@@ -300,5 +304,76 @@ namespace Golestan_Simulation.Controllers
             return RedirectToAction(nameof(Index)); // Used nameof for compile-time safety
         }
 
+
+        public IActionResult AssignInstructorToSection(int sectionId)
+        {
+            var vm = new TeachsViewModel
+            {
+                SectionId = sectionId,
+                Instructors = _context.Instructors.Select(i => new SelectListItem
+                {
+                    Value = i.Id.ToString(),
+                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
+                })
+            };
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignInstructorToSection(TeachsViewModel model)
+        {
+            if(await _assignmentServices.InstructorHasTimeConflictAsync(model.SectionId, model.InstructorId))
+            {
+                ModelState.AddModelError("InstructorId", "The instructor schedule has time conflict");
+                return View(model);
+            }   
+
+            var newTeachs = new Teachs
+            {
+                InstructorId = model.InstructorId,
+                SectionId = model.SectionId
+            };
+
+            await _context.Teaches.AddAsync(newTeachs);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public IActionResult AssignStudentToSection(int sectionId)
+        {
+            var vm = new TakesViewModel
+            {
+                SectionId = sectionId,
+                Students = _context.Students.Select(i => new SelectListItem
+                {
+                    Value = i.Id.ToString(),
+                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
+                })
+            };
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignStudentToSection(TakesViewModel model)
+        {
+            if (await _assignmentServices.StudentHasTimeConflict(model.SectionId, model.StudentId))
+            {
+                ModelState.AddModelError("StudentId", "The student schedule has time conflict");
+                return View(model);
+            }
+
+            var newTakes = new Takes
+            {
+                StudentId = model.StudentId,
+                SectionId = model.SectionId
+            };
+
+            await _context.Takes.AddAsync(newTakes);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

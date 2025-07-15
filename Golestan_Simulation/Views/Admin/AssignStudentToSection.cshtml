@@ -1,0 +1,51 @@
+﻿@model Golestan_Simulation.ViewModels.TakesViewModel;
+
+<h2 class="text-center"></h2>
+
+<form asp-action="AssignStudentToSection" asp-controller="Admin" method="post" id="studentForm">
+    <input type="hidden" asp-for="SectionId" value=@Model.SectionId />
+
+    <input type="hidden" asp-for="StudentId" id="selectedStudentId" />
+    <input type="hidden" asp-for="Students" value=@Model.Students />
+    <span asp-validation-for="StudentId" class="text-danger"></span>
+
+    <table class="table table-borderless">
+        <tbody>
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td class="w-100">
+                        <button type="button"
+                                class="btn btn-outline-primary w-100 py-3 select-btn"
+                                data-id="@student.Value">
+                            @student.Text
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success">Select</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll(".select-btn").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                const id = this.getAttribute("data-id");
+                document.getElementById("selectedStudentId").value = id;
+
+                // Highlight selected button
+                document.querySelectorAll(".select-btn").forEach(b => b.classList.remove("btn-primary"));
+                this.classList.add("btn-primary");
+                this.classList.remove("btn-outline-primary");
+            });
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

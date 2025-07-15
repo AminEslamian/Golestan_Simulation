@@ -14,13 +14,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IPassHasherService, PassHasherService>();
 builder.Services.AddScoped<IUserAccountServices, UserAccountServices>();
+builder.Services.AddScoped<IAssignmentServices, AssignmentServices>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Home/Login";
         options.AccessDeniedPath = "/Home/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
         options.SlidingExpiration = true;
     });
 
