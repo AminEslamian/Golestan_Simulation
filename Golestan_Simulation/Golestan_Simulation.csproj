@@ -22,14 +22,10 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Instructor\Controllers\" />
     <Folder Include="Areas\Instructor\Data\" />
     <Folder Include="Areas\Instructor\Models\" />
-    <Folder Include="Areas\Instructor\Views\" />
-    <Folder Include="Areas\Student\Controllers\" />
     <Folder Include="Areas\Student\Data\" />
     <Folder Include="Areas\Student\Models\" />
-    <Folder Include="Areas\Student\Views\" />
   </ItemGroup>
 
 </Project>
