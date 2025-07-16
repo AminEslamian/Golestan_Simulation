@@ -15,13 +15,13 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IPassHasherService _passHasher;
-        private readonly IUserAccountServices _accountServices;
+        private readonly IRegisterationServices _registerServices;
         private readonly IAssignmentServices _assignmentServices;
-        public InstructorsManagement(ApplicationDbContext context, IPassHasherService passHasher, IUserAccountServices accountServices, IAssignmentServices assignment)
+        public InstructorsManagement(ApplicationDbContext context, IPassHasherService passHasher, IRegisterationServices accountServices, IAssignmentServices assignment)
         {
             _context = context;
             _passHasher = passHasher;
-            _accountServices = accountServices;
+            _registerServices = accountServices;
             _assignmentServices = assignment;
         }
 
@@ -41,12 +41,12 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _accountServices.IsUserNameAvailableAsync(instructorAccount.UserName))
+                if (await _registerServices.IsUserNameAvailableAsync(instructorAccount.UserName))
                 {
                     ModelState.AddModelError("UserName", "This user name is not available");
                     return View(instructorAccount);
                 }
-                if (await _accountServices.IsEmailAvailableAsync(instructorAccount.Email))
+                if (await _registerServices.IsEmailAvailableAsync(instructorAccount.Email))
                 {
                     ModelState.AddModelError("Email", "This email is not available");
                     return View(instructorAccount);

@@ -13,8 +13,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"))); // ### configure the DefaultConnection ConnectionString in the appsettings.json file
 
 builder.Services.AddScoped<IPassHasherService, PassHasherService>();
-builder.Services.AddScoped<IUserAccountServices, UserAccountServices>();
+builder.Services.AddScoped<IRegisterationServices, RegisterationServices>();
 builder.Services.AddScoped<IAssignmentServices, AssignmentServices>();
+builder.Services.AddScoped<IGolestanAuthenticationServices, GolestanAuthenticationServices>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
