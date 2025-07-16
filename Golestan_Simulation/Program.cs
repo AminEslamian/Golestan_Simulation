@@ -37,6 +37,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (app.Environment.IsDevelopment()) { }
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
