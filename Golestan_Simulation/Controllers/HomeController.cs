@@ -86,11 +86,11 @@ public class HomeController : Controller
                 await _accountServices.AuthenticateUserAsync(userRole, HttpContext);
 
                 if (role == RolesEnum.Instructor)
-                    return RedirectToAction("Index", "Instructor");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Instructor"});
                 else if (role == RolesEnum.Student)
-                    return RedirectToAction("Index", "Student");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Student" });
                 else if (role == RolesEnum.Admin)
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
 
             }
             else
