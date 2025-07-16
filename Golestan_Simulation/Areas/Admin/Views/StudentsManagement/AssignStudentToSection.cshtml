@@ -1,24 +1,24 @@
-﻿@model Golestan_Simulation.ViewModels.TeachsViewModel;
+﻿@model Golestan_Simulation.ViewModels.TakesViewModel;
 
 <h2 class="text-center"></h2>
 
-<form asp-controller="InstructorManagement" asp-action="AssignInstructorToSection" method="post" id="instructorForm">
+<form asp-controller="StudentsManagement" asp-action="AssignStudentToSection" method="post" id="studentForm">
     <input type="hidden" asp-for="SectionId" value=@Model.SectionId />
 
-    <input type="hidden" asp-for="InstructorId" id="selectedInstructorId" />
-    <input type="hidden" asp-for="Instructors" value=@Model.Instructors />
-    <span asp-validation-for="InstructorId" class="text-danger"></span>
+    <input type="hidden" asp-for="StudentId" id="selectedStudentId" />
+    <input type="hidden" asp-for="Students" value=@Model.Students />
+    <span asp-validation-for="StudentId" class="text-danger"></span>
 
     <table class="table table-borderless">
         <tbody>
-            @foreach (var instructor in Model.Instructors)
+            @foreach (var student in Model.Students)
             {
                 <tr>
                     <td class="w-100">
                         <button type="button"
                                 class="btn btn-outline-primary w-100 py-3 select-btn"
-                                data-id="@instructor.Value">
-                            @instructor.Text
+                                data-id="@student.Value">
+                            @student.Text
                         </button>
                     </td>
                 </tr>
@@ -36,7 +36,7 @@
         document.querySelectorAll(".select-btn").forEach(function (btn) {
             btn.addEventListener("click", function () {
                 const id = this.getAttribute("data-id");
-                document.getElementById("selectedInstructorId").value = id;
+                document.getElementById("selectedStudentId").value = id;
 
                 // Highlight selected button
                 document.querySelectorAll(".select-btn").forEach(b => b.classList.remove("btn-primary"));
