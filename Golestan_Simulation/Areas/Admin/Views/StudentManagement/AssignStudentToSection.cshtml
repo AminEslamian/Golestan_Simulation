@@ -2,7 +2,7 @@
 
 <h2 class="text-center"></h2>
 
-<form asp-action="AssignStudentToSection" asp-controller="Admin" method="post" id="studentForm">
+<form asp-controller="StudentManagement" asp-action="AssignStudentToSection" method="post" id="studentForm">
     <input type="hidden" asp-for="SectionId" value=@Model.SectionId />
 
     <input type="hidden" asp-for="StudentId" id="selectedStudentId" />
