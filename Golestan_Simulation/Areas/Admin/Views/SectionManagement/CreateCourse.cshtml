@@ -7,7 +7,7 @@
             <h4>Add Course</h4>
         </div>
         <div class="card-body">
-            <form asp-action="CreateCourse" method="post">
+            <form asp-controller="SectionManagement" asp-action="CreateCourse" method="post">
 
                 <div class="mb-3">
                     <label asp-for="Name" class="form-label"></label>
