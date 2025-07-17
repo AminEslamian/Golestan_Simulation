@@ -13,8 +13,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"))); // ### configure the DefaultConnection ConnectionString in the appsettings.json file
 
 builder.Services.AddScoped<IPassHasherService, PassHasherService>();
-builder.Services.AddScoped<IUserAccountServices, UserAccountServices>();
+builder.Services.AddScoped<IRegisterationServices, RegisterationServices>();
 builder.Services.AddScoped<IAssignmentServices, AssignmentServices>();
+builder.Services.AddScoped<IGolestanAuthenticationServices, GolestanAuthenticationServices>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -37,6 +38,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (app.Environment.IsDevelopment()) { }
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
@@ -44,6 +47,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "default",

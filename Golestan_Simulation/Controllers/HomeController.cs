@@ -14,12 +14,14 @@ namespace Golestan_Simulation.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IUserAccountServices _accountServices;
+    private readonly IRegisterationServices _registerServices;
+    private readonly IGolestanAuthenticationServices _authenticationService;
 
-    public HomeController(ILogger<HomeController> logger, IUserAccountServices accountServices)
+    public HomeController(ILogger<HomeController> logger, IRegisterationServices accountServices, IGolestanAuthenticationServices authenticationService)
     {
         _logger = logger;
-        _accountServices = accountServices;
+        _registerServices = accountServices;
+        _authenticationService = authenticationService;
     }
 
 
@@ -73,7 +75,7 @@ public class HomeController : Controller
     {
         if (ModelState.IsValid)
         {
-            var userRole = await _accountServices.IsAccountExistingAsync(user, role);
+            var userRole = await _authenticationService.IsAccountExistingAsync(user, role);
             if (userRole == null)
             {
                 ModelState.AddModelError("UsernameOrEmail", "No account found with this user name or email");
@@ -81,16 +83,16 @@ public class HomeController : Controller
                 return View(user);
             }
 
-            if (_accountServices.IsPasswordCorrect(userRole, user.RawPassword))
+            if (_authenticationService.IsPasswordCorrect(userRole, user.RawPassword))
             {
-                await _accountServices.AuthenticateUserAsync(userRole, HttpContext);
+                await _authenticationService.AuthenticateUserAsync(userRole, HttpContext);
 
                 if (role == RolesEnum.Instructor)
-                    return RedirectToAction("Index", "Instructor");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Instructor"});
                 else if (role == RolesEnum.Student)
-                    return RedirectToAction("Index", "Student");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Student" });
                 else if (role == RolesEnum.Admin)
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
 
             }
             else

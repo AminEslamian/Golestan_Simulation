@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Golestan_Simulation.Controllers
+namespace Golestan_Simulation.Areas.Student.Controllers
 {
-    [Authorize(Roles = "Instructor")]
-    public class InstructorController : Controller
+    [Area("Student")]
+    [Authorize(Roles = "Student")]
+    public class Dashboard : Controller
     {
         public IActionResult Index()
         {

@@ -3,60 +3,45 @@ using Golestan_Simulation.Models;
 using Golestan_Simulation.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Golestan_Simulation.Services
 {
-    public interface IUserAccountServices
+    public interface IGolestanAuthenticationServices
     {
-        Task<bool> IsUserNameAvailableAsync(string userName);
-        Task<bool> IsEmailAvailableAsync(string? email);
         Task<UserRoles?> IsAccountExistingAsync(UserViewModel account, RolesEnum roleName);
         bool IsPasswordCorrect(UserRoles userRoles, string rawPass);
         Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext);
     }
 
 
-    public class UserAccountServices: IUserAccountServices
+
+    public class GolestanAuthenticationServices: IGolestanAuthenticationServices
     {
         private readonly ApplicationDbContext _context;
         private readonly IPassHasherService _passHasher;
-        public UserAccountServices(ApplicationDbContext context, IPassHasherService passHasher)
+        public GolestanAuthenticationServices(ApplicationDbContext context, IPassHasherService passHasher)
         {
             _context = context;
             _passHasher = passHasher;
         }
 
-
-        public async Task<bool> IsUserNameAvailableAsync(string userName)
-        {
-            var isAvailable = await _context.Users.AnyAsync(u => u.UserName == userName);
-
-            return isAvailable;
-        }
-        public async Task<bool> IsEmailAvailableAsync(string? email)
-        {
-            var isAvailable = await _context.Users.AnyAsync(u => u.Email == email);
-
-            return isAvailable;
-        }
         public async Task<UserRoles?> IsAccountExistingAsync(UserViewModel account, RolesEnum roleName)
         {
             try
             {
-                if(roleName == RolesEnum.Student)
+                if (roleName == RolesEnum.Student)
                 {
                     var ur = await _context.UserRoles
                     .Where(ur => ur.Role.Name == roleName)
                     .Include(s => s.User).ThenInclude(u => u.Students)
                     .Include(s => s.Role)
                     .SingleAsync(ur => ur.User.UserName == account.UsernameOrEmail || ur.User.Email == account.UsernameOrEmail);
-                    
+
                     return ur;
                 }
-                else if(roleName == RolesEnum.Instructor)
+                else if (roleName == RolesEnum.Instructor)
                 {
                     var ur = await _context.UserRoles
                     .Where(ur => ur.Role.Name == roleName)
@@ -66,7 +51,7 @@ namespace Golestan_Simulation.Services
 
                     return ur;
                 }
-                else if(roleName == RolesEnum.Admin)
+                else if (roleName == RolesEnum.Admin)
                 {
                     var ur = await _context.UserRoles
                     .Where(ur => ur.Role.Name == roleName)
@@ -83,7 +68,7 @@ namespace Golestan_Simulation.Services
             {
                 return null;
             }
-            
+
         }
         public bool IsPasswordCorrect(UserRoles ur, string rawPass)
         {
@@ -102,13 +87,13 @@ namespace Golestan_Simulation.Services
                     new Claim("UserId", userRole.UserId.ToString())
                 };
 
-            if(userRole.Role.Name == RolesEnum.Student)
+            if (userRole.Role.Name == RolesEnum.Student)
             {
                 var defaultStudentId = userRole.User.Students.First().Id;
-               
+
                 claims.Add(new Claim("DefaultStudentId", defaultStudentId.ToString()));
             }
-            else if(userRole.Role.Name == RolesEnum.Instructor)
+            else if (userRole.Role.Name == RolesEnum.Instructor)
             {
                 var defaultInstructorId = userRole.User.Instructors.First().Id;
 
