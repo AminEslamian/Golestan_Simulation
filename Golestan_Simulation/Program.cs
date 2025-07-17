@@ -2,6 +2,8 @@ using Golestan_Simulation.Data;
 using Golestan_Simulation.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddAuthorization();
+
+// For validators:
+builder.Services.AddControllersWithViews()
+    .AddFluentValidation(fv =>
+    {
+        fv.RegisterValidatorsFromAssemblyContaining<Program>();
+        fv.DisableDataAnnotationsValidation = false; //  Keep DataAnnotations too
+    });
+
+builder.Services.AddFluentValidationAutoValidation();   //  Automatic model validation
+builder.Services.AddFluentValidationClientsideAdapters();
+
 
 var app = builder.Build();
 
