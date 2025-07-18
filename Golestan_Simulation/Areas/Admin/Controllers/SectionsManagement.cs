@@ -13,12 +13,9 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
     public class SectionsManagement : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IAddSectionServices _sectionServices;
-
-        public SectionsManagement(ApplicationDbContext context, IAddSectionServices sectionServices)
+        public SectionsManagement(ApplicationDbContext context)
         {
             _context = context;
-            _sectionServices = sectionServices;
         }
 
 
@@ -119,6 +116,8 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
                 Text = r.Building + " " + r.RoomNumber
             });
 
+            if (!ModelState.IsValid)
+                return View(vm);
 
             //// 2️) Optionally check for duplicates
             //bool exists = await _context.Sections.AnyAsync(s =>
@@ -134,19 +133,8 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             //    return View(vm);
             //}
 
-            // 3.1) Check for invalid user input
 
-            if (!ModelState.IsValid)
-                return View(vm);
-
-            if (await _sectionServices.IsClassroomOccupied(vm))
-            {
-                ModelState.AddModelError("TimeSlot", "The classroom is occupied at the selected time!");
-                return View(vm);
-            }
-
-
-            // 3️.2) Create and assign *all* the ID‐based FKs
+            // 3️) Create and assign *all* the ID‐based FKs
             var newTimeSlot = new TimeSlots
             {
                 Day = vm.Day,
