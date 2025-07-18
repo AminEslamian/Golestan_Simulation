@@ -11,18 +11,16 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class StudentsManagement : Controller
+    public class StudentsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IPassHasherService _passHasher;
         private readonly IRegisterationServices _registerServices;
-        private readonly IAssignmentServices _assignmentServices;
-        public StudentsManagement(ApplicationDbContext context, IPassHasherService passHasher, IRegisterationServices accountServices, IAssignmentServices assignment)
+        public StudentsManagementController(ApplicationDbContext context, IPassHasherService passHasher, IRegisterationServices accountServices)
         {
             _context = context;
             _passHasher = passHasher;
             _registerServices = accountServices;
-            _assignmentServices = assignment;
         }
 
 
@@ -92,45 +90,9 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
                 );
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", nameof(Dashboard));
+                return RedirectToAction("Index", nameof(DashboardController));
             }
             return View(studentAccount);
-        }
-
-
-        public IActionResult AssignStudentToSection(int sectionId)
-        {
-            var vm = new TakesViewModel
-            {
-                SectionId = sectionId,
-                Students = _context.Students.Select(i => new SelectListItem
-                {
-                    Value = i.Id.ToString(),
-                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
-                })
-            };
-
-            return View(vm);
-        }
-        [HttpPost]
-        public async Task<IActionResult> AssignStudentToSection(TakesViewModel model)
-        {
-            if (await _assignmentServices.StudentHasTimeConflict(model.SectionId, model.StudentId))
-            {
-                ModelState.AddModelError("StudentId", "The student schedule has time conflict");
-                return View(model);
-            }
-
-            var newTakes = new Takes
-            {
-                StudentId = model.StudentId,
-                SectionId = model.SectionId
-            };
-
-            await _context.Takes.AddAsync(newTakes);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", nameof(Dashboard));
         }
     }
 }

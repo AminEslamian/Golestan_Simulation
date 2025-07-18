@@ -5,7 +5,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
 {
     [Area("Student")]
     [Authorize(Roles = "Student")]
-    public class Dashboard : Controller
+    public class DashboardController : Controller
     {
         public IActionResult Index()
         {

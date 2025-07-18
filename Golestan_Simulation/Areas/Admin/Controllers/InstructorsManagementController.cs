@@ -6,18 +6,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Golestan_Simulation.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = ("Admin"))]
-    public class InstructorsManagement : Controller
+    public class InstructorsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IPassHasherService _passHasher;
         private readonly IRegisterationServices _registerServices;
         private readonly IAssignmentServices _assignmentServices;
-        public InstructorsManagement(ApplicationDbContext context, IPassHasherService passHasher, IRegisterationServices accountServices, IAssignmentServices assignment)
+        public InstructorsManagementController(ApplicationDbContext context, IPassHasherService passHasher, IRegisterationServices accountServices, IAssignmentServices assignment)
         {
             _context = context;
             _passHasher = passHasher;
@@ -94,46 +95,10 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", nameof(Dashboard));
+                return RedirectToAction("Index", nameof(DashboardController));
             }
 
             return View(instructorAccount);
-        }
-
-
-        public IActionResult AssignInstructorToSection(int sectionId)
-        {
-            var vm = new TeachsViewModel
-            {
-                SectionId = sectionId,
-                Instructors = _context.Instructors.Select(i => new SelectListItem
-                {
-                    Value = i.Id.ToString(),
-                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
-                })
-            };
-
-            return View(vm);
-        }
-        [HttpPost]
-        public async Task<IActionResult> AssignInstructorToSection(TeachsViewModel model)
-        {
-            if (await _assignmentServices.InstructorHasTimeConflictAsync(model.SectionId, model.InstructorId))
-            {
-                ModelState.AddModelError("InstructorId", "The instructor schedule has time conflict");
-                return View(model);
-            }
-
-            var newTeachs = new Teachs
-            {
-                InstructorId = model.InstructorId,
-                SectionId = model.SectionId
-            };
-
-            await _context.Teaches.AddAsync(newTeachs);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", nameof(Dashboard));
         }
     }
 }

@@ -10,12 +10,14 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class SectionsManagement : Controller
+    public class SectionsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public SectionsManagement(ApplicationDbContext context)
+        private readonly IAssignmentServices _assignmentServices;
+        public SectionsManagementController(ApplicationDbContext context, IAssignmentServices assignmentServices)
         {
             _context = context;
+            _assignmentServices = assignmentServices;
         }
 
 
@@ -23,59 +25,6 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         //{
         //    return View();
         //}
-
-
-        public IActionResult CreateCourse()
-        {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateCourse(CourseViewModel vm)
-        {
-            if (ModelState.IsValid)
-            {
-                var newCourse = new Courses
-                {
-                    Name = vm.Name,
-                    Code = vm.Code,
-                    Unit = vm.Unit,
-                    Description = vm.Description,
-                    ExameDate = vm.ExamDate,
-                };
-                await _context.Courses.AddAsync(newCourse);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(vm);
-        }
-
-
-        public IActionResult CreateClassroom()
-        {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateClassroom(ClassroomViewModel vm)
-        {
-            if (ModelState.IsValid)
-            {
-                var newClass = new Classrooms
-                {
-                    Building = vm.Building,
-                    RoomNumber = vm.RoomNumber,
-                    Capacity = vm.Capacity
-                };
-
-                await _context.Classrooms.AddAsync(newClass);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(vm);
-        }
 
 
         public IActionResult AddSection()
@@ -157,7 +106,79 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             await _context.Sections.AddAsync(newSection);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", nameof(Dashboard)); // Used nameof for compile-time safety
+            return RedirectToAction("Index", nameof(DashboardController)); // Used nameof for compile-time safety
+        }
+
+
+        public IActionResult AssignInstructorToSection(int sectionId)
+        {
+            var vm = new TeachsViewModel
+            {
+                SectionId = sectionId,
+                Instructors = _context.Instructors.Select(i => new SelectListItem
+                {
+                    Value = i.Id.ToString(),
+                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
+                })
+            };
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignInstructorToSection(TeachsViewModel model)
+        {
+            if (await _assignmentServices.InstructorHasTimeConflictAsync(model.SectionId, model.InstructorId))
+            {
+                ModelState.AddModelError("InstructorId", "The instructor schedule has time conflict");
+                return View(model);
+            }
+
+            var newTeachs = new Teachs
+            {
+                InstructorId = model.InstructorId,
+                SectionId = model.SectionId
+            };
+
+            await _context.Teaches.AddAsync(newTeachs);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", nameof(DashboardController));
+        }
+
+
+        public IActionResult AssignStudentToSection(int sectionId)
+        {
+            var vm = new TakesViewModel
+            {
+                SectionId = sectionId,
+                Students = _context.Students.Select(i => new SelectListItem
+                {
+                    Value = i.Id.ToString(),
+                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
+                })
+            };
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignStudentToSection(TakesViewModel model)
+        {
+            if (await _assignmentServices.StudentHasTimeConflict(model.SectionId, model.StudentId))
+            {
+                ModelState.AddModelError("StudentId", "The student schedule has time conflict");
+                return View(model);
+            }
+
+            var newTakes = new Takes
+            {
+                StudentId = model.StudentId,
+                SectionId = model.SectionId
+            };
+
+            await _context.Takes.AddAsync(newTakes);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", nameof(DashboardController));
         }
     }
 }
