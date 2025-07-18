@@ -6,9 +6,7 @@ namespace Golestan_Simulation.ViewModels
 {
     public class SectionViewModel
     {
-        [Range(0, 20, ErrorMessage = "The chosen semester is not valid!")]
         public int Semester { get; set; }
-        [Range(0, int.MaxValue, ErrorMessage ="Selected year must be positive!")]
         public int Year { get; set; }
 
         // the two FK inputs:
