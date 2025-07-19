@@ -16,6 +16,7 @@ builder.Services.AddScoped<IPassHasherService, PassHasherService>();
 builder.Services.AddScoped<IRegisterationServices, RegisterationServices>();
 builder.Services.AddScoped<IAssignmentServices, AssignmentServices>();
 builder.Services.AddScoped<IGolestanAuthenticationServices, GolestanAuthenticationServices>();
+builder.Services.AddScoped<IAddSectionServices, AddSectionServices>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
