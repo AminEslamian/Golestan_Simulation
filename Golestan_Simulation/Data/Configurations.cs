@@ -42,45 +42,47 @@ namespace Golestan_Simulation.Data
 
     public class UserConfiguration : IEntityTypeConfiguration<Users>
     {
-        public void Configure(EntityTypeBuilder<Users> builer)
+        public void Configure(EntityTypeBuilder<Users> builder)
         {
             // ────────────────
             // 1) Entity‑level Configuration
             // ────────────────
 
-            builer.ToTable("Users");
-            builer.HasKey(e => e.Id);
+            builder.ToTable("Users");
+            builder.HasKey(e => e.Id);
 
             // ─────────── Students relationship ───────────
 
-            builer.HasMany(u => u.Students)
+            builder.HasMany(u => u.Students)
                 .WithOne(s => s.User)
                 .HasForeignKey(s => s.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // ─────────── Instructor relationship ───────────
-            builer.HasMany(u => u.Instructors)
+            builder.HasMany(u => u.Instructors)
                 .WithOne(i => i.User)
                 .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // ─────────── User roles relationship ───────────
-            // ### is it needed to add or not?
-
+            builder.HasMany(u => u.Roles)
+                .WithOne(ur => ur.User)
+                .HasForeignKey(ur => ur.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ────────────────
             // 2) Property‑level Configuration
             // ────────────────
 
-            builer.Property(e => e.FirstName)
+            builder.Property(e => e.FirstName)
                 .HasColumnName("FirstName");
-            builer.Property(e => e.LastName)
+            builder.Property(e => e.LastName)
                 .HasColumnName("LastName");
-            builer.Property(e => e.Email)
+            builder.Property(e => e.Email)
                 .HasColumnName("Email");
-            builer.Property(e => e.HashedPassword)
+            builder.Property(e => e.HashedPassword)
                 .HasColumnName("HashedPassword");
-            builer.Property(e => e.CreatedAt)
+            builder.Property(e => e.CreatedAt)
                 .HasColumnName("CreatedAt")
                 .HasColumnType("date")
                 .HasDefaultValueSql("getdate()");
@@ -198,12 +200,22 @@ namespace Golestan_Simulation.Data
 
             builder.HasOne(s => s.TimeSlot)
                 .WithMany(t => t.Sections)
-                .HasForeignKey(s => s.TimeSlotId);
+                .HasForeignKey(s => s.TimeSlotId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(s => s.Course)
                 .WithMany(c => c.Sections)
                 .HasForeignKey(s => s.CourseId);
 
+            builder.HasMany(s => s.Takes)
+                .WithOne(t => t.Section)
+                .HasForeignKey(t => t.SectionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(s => s.Teachs)
+                .WithOne(t => t.Section)
+                .HasForeignKey(t => t.SectionId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(e => e.Semester)
                 .HasColumnName("Semester");
@@ -219,6 +231,10 @@ namespace Golestan_Simulation.Data
             builder.ToTable("Courses");
             builder.HasKey(e => e.Id);
 
+            builder.HasMany(c => c.Sections)
+                .WithOne(s => s.Course)
+                .HasForeignKey(s => s.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(e => e.Name)
                 .HasColumnName("Name");
