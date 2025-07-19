@@ -14,10 +14,12 @@
                     <div class="col">
                         <label asp-for="Semester" class="form-label"></label>
                         <input asp-for="Semester" class="form-control" />
+                        <span asp-validation-for="Semester" class="text-danger"></span>
                     </div>
                     <div class="col">
                         <label asp-for="Year" class="form-label"></label>
                         <input asp-for="Year" class="form-control" />
+                        <span asp-validation-for="Year" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -25,10 +27,12 @@
                     <div class="col">
                         <label asp-for="StartTime" class="form-label"></label>
                         <input asp-for="StartTime" class="form-control" type="time" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
                     <div class="col">
                         <label asp-for="EndTime" class="form-label"></label>
                         <input asp-for="EndTime" class="form-control" type="time" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
                     </div>
                     <div class="col">
                         <label asp-for="Day" class="form-label"></label>
