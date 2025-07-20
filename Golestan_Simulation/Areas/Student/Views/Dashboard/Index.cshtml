@@ -1,5 +1,37 @@
-﻿@{
-    ViewData["Title"] = "Index";
+﻿@model IEnumerable<Golestan_Simulation.Models.Takes>
+
+@{
+    ViewData["Title"] = "Your Enrollments";
 }
 
-<h1>Student dashboard...</h1>
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Section</th>
+            <th>Grade</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var take in Model)
+        {
+            <tr>
+                <td>@take.Section.Course.Name</td>
+                <td>@take.Section.Id</td>
+                <td>@take.Grade</td>
+                <td>
+                    <form asp-action="Delete" method="get" class="d-inline">
+                        <input type="hidden" name="studentId" value="@take.StudentId" />
+                        <input type="hidden" name="sectionId" value="@take.SectionId" />
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
