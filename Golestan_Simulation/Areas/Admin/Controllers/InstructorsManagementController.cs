@@ -100,5 +100,39 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
             return View(instructorAccount);
         }
+
+        
+        // Optional: for confirmation page(if confirmed set the view page)
+        public async Task<IActionResult> Delete(int id)
+        {
+            var instructor = await _context.Instructors
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (instructor == null)
+            {
+                return NotFound();
+            }
+
+            return View(instructor); // A confirmation view
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var instructor = await _context.Instructors
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (instructor == null)
+            {
+                return NotFound();
+            }
+
+            _context.Instructors.Remove(instructor);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
