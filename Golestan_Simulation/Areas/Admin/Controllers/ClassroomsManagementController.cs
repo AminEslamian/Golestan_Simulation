@@ -54,38 +54,31 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        // Optional: for confirmation page(if confirmed set the view page)
+        //  GET: show confirmation
+        //    URL: /Admin/ClassroomsManagement/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var classroom = await _context.Classrooms
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (classroom == null)
-            {
-                return NotFound();
-            }
-
-            return View(classroom); // A confirmation view
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom == null) return NotFound();
+            return View(classroom);   // renders Delete.cshtml
         }
 
-
-        [HttpPost, ActionName("Delete")]
+        // 2) POST: perform deletion
+        //    Form posts back to the *same* /Delete/{id} URL
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id, IFormCollection form)
         {
-            var classroom = await _context.Classrooms
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (classroom == null)
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom != null)
             {
-                return NotFound();
+                _context.Classrooms.Remove(classroom);
+                await _context.SaveChangesAsync();
             }
-
-            _context.Classrooms.Remove(classroom);
-            await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
+
 
         //public async Task<IActionResult> Edit(int id)
         //{
