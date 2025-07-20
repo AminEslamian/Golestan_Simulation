@@ -1,10 +1,12 @@
-﻿using Golestan_Simulation.Data;
+﻿using Golestan_Simulation.Areas.Student.Controllers;
+using Golestan_Simulation.Data;
 using Golestan_Simulation.Models;
 using Golestan_Simulation.Services;
 using Golestan_Simulation.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Golestan_Simulation.Areas.Admin.Controllers
 {
@@ -23,10 +25,10 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Sections.ToListAsync());
+        }
 
 
         public IActionResult AddSection()
@@ -155,6 +157,36 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
+        public async Task<IActionResult> UnassignInstructor(int? instructorId, int? sectionId)
+        {
+            if (instructorId == null || sectionId == null)
+            {
+                return NotFound();
+            }
+
+            var teachs = await _context.Teaches.FindAsync(instructorId, sectionId);
+            if (teachs == null)
+            {
+                return NotFound();
+            }
+
+            return View(teachs);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UnassignInstructor(Teachs model)
+        {
+            var teachs = await _context.Teaches.FindAsync(model.InstructorId, model.SectionId);
+            if (teachs != null)
+            {
+                _context.Teaches.Remove(teachs);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         public IActionResult AssignStudentToSection(int sectionId)
         {
             var vm = new TakesViewModel
@@ -187,7 +219,37 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             await _context.Takes.AddAsync(newTakes);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", nameof(DashboardController));
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> UnassignStudent(int? studentId, int? sectionId)
+        {
+            if (studentId == null || sectionId == null)
+            {
+                return NotFound();
+            }
+
+            var takes = await _context.Takes.FindAsync(studentId, sectionId);
+            if (takes == null)
+            {
+                return NotFound();
+            }
+
+            return View(takes);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UnassignStudent(Takes model)
+        {
+            var takes = await _context.Takes.FindAsync(model.StudentId, model.SectionId);
+            if (takes != null)
+            {
+                _context.Takes.Remove(takes);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -23,8 +23,8 @@ builder.Services.AddScoped<IAddSectionServices, AddSectionServices>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Login";
-        options.AccessDeniedPath = "/Home/AccessDenied";
+        options.LoginPath = "/AccountManagement/Login";
+        options.AccessDeniedPath = "/AccountManagement/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
         options.SlidingExpiration = true;
     });
