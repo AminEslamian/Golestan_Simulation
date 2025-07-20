@@ -16,9 +16,25 @@ namespace Golestan_Simulation.Areas.Student.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            // 1) pull the student id out of the auth cookie
+            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
+            if (string.IsNullOrEmpty(studentIdClaim)
+                || !int.TryParse(studentIdClaim, out var studentId))
+            {
+                return Forbid();  // or RedirectToAction("Login", "Home");
+            }
+
+            // 2) load only this student's enrollments, with Section → Course
+            var takes = await _context.Takes
+                .Where(t => t.StudentId == studentId)
+                .Include(t => t.Section)
+                    .ThenInclude(s => s.Course)
+                .ToListAsync();
+
+            // 3) hand them off to the view
+            return View(takes);
         }
 
         // Optional: for confirmation page(if confirmed set the view page)
