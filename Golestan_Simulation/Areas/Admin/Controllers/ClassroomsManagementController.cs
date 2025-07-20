@@ -1,11 +1,14 @@
 ﻿using Golestan_Simulation.Data;
 using Golestan_Simulation.Models;
 using Golestan_Simulation.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Golestan_Simulation.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ClassroomsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -15,9 +18,13 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var classrooms = await _context.Classrooms
+                .AsNoTracking()
+                .ToListAsync();
+
+            return View(classrooms);
         }
 
 
