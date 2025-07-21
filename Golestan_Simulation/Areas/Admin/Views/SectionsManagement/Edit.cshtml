@@ -1,0 +1,47 @@
+﻿@model Golestan_Simulation.Models.Sections
+
+@{
+    ViewData["Title"] = "Edit Section";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-area="Admin"
+      asp-controller="SectionsManagement"
+      asp-action="Edit"
+      asp-route-id="@Model.Id"
+      method="post">
+
+    <div class="form-group">
+        <label for="Semester">Semester</label>
+        <input name="Semester"
+               id="Semester"
+               value="@Model.Semester"
+               class="form-control" />
+        <span asp-validation-for="Semester" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Year">Year</label>
+        <input name="Year"
+               id="Year"
+               value="@Model.Year"
+               class="form-control" />
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-area="Admin"
+       asp-controller="SectionsManagement"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,60 @@
+﻿@model Golestan_Simulation.Models.Sections
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Id</dt>
+    <dd class="col-sm-10">@Model.Id</dd>
+
+    <dt class="col-sm-2">CourseId</dt>
+    <dd class="col-sm-10">@Model.CourseId</dd>
+
+    <dt class="col-sm-2">Semester</dt>
+    <dd class="col-sm-10">@Model.Semester</dd>
+
+    <dt class="col-sm-2">Year</dt>
+    <dd class="col-sm-10">@Model.Year</dd>
+
+    <dt class="col-sm-2">ClassroomId</dt>
+    <dd class="col-sm-10">@Model.ClassroomId</dd>
+
+    <dt class="col-sm-2">Day</dt>
+    <dd class="col-sm-10">@Model.TimeSlot.Day</dd>
+
+    <dt class="col-sm-2">StartTime</dt>
+    <dd class="col-sm-10">
+        @Model.TimeSlot.StartTime
+    </dd>
+
+    <dt class="col-sm-2">EndTime</dt>
+    <dd class="col-sm-10">
+        @Model.TimeSlot.EndTime
+    </dd>
+</dl>
+
+<p>
+    <a asp-area="Admin"
+       asp-controller="SectionsManagement"
+       asp-action="Edit"
+       asp-route-id="@Model.Id"
+       class="btn btn-primary">
+        Edit
+    </a>
+    <a asp-area="Admin"
+       asp-controller="SectionsManagement"
+       asp-action="Delete"
+       asp-route-id="@Model.Id"
+       class="btn btn-danger">
+        Delete
+    </a>
+    <a asp-area="Admin"
+       asp-controller="SectionsManagement"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Back to List
+    </a>
+</p>

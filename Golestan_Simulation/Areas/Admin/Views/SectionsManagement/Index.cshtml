@@ -1,5 +1,29 @@
-﻿@{
-    ViewData["Title"] = "Index";
+﻿@model IEnumerable<Golestan_Simulation.Models.Sections>
+
+@{
+    ViewData["Title"] = "All Sections";
 }
 
-<h1>Sections management</h1>
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Id</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@c.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@c.Id">Delete</a> |
+                    <a asp-action="Info" asp-route-id="@c.Id">Info</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
