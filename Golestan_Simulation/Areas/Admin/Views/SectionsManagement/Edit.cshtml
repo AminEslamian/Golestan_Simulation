@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.Models.Sections
 
 @{
-    ViewData["Title"] = "Edit Section";
+    ViewData["Title"] = "ویرایش بخش";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -13,7 +13,7 @@
       method="post">
 
     <div class="form-group">
-        <label for="Semester">Semester</label>
+        <label for="Semester">ترم</label>
         <input name="Semester"
                id="Semester"
                value="@Model.Semester"
@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group">
-        <label for="Year">Year</label>
+        <label for="Year">سال</label>
         <input name="Year"
                id="Year"
                value="@Model.Year"
@@ -31,12 +31,12 @@
     </div>
 
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
     <a asp-area="Admin"
        asp-controller="SectionsManagement"
        asp-action="Index"
        class="btn btn-secondary">
-        Cancel
+        انصراف
     </a>
 </form>
 

@@ -1,25 +1,25 @@
 ﻿@model Golestan_Simulation.Models.Courses
 
 @{
-    ViewData["Title"] = "Course Details";
+    ViewData["Title"] = "جزئیات درس";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <dl class="row">
-    <dt class="col-sm-2">Name</dt>
+    <dt class="col-sm-2">نام درس</dt>
     <dd class="col-sm-10">@Model.Name</dd>
 
-    <dt class="col-sm-2">Code</dt>
+    <dt class="col-sm-2">کد درس</dt>
     <dd class="col-sm-10">@Model.Code</dd>
 
-    <dt class="col-sm-2">Unit</dt>
+    <dt class="col-sm-2">تعداد واحد</dt>
     <dd class="col-sm-10">@Model.Unit</dd>
 
-    <dt class="col-sm-2">Description</dt>
+    <dt class="col-sm-2">توضیحات</dt>
     <dd class="col-sm-10">@Model.Description</dd>
 
-    <dt class="col-sm-2">Exam Date</dt>
+    <dt class="col-sm-2">تاریخ امتحان</dt>
     <dd class="col-sm-10">
         @Model.ExameDate
     </dd>
@@ -31,19 +31,19 @@
        asp-action="Edit"
        asp-route-id="@Model.Id"
        class="btn btn-primary">
-        Edit
+        ویرایش
     </a>
     <a asp-area="Admin"
        asp-controller="CoursesManagement"
        asp-action="Delete"
        asp-route-id="@Model.Id"
        class="btn btn-danger">
-        Delete
+        حذف
     </a>
     <a asp-area="Admin"
        asp-controller="CoursesManagement"
        asp-action="Index"
        class="btn btn-secondary">
-        Back to List
+        بازگشت به لیست
     </a>
 </p>

@@ -1,13 +1,13 @@
 ﻿@model Golestan_Simulation.Models.Students
 
-<h1>Delete Student</h1>
-<p>Are you sure you want to delete @Model.Id?</p>
+<h1>حذف دانشجو</h1>
+<p>آیا شما از حذف دانشجو با شناسه @Model.Id اطمینان دارید؟</p>
 
 <form asp-area="Admin"
       asp-controller="StudentsManagement"
       asp-action="Delete"
       asp-route-id="@Model.Id"
       method="post">
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">بله, حذف شود</button>
+    <a asp-action="Index" class="btn btn-secondary">لغو</a>
 </form>

@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.Models.Courses
 
 @{
-    ViewData["Title"] = "Edit Course";
+    ViewData["Title"] = "ویرایش درس";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -13,7 +13,7 @@
       method="post">
 
     <div class="form-group">
-        <label for="Name">Name</label>
+        <label for="Name">نام درس</label>
         <input name="Name"
                id="Name"
                value="@Model.Name"
@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group">
-        <label for="Code">Code</label>
+        <label for="Code">کد درس</label>
         <input name="Code"
                id="Code"
                value="@Model.Code"
@@ -31,7 +31,7 @@
     </div>
 
     <div class="form-group">
-        <label for="Unit">Unit</label>
+        <label for="Unit">تعداد واحد</label>
         <input name="Unit"
                id="Unit"
                value="@Model.Unit"
@@ -40,7 +40,7 @@
     </div>
 
     <div class="form-group">
-        <label for="ExameDate">ExameDate</label>
+        <label for="ExameDate">تاریخ امتحان</label>
         <input name="ExameDate"
                id="ExameDate"
                value="@Model.ExameDate"
@@ -48,12 +48,12 @@
         <span asp-validation-for="ExameDate" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
     <a asp-area="Admin"
        asp-controller="CoursesManagement"
        asp-action="Index"
        class="btn btn-secondary">
-        Cancel
+        انصراف
     </a>
 </form>
 

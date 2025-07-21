@@ -1,23 +1,22 @@
 ﻿@using Golestan_Simulation.ViewModels
 @model SectionViewModel
 
-
 <div class="container my-5">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
-            <h4>Add Section</h4>
+            <h4>افزودن بخش</h4>
         </div>
         <div class="card-body">
             <form asp-controller="SectionsManagement" asp-action="AddSection" method="post">
 
                 <div class="row mb-3">
                     <div class="col">
-                        <label asp-for="Semester" class="form-label"></label>
+                        <label asp-for="Semester" class="form-label">ترم</label>
                         <input asp-for="Semester" class="form-control" />
                         <span asp-validation-for="Semester" class="text-danger"></span>
                     </div>
                     <div class="col">
-                        <label asp-for="Year" class="form-label"></label>
+                        <label asp-for="Year" class="form-label">سال</label>
                         <input asp-for="Year" class="form-control" />
                         <span asp-validation-for="Year" class="text-danger"></span>
                     </div>
@@ -25,47 +24,47 @@
 
                 <div class="row mb-3">
                     <div class="col">
-                        <label asp-for="StartTime" class="form-label"></label>
+                        <label asp-for="StartTime" class="form-label">زمان شروع</label>
                         <input asp-for="StartTime" class="form-control" type="time" />
                         <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
                     <div class="col">
-                        <label asp-for="EndTime" class="form-label"></label>
+                        <label asp-for="EndTime" class="form-label">زمان پایان</label>
                         <input asp-for="EndTime" class="form-control" type="time" />
                         <span asp-validation-for="EndTime" class="text-danger"></span>
                     </div>
                     <div class="col">
-                        <label asp-for="Day" class="form-label"></label>
+                        <label asp-for="Day" class="form-label">روز</label>
                         <select asp-for="Day" class="form-control">
-                            <option value="Saturday">Saturday</option>
-                            <option value="Sunday">Sunday</option>
-                            <option value="Monday">Monday</option>
-                            <option value="Tuseday">Tuseday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
+                            <option value="Saturday">شنبه</option>
+                            <option value="Sunday">یکشنبه</option>
+                            <option value="Monday">دوشنبه</option>
+                            <option value="Tuseday">سه شنبه</option>
+                            <option value="Wednesday">چهارشنبه</option>
+                            <option value="Thursday">پنجشنبه</option>
+                            <option value="Friday">جمعه</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="SelectedCourseId" class="form-label">Course</label>
+                    <label asp-for="SelectedCourseId" class="form-label">درس</label>
                     <select asp-for="SelectedCourseId" asp-items="Model.Courses"
                             class="form-select">
-                        <option value="">-- pick a course --</option>
+                        <option value="">-- انتخاب درس --</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="SelectedClassroomId" class="form-label">Classroom</label>
+                    <label asp-for="SelectedClassroomId" class="form-label">کلاس</label>
                     <select asp-for="SelectedClassroomId" asp-items="Model.Classrooms"
                             class="form-select">
-                        <option value="">-- pick a room --</option>
+                        <option value="">-- انتخاب کلاس --</option>
                     </select>
                 </div>
 
                 <button type="submit" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> Create Section
+                    <i class="bi bi-plus-circle"></i> ایجاد بخش
                 </button>
             </form>
         </div>

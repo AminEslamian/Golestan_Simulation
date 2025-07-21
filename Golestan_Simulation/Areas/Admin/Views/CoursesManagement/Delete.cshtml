@@ -1,13 +1,13 @@
 ﻿@model Golestan_Simulation.Models.Courses
 
 <h1>Delete Courses</h1>
-<p>Are you sure you want to delete @Model.Name – @Model.Code?</p>
+<p>آیا شما از حذف درس @Model.Name - @Model.Code اطمینان دارید؟</p>
 
 <form asp-area="Admin"
       asp-controller="CoursesManagement"
       asp-action="Delete"
       asp-route-id="@Model.Id"
       method="post">
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">بله, حذف شود</button>
+    <a asp-action="Index" class="btn btn-secondary">لغو</a>
 </form>

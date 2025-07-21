@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.ViewModels.LoginViewModel
 
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "ورود";
 }
 
 <div class="row">
@@ -10,29 +10,29 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @* <input type="hidden" name="Role" value="@ViewBag.Role" /> *@
             <div class="form-group">
-                <label asp-for="UsernameOrEmail" class="control-label">Username or Email</label>
+                <label asp-for="UsernameOrEmail" class="control-label">نام‌کاربری یا ایمیل</label>
                 <input asp-for="UsernameOrEmail" class="form-control" />
                 <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RawPassword" class="control-label">Password</label>
+                <label asp-for="RawPassword" class="control-label">کلمه عبور</label>
                 <input asp-for="RawPassword" class="form-control" id="passwordInput" type="password" />
                 <span asp-validation-for="RawPassword" class="text-danger"></span>
             </div>
             <div>
-                <input type="checkbox" onclick="togglePassword()" />Show password
+                <input type="checkbox" onclick="togglePassword()" />نشان دادن کلمه عبور
             </div>
             @if (ViewBag.Role == RolesEnum.None)
             {
                 <div class="form-group mt-3">
-                    <button type="submit" class="btn btn-outline-primary" name="role" value=@RolesEnum.Student>Login as Student</button>
-                    <button type="submit" class="btn btn-outline-primary" name="role" value=@RolesEnum.Instructor>Login as Instructor</button>
+                    <button type="submit" class="btn btn-outline-primary" name="role" value=@RolesEnum.Student>ورود به عنوان دانشجو</button>
+                    <button type="submit" class="btn btn-outline-primary" name="role" value=@RolesEnum.Instructor>ورود به عنوان استاد</button>
                 </div>
             }
             else
             {
                 <div class="focus-group mt-3">
-                    <button type="submit" class="btn btn-outline-primary" name="role" value=@ViewBag.Role>Login</button>
+                    <button type="submit" class="btn btn-outline-primary" name="role" value=@ViewBag.Role>ورود</button>
                 </div>
             }
             @* <div class="form-group">
@@ -43,7 +43,7 @@
 </div>
 
 <div>
-    <a asp-action="Index" asp-controller="Home">Back</a>
+    <a asp-action="Index" asp-controller="Home">بازگشت</a>
 </div>
 
 @section Scripts {

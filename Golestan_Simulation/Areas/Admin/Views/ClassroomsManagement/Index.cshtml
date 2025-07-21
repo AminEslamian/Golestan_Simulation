@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Golestan_Simulation.Models.Classrooms>
 
 @{
-    ViewData["Title"] = "All Classrooms";
+    ViewData["Title"] = "لیست کلاس‌ها";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,10 +9,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Building</th>
-            <th>Room Number</th>
-            <th>Capacity</th>
-            <th>Actions</th>
+            <th>ساختمان</th>
+            <th>شماره اتاق</th>
+            <th>ظرفیت</th>
+            <th>اعمال</th>
         </tr>
     </thead>
     <tbody>
@@ -23,8 +23,8 @@
                 <td>@c.RoomNumber</td>
                 <td>@c.Capacity</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@c.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@c.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@c.Id">ویرایش</a> |
+                    <a asp-action="Delete" asp-route-id="@c.Id">حذف</a>
                 </td>
             </tr>
         }

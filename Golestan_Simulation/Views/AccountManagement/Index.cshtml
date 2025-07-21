@@ -11,31 +11,31 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            نام
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+            نام خانوادگی
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
+            نام کاربری
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UserName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+            ایمیل
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
+            ساخته‌شده در زمان
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedAt)
@@ -43,6 +43,6 @@
     </dl>
 </div>
 <div>
-    <a class="btn btn-secondary" asp-controller="AccountManagement" asp-action="Logout">Logout</a>
-    <a class="btn btn-secondary" asp-area=@ViewBag.Role asp-controller="Dashboard" asp-action="Index">dashboard</a>
+    <a class="btn btn-secondary" asp-controller="AccountManagement" asp-action="Logout">خروج از حساب</a>
+    <a class="btn btn-secondary" asp-area=@ViewBag.Role asp-controller="Dashboard" asp-action="Index">داشبورد</a>
 </div>

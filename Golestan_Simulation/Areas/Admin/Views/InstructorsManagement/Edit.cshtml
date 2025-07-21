@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.Models.Instructors
 
 @{
-    ViewData["Title"] = "Edit Instructor";
+    ViewData["Title"] = "ویرایش اطلاعات استاد";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -15,22 +15,22 @@
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label asp-for="Salary" class="control-label"></label>
+        <label asp-for="Salary" class="control-label">حقوق</label>
         <input asp-for="Salary" class="form-control" />
         <span asp-validation-for="Salary" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="HireDate" class="control-label"></label>
+        <label asp-for="HireDate" class="control-label">تاریخ استخدام</label>
         <input asp-for="HireDate" class="form-control" />
         <span asp-validation-for="HireDate" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
     <a asp-area="Admin"
        asp-controller="InstructorsManagement"
        asp-action="Index"
-       class="btn btn-secondary">Cancel</a>
+       class="btn btn-secondary">انصراف</a>
 </form>
 
 @section Scripts {
