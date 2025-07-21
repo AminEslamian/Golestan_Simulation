@@ -46,34 +46,26 @@ namespace Golestan_Simulation.Controllers
             }
             else
             {
-                return View();
+                return RedirectToAction(nameof(Login));
             }
         }
 
 
-        public IActionResult Login(RolesEnum role = RolesEnum.None, string? returnUrl = null)
+        public IActionResult Login(string? returnUrl = null)
         {
-            if (role != RolesEnum.None)
-            {
-                ViewBag.Role = role;
-            }
-            else
-            {
-                RolesEnum expectedRole = RolesEnum.None;
-                if (!string.IsNullOrEmpty(returnUrl))
-                {
-                    if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
-                        expectedRole = RolesEnum.Admin;
-                    else if (returnUrl.StartsWith("/instructor", StringComparison.OrdinalIgnoreCase))
-                        expectedRole = RolesEnum.Instructor;
-                    else if (returnUrl.StartsWith("/student", StringComparison.OrdinalIgnoreCase))
-                        expectedRole = RolesEnum.Student;
-                }
-                else
-                    return NotFound();
 
-                ViewBag.Role = expectedRole;
+            RolesEnum expectedRole = RolesEnum.None;
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Admin;
+                else if (returnUrl.StartsWith("/instructor", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Instructor;
+                else if (returnUrl.StartsWith("/student", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Student;
             }
+
+            ViewBag.Role = expectedRole;
 
             return View();
         }
