@@ -128,48 +128,48 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
       
-        public async Task<IActionResult> Edit(int id)
-        {
-            var instructor = await _context.Instructors
-                .Include(i => i.User)
-                .FirstOrDefaultAsync(i => i.Id == id);
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    var instructor = await _context.Instructors
+        //        .Include(i => i.User)
+        //        .FirstOrDefaultAsync(i => i.Id == id);
 
-            if (instructor == null)
-                return NotFound();
+        //    if (instructor == null)
+        //        return NotFound();
 
-            return View(instructor);
-        }
+        //    return View(instructor);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(
-            int id,
-            [Bind("Salary,HireDate,User")] Instructors vm)
-        {
-            if (!ModelState.IsValid)
-            {
-                var original = await _context.Instructors
-                    .Include(i => i.User)
-                    .FirstOrDefaultAsync(i => i.Id == id);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(
+        //    int id,
+        //    [Bind("Salary,HireDate,User")] Instructors vm)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var original = await _context.Instructors
+        //            .Include(i => i.User)
+        //            .FirstOrDefaultAsync(i => i.Id == id);
 
-                if (original == null)
-                    return NotFound();
+        //        if (original == null)
+        //            return NotFound();
 
-                original.Salary = vm.Salary;
-                original.HireDate = vm.HireDate;
-                return View(original);
-            }
+        //        original.Salary = vm.Salary;
+        //        original.HireDate = vm.HireDate;
+        //        return View(original);
+        //    }
 
-            var instructor = await _context.Instructors.FindAsync(id);
-            if (instructor == null)
-                return NotFound();
+        //    var instructor = await _context.Instructors.FindAsync(id);
+        //    if (instructor == null)
+        //        return NotFound();
 
-            instructor.Salary = vm.Salary;
-            instructor.HireDate = vm.HireDate;
+        //    instructor.Salary = vm.Salary;
+        //    instructor.HireDate = vm.HireDate;
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
 
 
