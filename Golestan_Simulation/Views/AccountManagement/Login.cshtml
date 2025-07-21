@@ -1,4 +1,4 @@
-﻿@model Golestan_Simulation.ViewModels.UserViewModel
+﻿@model Golestan_Simulation.ViewModels.LoginViewModel
 
 @{
     ViewData["Title"] = "Login";
@@ -8,7 +8,7 @@
     <div class="col-md-4">
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="Role" value="@ViewBag.Role" />
+            @* <input type="hidden" name="Role" value="@ViewBag.Role" /> *@
             <div class="form-group">
                 <label asp-for="UsernameOrEmail" class="control-label">Username or Email</label>
                 <input asp-for="UsernameOrEmail" class="form-control" />
@@ -22,9 +22,22 @@
             <div>
                 <input type="checkbox" onclick="togglePassword()" />Show password
             </div>
-            <div class="form-group">
+            @if (ViewBag.Role == RolesEnum.None)
+            {
+                <div class="form-group mt-3">
+                    <button type="submit" class="btn btn-outline-primary" name="role" value=@RolesEnum.Student>Login as Student</button>
+                    <button type="submit" class="btn btn-outline-primary" name="role" value=@RolesEnum.Instructor>Login as Instructor</button>
+                </div>
+            }
+            else
+            {
+                <div class="focus-group mt-3">
+                    <button type="submit" class="btn btn-outline-primary" name="role" value=@ViewBag.Role>Login</button>
+                </div>
+            }
+            @* <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
+            </div> *@
         </form>
     </div>
 </div>
@@ -42,5 +55,8 @@
             var passwordField = document.getElementById("passwordInput");
             passwordField.type = passwordField.type === "password" ? "text" : "password";
         }
+        // function setRoleAndSubmit(Role) {
+        //     document.getElementById("RoleInput").value = Role;
+        // }
     </script>
 }

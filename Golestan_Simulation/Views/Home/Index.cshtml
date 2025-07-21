@@ -1,18 +1,3 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <div class="text-center">
-        <h2 class="mb-4"></h2>
-
-        <a asp-controller="Home" asp-action="Login" asp-route-role=@RolesEnum.Student class="btn btn-outline-primary btn-lg mx-auto">
-            Login as student
-        </a>
-
-        <a asp-controller="Home" asp-action="Login" asp-route-role=@RolesEnum.Instructor class="btn btn-outline-primary btn-lg mx-auto">
-            Login as insturctor
-        </a>
-    </div>
-</div>
-

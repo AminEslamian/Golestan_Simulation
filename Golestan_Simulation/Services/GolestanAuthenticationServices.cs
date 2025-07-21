@@ -10,7 +10,7 @@ namespace Golestan_Simulation.Services
 {
     public interface IGolestanAuthenticationServices
     {
-        Task<UserRoles?> IsAccountExistingAsync(UserViewModel account, RolesEnum roleName);
+        Task<UserRoles?> IsAccountExistingAsync(LoginViewModel account, RolesEnum roleName);
         bool IsPasswordCorrect(UserRoles userRoles, string rawPass);
         Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext);
     }
@@ -27,7 +27,7 @@ namespace Golestan_Simulation.Services
             _passHasher = passHasher;
         }
 
-        public async Task<UserRoles?> IsAccountExistingAsync(UserViewModel account, RolesEnum roleName)
+        public async Task<UserRoles?> IsAccountExistingAsync(LoginViewModel account, RolesEnum roleName)
         {
             try
             {
