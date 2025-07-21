@@ -1,0 +1,13 @@
+﻿@model Golestan_Simulation.Models.Classrooms
+
+<h1>Delete Classroom</h1>
+<p>Are you sure you want to delete @Model.Building – @Model.RoomNumber?</p>
+
+<form asp-area="Admin"
+      asp-controller="ClassroomsManagement"
+      asp-action="Delete"
+      asp-route-id="@Model.Id"
+      method="post">
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

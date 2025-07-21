@@ -1,0 +1,49 @@
+﻿@model Golestan_Simulation.Models.Courses
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Name</dt>
+    <dd class="col-sm-10">@Model.Name</dd>
+
+    <dt class="col-sm-2">Code</dt>
+    <dd class="col-sm-10">@Model.Code</dd>
+
+    <dt class="col-sm-2">Unit</dt>
+    <dd class="col-sm-10">@Model.Unit</dd>
+
+    <dt class="col-sm-2">Description</dt>
+    <dd class="col-sm-10">@Model.Description</dd>
+
+    <dt class="col-sm-2">Exam Date</dt>
+    <dd class="col-sm-10">
+        @Model.ExameDate
+    </dd>
+</dl>
+
+<p>
+    <a asp-area="Admin"
+       asp-controller="CoursesManagement"
+       asp-action="Edit"
+       asp-route-id="@Model.Id"
+       class="btn btn-primary">
+        Edit
+    </a>
+    <a asp-area="Admin"
+       asp-controller="CoursesManagement"
+       asp-action="Delete"
+       asp-route-id="@Model.Id"
+       class="btn btn-danger">
+        Delete
+    </a>
+    <a asp-area="Admin"
+       asp-controller="CoursesManagement"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Back to List
+    </a>
+</p>

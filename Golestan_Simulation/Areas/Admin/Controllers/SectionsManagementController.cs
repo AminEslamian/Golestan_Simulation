@@ -251,5 +251,76 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var section = await _context.Sections.FindAsync(id);
+            if (section == null) return NotFound();
+            return View(section);   // renders Delete.cshtml
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id, IFormCollection form)
+        {
+            var section = await _context.Sections.FindAsync(id);
+            if (section != null)
+            {
+                _context.Sections.Remove(section);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    var section = await _context.Sections.FindAsync(id);
+        //    if (section == null)
+        //        return NotFound();
+
+        //    return View(section);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(
+        //    int id,
+        //    [Bind("Year,Semester")] Sections vm)
+        //{
+        //    // If user submitted invalid data, re-fetch the original so the view has Id & Capacity
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var original = await _context.Sections.FindAsync(id);
+        //        if (original == null)
+        //            return NotFound();
+
+        //        // overwrite the two editable fields so the form redisplays user input
+        //        original.Year = vm.Year;
+        //        original.Semester = vm.Semester;
+        //        return View(original);
+        //    }
+
+        //    // Now perform the real update
+        //    var section = await _context.Sections.FindAsync(id);
+        //    if (section == null)
+        //        return NotFound();
+
+        //    section.Year = vm.Year;
+        //    section.Semester = vm.Semester;
+
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+
+        public async Task<IActionResult> Info(int id)
+        {
+            var section = await _context.Sections
+                .Include(s => s.TimeSlot)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            if (section == null)
+                return NotFound();
+            return View(section);
+        }
     }
 }

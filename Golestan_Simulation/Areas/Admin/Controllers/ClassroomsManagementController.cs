@@ -1,11 +1,14 @@
 ﻿using Golestan_Simulation.Data;
 using Golestan_Simulation.Models;
 using Golestan_Simulation.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Golestan_Simulation.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ClassroomsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -15,9 +18,13 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var classrooms = await _context.Classrooms
+                .AsNoTracking()
+                .ToListAsync();
+
+            return View(classrooms);
         }
 
 
@@ -47,36 +54,68 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        // Optional: for confirmation page(if confirmed set the view page)
+        //  GET: show confirmation
+        //    URL: /Admin/ClassroomsManagement/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var classroom = await _context.Classrooms
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (classroom == null)
-            {
-                return NotFound();
-            }
-
-            return View(classroom); // A confirmation view
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom == null) return NotFound();
+            return View(classroom);   // renders Delete.cshtml
         }
 
-
-        [HttpPost, ActionName("Delete")]
+        // 2) POST: perform deletion
+        //    Form posts back to the *same* /Delete/{id} URL
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id, IFormCollection form)
         {
-            var classroom = await _context.Classrooms
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (classroom == null)
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom != null)
             {
+                _context.Classrooms.Remove(classroom);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom == null)
                 return NotFound();
+
+            return View(classroom);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Building,RoomNumber,Capacity")] Classrooms vm)
+        {
+            // If user submitted invalid data, re-fetch the original so the view has Id & Capacity
+            if (!ModelState.IsValid)
+            {
+                var original = await _context.Classrooms.FindAsync(id);
+                if (original == null)
+                    return NotFound();
+
+                // overwrite the two editable fields so the form redisplays user input
+                original.Building = vm.Building;
+                original.RoomNumber = vm.RoomNumber;
+                return View(original);
             }
 
-            _context.Classrooms.Remove(classroom);
-            await _context.SaveChangesAsync();
+            // Now perform the real update
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom == null)
+                return NotFound();
 
+            classroom.Building = vm.Building;
+            classroom.RoomNumber = vm.RoomNumber;
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }

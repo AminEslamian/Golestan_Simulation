@@ -1,0 +1,64 @@
+﻿@model Golestan_Simulation.Models.Courses
+
+@{
+    ViewData["Title"] = "Edit Course";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-area="Admin"
+      asp-controller="CoursesManagement"
+      asp-action="Edit"
+      asp-route-id="@Model.Id"
+      method="post">
+
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input name="Name"
+               id="Name"
+               value="@Model.Name"
+               class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Code">Code</label>
+        <input name="Code"
+               id="Code"
+               value="@Model.Code"
+               class="form-control" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Unit">Unit</label>
+        <input name="Unit"
+               id="Unit"
+               value="@Model.Unit"
+               class="form-control" />
+        <span asp-validation-for="Unit" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="ExameDate">ExameDate</label>
+        <input name="ExameDate"
+               id="ExameDate"
+               value="@Model.ExameDate"
+               class="form-control" />
+        <span asp-validation-for="ExameDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-area="Admin"
+       asp-controller="CoursesManagement"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

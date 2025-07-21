@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Golestan_Simulation.Models.Sections>
+﻿@model IEnumerable<Golestan_Simulation.Models.Instructors>
 
 @{
-    ViewData["Title"] = "All Sections";
+    ViewData["Title"] = "All Instructors";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,7 +9,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
+            <th>Name</th>
+            <th>Salary</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -17,7 +18,8 @@
         @foreach (var c in Model)
         {
             <tr>
-                <td>@c.Id</td>
+                <td>@c.User.UserName @c.User.LastName</td>
+                <td>@c.Salary</td>
                 <td>
                     <a asp-action="Delete" asp-route-id="@c.Id">Delete</a> |
                     <a asp-action="Info" asp-route-id="@c.Id">Info</a>

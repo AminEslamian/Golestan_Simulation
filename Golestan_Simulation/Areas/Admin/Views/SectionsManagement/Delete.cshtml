@@ -1,0 +1,13 @@
+﻿@model Golestan_Simulation.Models.Sections
+
+<h1>Delete Section</h1>
+<p>Are you sure you want to delete Id: @Model.Id – Year @Model.Year - Semester @Model.Semester?</p>
+
+<form asp-area="Admin"
+      asp-controller="SectionsManagement"
+      asp-action="Delete"
+      asp-route-id="@Model.Id"
+      method="post">
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

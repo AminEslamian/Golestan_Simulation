@@ -24,10 +24,15 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public async Task<IActionResult> Index()
+        {
+            var students = await _context.Students
+                .Include(s => s.User)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return View(students);
+        }
 
 
         public IActionResult RegisterStudent()
@@ -95,37 +100,69 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             return View(studentAccount);
         }
 
-        // Optional: for confirmation page(if confirmed set the view page)
         public async Task<IActionResult> Delete(int id)
         {
-            var student = await _context.Students
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            return View(student); // A confirmation view
+            var st = await _context.Students.FindAsync(id);
+            if (st == null) return NotFound();
+            return View(st);   // renders Delete.cshtml
         }
 
-
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id, IFormCollection form)
         {
-            var student = await _context.Students
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (student == null)
+            var st = await _context.Students.FindAsync(id);
+            if (st != null)
             {
-                return NotFound();
+                _context.Students.Remove(st);
+                await _context.SaveChangesAsync();
             }
-
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
+        }
+
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    var st = await _context.Students.FindAsync(id);
+        //    if (st == null)
+        //        return NotFound();
+
+        //    return View(st);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(
+        //    int id,
+        //    Students vm)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var original = await _context.Students.FindAsync(id);
+        //        if (original == null)
+        //            return NotFound();
+
+        //        original.EnrollmentDate = vm.EnrollmentDate;
+        //    }
+
+        //    // Now perform the real update
+        //    var st = await _context.Students.FindAsync(id);
+        //    if (st == null)
+        //        return NotFound();
+        //    st.EnrollmentDate = vm.EnrollmentDate;
+
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+
+        public async Task<IActionResult> Info(int id)
+        {
+            var st = await _context.Students
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            if (st == null)
+                return NotFound();
+            return View(st);
         }
     }
 }
