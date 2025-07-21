@@ -4,10 +4,14 @@ namespace Golestan_Simulation.ViewModels
 {
     public class UserViewModel
     {
-        [StringLength(50)]
-        public string UsernameOrEmail { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
 
-        [StringLength(50)]
-        public string RawPassword { get; set; } = null!;
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+
+        public string UserName { get; set; } = null!;
+
+        public string? Email { get; set; }
     }
 }
