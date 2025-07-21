@@ -1,0 +1,54 @@
+﻿@model Golestan_Simulation.Models.Classrooms
+
+@{
+    ViewData["Title"] = "Edit Classroom";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-area="Admin"
+      asp-controller="ClassroomsManagement"
+      asp-action="Edit"
+      asp-route-id="@Model.Id"
+      method="post">
+
+    <div class="form-group">
+        <label for="Building">Building</label>
+        <input name="Building"
+               id="Building"
+               value="@Model.Building"
+               class="form-control" />
+        <span asp-validation-for="Building" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="RoomNumber">Room Number</label>
+        <input name="RoomNumber"
+               id="RoomNumber"
+               value="@Model.RoomNumber"
+               class="form-control" />
+        <span asp-validation-for="RoomNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Capacity (fixed)</label>
+        <p class="form-control-plaintext">@Model.Capacity</p>
+        <input type="hidden"
+               name="Capacity"
+               value="@Model.Capacity" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-area="Admin"
+       asp-controller="ClassroomsManagement"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -79,51 +79,44 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom == null)
+                return NotFound();
 
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    var classroom = await _context.Classrooms
-        //        .FirstOrDefaultAsync(s => s.Id == id);
+            return View(classroom);
+        }
 
-        //    if (classroom == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Building,RoomNumber,Capacity")] Classrooms vm)
+        {
+            // If user submitted invalid data, re-fetch the original so the view has Id & Capacity
+            if (!ModelState.IsValid)
+            {
+                var original = await _context.Classrooms.FindAsync(id);
+                if (original == null)
+                    return NotFound();
 
-        //    var vm = new ClassroomViewModel
-        //    {
-        //        Building = classroom.Building,
-        //        Capacity = classroom.Capacity,
-        //        RoomNumber = classroom.RoomNumber
-        //    };
-        //    return View(vm);
-        //}
+                // overwrite the two editable fields so the form redisplays user input
+                original.Building = vm.Building;
+                original.RoomNumber = vm.RoomNumber;
+                return View(original);
+            }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(ClassroomViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model); // Return same view with validation errors
-        //    }
+            // Now perform the real update
+            var classroom = await _context.Classrooms.FindAsync(id);
+            if (classroom == null)
+                return NotFound();
 
-        //    var product = await _context.Classrooms.FindAsync(model);
+            classroom.Building = vm.Building;
+            classroom.RoomNumber = vm.RoomNumber;
 
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    // Update properties
-        //    product.Name = model.Name;
-        //    product.Price = model.Price;
-
-        //    _context.Update(product);
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction(nameof(Index)); // Redirect to list page or details page
-        //}
-
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
