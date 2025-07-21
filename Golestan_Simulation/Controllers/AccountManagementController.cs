@@ -1,24 +1,45 @@
-﻿using Golestan_Simulation.Models;
+﻿using AspNetCoreGeneratedDocument;
+using Golestan_Simulation.Data;
+using Golestan_Simulation.Models;
 using Golestan_Simulation.Services;
 using Golestan_Simulation.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Golestan_Simulation.Controllers
 {
     public class AccountManagementController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly IGolestanAuthenticationServices _authenticationServices;
-        public AccountManagementController(IGolestanAuthenticationServices authenticationServices)
+        public AccountManagementController(IGolestanAuthenticationServices authenticationServices, ApplicationDbContext context)
         {
+            _context = context;
             _authenticationServices = authenticationServices;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var userId = User.FindFirst("UserId").Value;
+            var user = await _context.Users.FindAsync(int.Parse(userId));
+
+            var model = new UserViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Email = user.Email,
+                CreatedAt = DateTime.Now
+            };
+
+            ViewBag.Role = User.FindFirst(ClaimTypes.Role).Value;
+
+            return View(model);
         }
 
 
@@ -49,7 +70,7 @@ namespace Golestan_Simulation.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(UserViewModel user, RolesEnum role)
+        public async Task<IActionResult> Login(LoginViewModel user, RolesEnum role)
         {
             if (ModelState.IsValid)
             {
