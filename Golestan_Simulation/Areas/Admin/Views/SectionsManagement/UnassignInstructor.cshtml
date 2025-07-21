@@ -1,16 +1,16 @@
 ﻿@model Teachs;
 
 @{
-    ViewData["Title"] = "Unassign Instructor";
+    ViewData["Title"] = "حذف استاد";
 }
 <h2>
-    Are you sure to unassign this account from the section?
+    آیا از حذف این استاد از واحد درسی مطمئن هستید؟
 </h2>
 
 <div>
     <form asp-action="UnassignInstructor">
         <input asp-for="InstructorId" type="hidden" value=@Model.InstructorId />
         <input asp-for="SectionId" type="hidden" value=@Model.SectionId />
-        <input type="submit" value="Unassign" class="btn btn-danger" />
+        <input type="submit" value="حذف" class="btn btn-danger" />
     </form>
 </div>

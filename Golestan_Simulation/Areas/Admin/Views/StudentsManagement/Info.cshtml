@@ -1,22 +1,22 @@
 ﻿@model Golestan_Simulation.Models.Students
 
 @{
-    ViewData["Title"] = "Student Details";
+    ViewData["Title"] = "جزئیات دانشجو";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <dl class="row">
-    <dt class="col-sm-2">Id</dt>
+    <dt class="col-sm-2">شناسه</dt>
     <dd class="col-sm-10">@Model.Id</dd>
 
-    <dt class="col-sm-2">Name</dt>
+    <dt class="col-sm-2">نام</dt>
     <dd class="col-sm-10">@Model.User.FirstName @Model.User.LastName</dd>
 
-    <dt class="col-sm-2">UserId</dt>
+    <dt class="col-sm-2">شناسه کاربری</dt>
     <dd class="col-sm-10">@Model.UserId</dd>
 
-    <dt class="col-sm-2">Enrollment Date</dt>
+    <dt class="col-sm-2">تاریخ ثبت نام</dt>
     <dd class="col-sm-10">
         @Model.EnrollmentDate
     </dd>
@@ -28,13 +28,12 @@
        asp-action="Delete"
        asp-route-id="@Model.Id"
        class="btn btn-danger">
-        Delete
+        حذف
     </a>
     <a asp-area="Admin"
        asp-controller="StudentsManagement"
        asp-action="Index"
        class="btn btn-secondary">
-        Back to List
+        بازگشت به لیست
     </a>
 </p>
-

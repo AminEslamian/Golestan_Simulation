@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.Models.Classrooms
 
 @{
-    ViewData["Title"] = "Edit Classroom";
+    ViewData["Title"] = "ویرایش کلاس";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -13,7 +13,7 @@
       method="post">
 
     <div class="form-group">
-        <label for="Building">Building</label>
+        <label for="Building">ساختمان</label>
         <input name="Building"
                id="Building"
                value="@Model.Building"
@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group">
-        <label for="RoomNumber">Room Number</label>
+        <label for="RoomNumber">شماره اتاق</label>
         <input name="RoomNumber"
                id="RoomNumber"
                value="@Model.RoomNumber"
@@ -31,19 +31,19 @@
     </div>
 
     <div class="form-group">
-        <label>Capacity (fixed)</label>
+        <label>ظرفیت (ثابت)</label>
         <p class="form-control-plaintext">@Model.Capacity</p>
         <input type="hidden"
                name="Capacity"
                value="@Model.Capacity" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
     <a asp-area="Admin"
        asp-controller="ClassroomsManagement"
        asp-action="Index"
        class="btn btn-secondary">
-        Cancel
+        لغو
     </a>
 </form>
 

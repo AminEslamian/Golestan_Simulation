@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.ViewModels.StudentAccountViewModel
 
 @{
-    ViewData["Title"] = "Register Student";
+    ViewData["Title"] = "ثبت نام دانشجو";
 }
 
 <div class="row">
@@ -9,44 +9,44 @@
         <form asp-controller="StudentsManagement" asp-action="RegisterStudent">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label">First Name</label>
+                <label asp-for="FirstName" class="control-label">نام</label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label">Last Name</label>
+                <label asp-for="LastName" class="control-label">نام خانوادگی</label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label">User Name*</label>
+                <label asp-for="UserName" class="control-label">نام کاربری*</label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RawPassword" class="control-label">Password*</label>
+                <label asp-for="RawPassword" class="control-label">رمز عبور*</label>
                 <input asp-for="RawPassword" class="form-control" type="password" />
                 <span asp-validation-for="RawPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">ایمیل</label>
                 <input asp-for="Email" class="form-control" type="email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EnrollmentDate" class="control-label">Enrollment Date</label>
+                <label asp-for="EnrollmentDate" class="control-label">تاریخ ثبت نام</label>
                 <input asp-for="EnrollmentDate" class="form-control" type="date" />
                 <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="ثبت نام" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-controller="StudentManagement" asp-action="Index">Back</a>
+    <a asp-controller="StudentManagement" asp-action="Index">بازگشت</a>
 </div>
 
 @section Scripts {

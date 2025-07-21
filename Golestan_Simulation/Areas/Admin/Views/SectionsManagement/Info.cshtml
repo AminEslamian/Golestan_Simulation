@@ -1,36 +1,36 @@
 ﻿@model Golestan_Simulation.Models.Sections
 
 @{
-    ViewData["Title"] = "Course Details";
+    ViewData["Title"] = "جزئیات بخش";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <dl class="row">
-    <dt class="col-sm-2">Id</dt>
+    <dt class="col-sm-2">شناسه</dt>
     <dd class="col-sm-10">@Model.Id</dd>
 
-    <dt class="col-sm-2">CourseId</dt>
+    <dt class="col-sm-2">شناسه درس</dt>
     <dd class="col-sm-10">@Model.CourseId</dd>
 
-    <dt class="col-sm-2">Semester</dt>
+    <dt class="col-sm-2">ترم</dt>
     <dd class="col-sm-10">@Model.Semester</dd>
 
-    <dt class="col-sm-2">Year</dt>
+    <dt class="col-sm-2">سال</dt>
     <dd class="col-sm-10">@Model.Year</dd>
 
-    <dt class="col-sm-2">ClassroomId</dt>
+    <dt class="col-sm-2">شناسه کلاس</dt>
     <dd class="col-sm-10">@Model.ClassroomId</dd>
 
-    <dt class="col-sm-2">Day</dt>
+    <dt class="col-sm-2">روز</dt>
     <dd class="col-sm-10">@Model.TimeSlot.Day</dd>
 
-    <dt class="col-sm-2">StartTime</dt>
+    <dt class="col-sm-2">زمان شروع</dt>
     <dd class="col-sm-10">
         @Model.TimeSlot.StartTime
     </dd>
 
-    <dt class="col-sm-2">EndTime</dt>
+    <dt class="col-sm-2">زمان پایان</dt>
     <dd class="col-sm-10">
         @Model.TimeSlot.EndTime
     </dd>
@@ -42,12 +42,12 @@
        asp-action="Delete"
        asp-route-id="@Model.Id"
        class="btn btn-danger">
-        Delete
+        حذف
     </a>
     <a asp-area="Admin"
        asp-controller="SectionsManagement"
        asp-action="Index"
        class="btn btn-secondary">
-        Back to List
+        بازگشت به لیست
     </a>
 </p>

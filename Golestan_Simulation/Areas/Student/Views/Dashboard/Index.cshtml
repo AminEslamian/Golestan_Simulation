@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Golestan_Simulation.Models.Takes>
 
 @{
-    ViewData["Title"] = "Your Enrollments";
+    ViewData["Title"] = "واحدهای درسی ثبت‌ نامی شما";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -9,9 +9,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Course</th>
-            <th>Section</th>
-            <th>Grade</th>
+            <th>درس</th>
+            <th>بخش</th>
+            <th>نمره</th>
             <th></th>
         </tr>
     </thead>
@@ -23,11 +23,11 @@
                 <td>@take.Section.Id</td>
                 <td>@take.Grade</td>
                 <td>
-                    <form asp-action="Delete" method="get" class="d-inline">
+                    <form asp-action="DeleteTake" method="get" class="d-inline">
                         <input type="hidden" name="studentId" value="@take.StudentId" />
                         <input type="hidden" name="sectionId" value="@take.SectionId" />
                         <button type="submit" class="btn btn-sm btn-outline-danger">
-                            Delete
+                            حذف
                         </button>
                     </form>
                 </td>

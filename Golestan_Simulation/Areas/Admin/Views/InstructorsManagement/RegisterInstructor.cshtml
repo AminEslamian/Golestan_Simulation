@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.ViewModels.InstructorAccountViewModel
 
 @{
-    ViewData["Title"] = "Register Instructor";
+    ViewData["Title"] = "ثبت نام استاد";
 }
 
 <div class="row">
@@ -9,49 +9,49 @@
         <form asp-controller="InstructorsManagement" asp-action="RegisterInstructor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label">First Name</label>
+                <label asp-for="FirstName" class="control-label">نام</label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label">Last Name</label>
+                <label asp-for="LastName" class="control-label">نام خانوادگی</label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label">User Name*</label>
+                <label asp-for="UserName" class="control-label">نام کاربری*</label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RawPassword" class="control-label">Password*</label>
-                <input asp-for="RawPassword" class="form-control" type="password"/>
+                <label asp-for="RawPassword" class="control-label">رمز عبور*</label>
+                <input asp-for="RawPassword" class="form-control" type="password" />
                 <span asp-validation-for="RawPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" type="email"/>
+                <label asp-for="Email" class="control-label">ایمیل</label>
+                <input asp-for="Email" class="form-control" type="email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Salary" class="control-label"></label>
-                <input asp-for="Salary" class="form-control" type="number"/>
+                <label asp-for="Salary" class="control-label">حقوق</label>
+                <input asp-for="Salary" class="form-control" type="number" />
                 <span asp-validation-for="Salary" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HireDate" class="control-label">Hire Date</label>
-                <input asp-for="HireDate" class="form-control" type="date"/>
+                <label asp-for="HireDate" class="control-label">تاریخ استخدام</label>
+                <input asp-for="HireDate" class="form-control" type="date" />
                 <span asp-validation-for="HireDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="ثبت نام" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-controller="StudentManagement" asp-action="Index">Back</a>
+    <a asp-controller="StudentManagement" asp-action="Index">بازگشت</a>
 </div>
 
 @section Scripts {
@@ -59,4 +59,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-

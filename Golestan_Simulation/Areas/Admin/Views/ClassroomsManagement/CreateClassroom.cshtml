@@ -4,31 +4,31 @@
 <div class="container my-5">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
-            <h4>Add Classroom</h4>
+            <h4>افزودن کلاس</h4>
         </div>
         <div class="card-body">
             <form asp-controller="ClassroomsManagement" asp-action="CreateClassroom" method="post">
 
                 <div class="mb-3">
-                    <label asp-for="Building" class="form-label"></label>
+                    <label asp-for="Building" class="form-label">ساختمان</label>
                     <input asp-for="Building" class="form-control" />
                     <span asp-validation-for="Building" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="RoomNumber" class="form-label"></label>
+                    <label asp-for="RoomNumber" class="form-label">شماره اتاق</label>
                     <input asp-for="RoomNumber" class="form-control" type="number" />
                     <span asp-validation-for="RoomNumber" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Capacity" class="form-label"></label>
+                    <label asp-for="Capacity" class="form-label">ظرفیت</label>
                     <input asp-for="Capacity" class="form-control" type="number" />
                     <span asp-validation-for="Capacity" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> Add Classroom
+                    <i class="bi bi-plus-circle"></i> افزودن کلاس
                 </button>
             </form>
         </div>
