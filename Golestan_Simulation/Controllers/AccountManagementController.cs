@@ -5,6 +5,7 @@ using Golestan_Simulation.Services;
 using Golestan_Simulation.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -25,48 +26,48 @@ namespace Golestan_Simulation.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirst("UserId").Value;
-            var user = await _context.Users.FindAsync(int.Parse(userId));
-
-            var model = new UserViewModel
+            if(User.Identity != null && User.Identity.IsAuthenticated)
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                UserName = user.UserName,
-                Email = user.Email,
-                CreatedAt = DateTime.Now
-            };
+                var userId = User.FindFirst("UserId").Value;
+                var user = await _context.Users.FindAsync(int.Parse(userId));
 
-            ViewBag.Role = User.FindFirst(ClaimTypes.Role).Value;
+                var model = new UserViewModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    CreatedAt = DateTime.Now
+                };
 
-            return View(model);
-        }
+                ViewBag.Role = User.FindFirst(ClaimTypes.Role).Value;
 
-
-        public IActionResult Login(RolesEnum role = RolesEnum.None, string? returnUrl = null)
-        {
-            if (role != RolesEnum.None)
-            {
-                ViewBag.Role = role;
+                return View(model);
             }
             else
             {
-                RolesEnum expectedRole = RolesEnum.None;
-                if (!string.IsNullOrEmpty(returnUrl))
-                {
-                    if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
-                        expectedRole = RolesEnum.Admin;
-                    else if (returnUrl.StartsWith("/instructor", StringComparison.OrdinalIgnoreCase))
-                        expectedRole = RolesEnum.Instructor;
-                    else if (returnUrl.StartsWith("/student", StringComparison.OrdinalIgnoreCase))
-                        expectedRole = RolesEnum.Student;
-                }
-                else
-                    return NotFound();
-
-                ViewBag.Role = expectedRole;
+                return View();
             }
+        }
 
+
+        public IActionResult Login(string? returnUrl = null)
+        {
+            RolesEnum expectedRole = RolesEnum.None;
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Admin;
+                else if (returnUrl.StartsWith("/instructor", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Instructor;
+                else if (returnUrl.StartsWith("/student", StringComparison.OrdinalIgnoreCase))
+                    expectedRole = RolesEnum.Student;
+            }
+            else
+                return NotFound();
+
+            ViewBag.Role = expectedRole;
+            
             return View();
         }
         [HttpPost]
