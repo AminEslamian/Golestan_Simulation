@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Golestan_Simulation.Models.Students>
+
+@{
+    ViewData["Title"] = "All Students";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Id</td>
+                <td>@c.User.FirstName @c.User.LastName</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@c.Id">Delete</a> |
+                    <a asp-action="Info" asp-route-id="@c.Id">Info</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
