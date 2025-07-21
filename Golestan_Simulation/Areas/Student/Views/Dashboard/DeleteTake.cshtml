@@ -1,0 +1,24 @@
+﻿@model Golestan_Simulation.Models.Takes
+
+@{
+    ViewData["Title"] = "Confirm Deletion";
+}
+
+<h2>Confirm Deletion</h2>
+
+<div class="alert alert-warning">
+    <p>Are you sure you want to delete your enrollment in:</p>
+    <ul>
+        <li><strong>@Model.Student.User.LastName</strong></li>
+        <li>SectionId on: @Model.SectionId</li>
+    </ul>
+</div>
+
+<form asp-action="Delete"
+      asp-route-studentId="@Model.StudentId"
+      asp-route-sectionId="@Model.StudentId"
+      method="post">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
