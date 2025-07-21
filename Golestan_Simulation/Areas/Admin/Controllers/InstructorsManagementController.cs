@@ -27,10 +27,15 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public async Task<IActionResult> Index()
+        {
+            var instructors = await _context.Instructors
+                .Include(i => i.User)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return View(instructors);
+        }
 
 
         public IActionResult RegisterInstructor()
@@ -101,38 +106,114 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             return View(instructorAccount);
         }
 
-        
-        // Optional: for confirmation page(if confirmed set the view page)
+
         public async Task<IActionResult> Delete(int id)
         {
-            var instructor = await _context.Instructors
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (instructor == null)
-            {
-                return NotFound();
-            }
-
-            return View(instructor); // A confirmation view
+            var instructor = await _context.Instructors.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == id);
+            if (instructor == null) return NotFound();
+            return View(instructor);   // renders Delete.cshtml
         }
 
-
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id, IFormCollection form)
         {
-            var instructor = await _context.Instructors
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (instructor == null)
+            var instructor = await _context.Instructors.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == id);
+            if (instructor != null)
             {
-                return NotFound();
+                _context.Instructors.Remove(instructor);
+                await _context.SaveChangesAsync();
             }
-
-            _context.Instructors.Remove(instructor);
-            await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
+
+      
+        public async Task<IActionResult> Edit(int id)
+        {
+            var instructor = await _context.Instructors
+                .Include(i => i.User)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (instructor == null)
+                return NotFound();
+
+            return View(instructor);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Salary,HireDate,User")] Instructors vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                var original = await _context.Instructors
+                    .Include(i => i.User)
+                    .FirstOrDefaultAsync(i => i.Id == id);
+
+                if (original == null)
+                    return NotFound();
+
+                original.Salary = vm.Salary;
+                original.HireDate = vm.HireDate;
+                return View(original);
+            }
+
+            var instructor = await _context.Instructors.FindAsync(id);
+            if (instructor == null)
+                return NotFound();
+
+            instructor.Salary = vm.Salary;
+            instructor.HireDate = vm.HireDate;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        public async Task<IActionResult> Info(int id)
+        {
+            var instructor = await _context.Instructors
+                .Include(i => i.User) 
+                .FirstOrDefaultAsync(i => i.Id == id);
+            if (instructor == null)
+                return NotFound();
+            return View(instructor);
+        }
+
+        //// Optional: for confirmation page(if confirmed set the view page)
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var instructor = await _context.Instructors
+        //        .FirstOrDefaultAsync(s => s.Id == id);
+
+        //    if (instructor == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(instructor); // A confirmation view
+        //}
+
+
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var instructor = await _context.Instructors
+        //        .FirstOrDefaultAsync(s => s.Id == id);
+
+        //    if (instructor == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Instructors.Remove(instructor);
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 }
