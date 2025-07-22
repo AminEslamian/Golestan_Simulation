@@ -1,4 +1,4 @@
-﻿@model Golestan_Simulation.ViewModels.InstructorAccountViewModel
+﻿@model Golestan_Simulation.ViewModels.InstructorUserViewModel
 
 @{
     ViewData["Title"] = "ثبت نام استاد";
@@ -9,40 +9,54 @@
         <form asp-controller="InstructorsManagement" asp-action="RegisterInstructor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label">نام</label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <label>
+                    <input asp-for=@Model.IsNewUser type="checkbox" id="toggleNewUser" /> ساخت یوزر جدید
+                </label>
+            </div>
+
+            <div id="existing-user-section">
+                <label>انتخاب کاربر موجود</label>
+                <select asp-for=@Model.SelectedUserId asp-items=@Model.ExistingInstructorUsers class="form-control"></select>
+            </div>
+
+            <div id="new-user-section" style="display: none;">
+                <div class="form-group">
+                    <input asp-for="@Model.User.FirstName" class="form-control" placeholder="نام" />
+                    <span asp-validation-for="@Model.User.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input asp-for="@Model.User.LastName" class="form-control" placeholder="نام خانوادگی" />
+                    <span asp-validation-for="@Model.User.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input asp-for="@Model.User.UserName" class="form-control" placeholder="نام کاربری" />
+                    <span asp-validation-for="@Model.User.UserName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input asp-for="@Model.User.RawPassword" class="form-control" type="password" placeholder="رمز عبور" />
+                    <span asp-validation-for="@Model.User.RawPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input asp-for="@Model.User.Email" class="form-control" placeholder="ایمیل" />
+                    <span asp-validation-for="@Model.User.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <hr />
+            <div class="form-group">
+                <input asp-for=@Model.Instructor.Salary class="form-control" type="number" placeholder="حقوق"/>
+                <span asp-validation-for=@Model.Instructor.Salary class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label">نام خانوادگی</label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <input asp-for=@Model.Instructor.HireDate class="form-control" type="date" placeholder="تاریخ استخدام"/>
+                <span asp-validation-for=@Model.Instructor.HireDate class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label">نام کاربری*</label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RawPassword" class="control-label">رمز عبور*</label>
-                <input asp-for="RawPassword" class="form-control" type="password" />
-                <span asp-validation-for="RawPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label">ایمیل</label>
-                <input asp-for="Email" class="form-control" type="email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salary" class="control-label">حقوق</label>
-                <input asp-for="Salary" class="form-control" type="number" />
-                <span asp-validation-for="Salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HireDate" class="control-label">تاریخ استخدام</label>
-                <input asp-for="HireDate" class="form-control" type="date" />
-                <span asp-validation-for="HireDate" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <input type="submit" value="ثبت نام" class="btn btn-primary" />
             </div>
@@ -58,4 +72,19 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        const toggleCheckbox = document.getElementById("toggleNewUser");
+        const existingSection = document.getElementById("existing-user-section");
+        const newUserSection = document.getElementById("new-user-section");
+
+        toggleCheckbox.addEventListener("change", function () {
+            if (this.checked) {
+                existingSection.style.display = "none";
+                newUserSection.style.display = "block";
+            } else {
+                existingSection.style.display = "block";
+                newUserSection.style.display = "none";
+            }
+        });
+    </script>
 }

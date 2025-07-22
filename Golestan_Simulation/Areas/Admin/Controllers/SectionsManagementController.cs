@@ -153,7 +153,7 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             await _context.Teaches.AddAsync(newTeachs);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", nameof(DashboardController));
+            return RedirectToAction("Index", "Dashboard");
         }
 
 
