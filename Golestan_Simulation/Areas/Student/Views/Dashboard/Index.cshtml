@@ -10,20 +10,22 @@
     <thead>
         <tr>
             <th>درس</th>
+            <th>کلاس</th>
             <th>بخش</th>
             <th>نمره</th>
-            <th></th>
-        </tr>
+            <th>عملیات</th>
     </thead>
     <tbody>
         @foreach (var take in Model)
         {
             <tr>
                 <td>@take.Section.Course.Name</td>
+                <td>@take.Section.Classroom.Building - @take.Section.Classroom.RoomNumber</td>
                 <td>@take.Section.Id</td>
                 <td>@take.Grade</td>
                 <td>
                     <a asp-action="DeleteTake"
+                       asp-route-studentId="@take.StudentId"
                        asp-route-sectionId="@take.SectionId"
                        class="btn btn-sm btn-outline-danger">
                         حذف

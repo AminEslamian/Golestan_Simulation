@@ -31,6 +31,8 @@ namespace Golestan_Simulation.Areas.Student.Controllers
                 .Where(t => t.StudentId == studentId)
                 .Include(t => t.Section)
                     .ThenInclude(s => s.Course)
+                 .Include(t => t.Section)
+                    .ThenInclude(s => s.Classroom)
                 .ToListAsync();
 
             // 3) hand them off to the view
