@@ -13,26 +13,62 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom shadow-sm mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">سامانه گلستان</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <!-- BRAND -->
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    سامانه گلستان
+                </a>
+
+                <!-- TOGGLER -->
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                <!-- COLLAPSIBLE LINKS -->
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" id="mainNavbar">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Index">داشبورد</a>
+                            <a class="nav-link text-dark"
+                               asp-controller="Dashboard"
+                               asp-action="Index">
+                                داشبورد
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-controller="Dashboard"
+                               asp-action="Scores">
+                                ریزنمرات
+                            </a>
+                        </li>
+                        <!-- add more links here -->
+                    </ul>
+
+                    <!-- user‑icon on the “other side” -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-area=""
+                               asp-controller="AccountManagement"
+                               asp-action="Index"
+                               title="کانت کاربری">
+                                <i class="bi bi-person-circle fs-5"></i>
+                            </a>
                         </li>
                     </ul>
                 </div>
-                <a class="nav-link ms-3" asp-area="" asp-controller="AccountManagement" asp-action="Index" title="کانت کاربری">
-                    <i class="bi bi-person-circle fs-5"></i>
-                </a>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

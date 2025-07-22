@@ -19,7 +19,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
         public async Task<IActionResult> Index()
         {
             // 1) pull the student id out of the auth cookie
-            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
+            var studentIdClaim = User.FindFirstValue("UserId");
             if (string.IsNullOrEmpty(studentIdClaim)
                 || !int.TryParse(studentIdClaim, out var studentId))
             {
@@ -31,6 +31,8 @@ namespace Golestan_Simulation.Areas.Student.Controllers
                 .Where(t => t.StudentId == studentId)
                 .Include(t => t.Section)
                     .ThenInclude(s => s.Course)
+                 .Include(t => t.Section)
+                    .ThenInclude(s => s.Classroom)
                 .ToListAsync();
 
             // 3) hand them off to the view
@@ -41,7 +43,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteTake(int sectionId)
         {
-            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
+            var studentIdClaim = User.FindFirstValue("UserId");
             if (string.IsNullOrEmpty(studentIdClaim)
                 || !int.TryParse(studentIdClaim, out var studentId))
             {
@@ -66,7 +68,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteTake(int sectionId, IFormCollection form)
         {
-            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
+            var studentIdClaim = User.FindFirstValue("UserId");
             if (string.IsNullOrEmpty(studentIdClaim)
                 || !int.TryParse(studentIdClaim, out var studentId))
             {
@@ -90,7 +92,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
 
         public async Task<IActionResult> Scores()
         {
-            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
+            var studentIdClaim = User.FindFirstValue("UserId");
             if (string.IsNullOrEmpty(studentIdClaim) || !int.TryParse(studentIdClaim, out var studentId))
             {
                 return Forbid();
