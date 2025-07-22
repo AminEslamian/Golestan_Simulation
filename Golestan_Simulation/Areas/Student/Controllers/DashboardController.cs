@@ -37,46 +37,75 @@ namespace Golestan_Simulation.Areas.Student.Controllers
             return View(takes);
         }
 
-        // Optional: for confirmation page(if confirmed set the view page)
-        public async Task<IActionResult> DeleteTake(int id) // the id is id of the selected takes which is intended to be deleted
+        // GET: Student/Dashboard/DeleteTake?sectionId=5
+        [HttpGet]
+        public async Task<IActionResult> DeleteTake(int sectionId)
         {
             var studentIdClaim = User.FindFirstValue("DefaultStudentId");
-            if (string.IsNullOrEmpty(studentIdClaim) || !int.TryParse(studentIdClaim, out var studentId))
+            if (string.IsNullOrEmpty(studentIdClaim)
+                || !int.TryParse(studentIdClaim, out var studentId))
+            {
                 return Forbid();
+            }
 
-            // load just that one take, belonging to this student
+            // load the specific take by SectionId+StudentId
             var take = await _context.Takes
                 .Include(t => t.Section)
-                .FirstOrDefaultAsync(t => t.StudentId == id && t.StudentId == studentId);
-
-            if (take == null) return NotFound();
-
-            // pass it to the confirmation page
-            return View(take);
-        }
-
-
-        [HttpPost, ActionName("DeleteTake")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteTakeConfirmed(int id)
-        {
-            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
-            if (string.IsNullOrEmpty(studentIdClaim) || !int.TryParse(studentIdClaim, out var studentId))
-                return Forbid();
-
-            //var classroom = await _context.Classrooms
-            //    .FirstOrDefaultAsync(s => s.Id == id);
-            var take = await _context.Takes
-                .FirstOrDefaultAsync(t => t.StudentId == id && t.StudentId == studentId);
+                    .ThenInclude(s => s.Course)
+                .FirstOrDefaultAsync(t => t.SectionId == sectionId
+                                       && t.StudentId == studentId);
 
             if (take == null)
                 return NotFound();
 
+            return View(take);
+        }
 
-            _context.Takes.Remove(take);
-            await _context.SaveChangesAsync();
+        // POST: Student/Dashboard/DeleteTake?sectionId=5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTake(int sectionId, IFormCollection form)
+        {
+            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
+            if (string.IsNullOrEmpty(studentIdClaim)
+                || !int.TryParse(studentIdClaim, out var studentId))
+            {
+                return Forbid();
+            }
+
+            var take = await _context.Takes
+                .FirstOrDefaultAsync(t => t.SectionId == sectionId
+                                       && t.StudentId == studentId);
+
+            if (take != null)
+            {
+                _context.Takes.Remove(take);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction(nameof(Index));
         }
+
+
+
+        public async Task<IActionResult> Scores()
+        {
+            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
+            if (string.IsNullOrEmpty(studentIdClaim) || !int.TryParse(studentIdClaim, out var studentId))
+            {
+                return Forbid();
+            }
+
+            // Load the student's courses and grades
+            var takes = await _context.Takes
+                .Where(t => t.StudentId == studentId)
+                .Include(t => t.Section)
+                    .ThenInclude(s => s.Course)
+                .ToListAsync();
+
+            // Pass directly to the view (we'll calculate average in the view)
+            return View(takes);
+        }
+
     }
 }
