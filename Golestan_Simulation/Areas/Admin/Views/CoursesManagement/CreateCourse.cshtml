@@ -39,9 +39,18 @@
                     <span asp-validation-for="ExamDate" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> افزودن درس
-                </button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> افزودن درس
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="CoursesManagement"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        بازگشت
+                    </a>
+                </div>
             </form>
         </div>
     </div>

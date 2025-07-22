@@ -65,7 +65,14 @@
 </div>
 
 <div>
-    <a asp-controller="StudentManagement" asp-action="Index">بازگشت</a>
+    <div>
+        <a asp-area="Admin"
+           asp-controller="InstructorsManagement"
+           asp-action="Index"
+           class="btn btn-primary mt-3">
+            بازگشت
+        </a>
+    </div>
 </div>
 
 @section Scripts {
