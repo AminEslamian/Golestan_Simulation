@@ -1,4 +1,4 @@
-﻿@model Golestan_Simulation.Models.Students
+﻿@model Golestan_Simulation.ViewModels.StudentInfoViewModel
 
 @{
     ViewData["Title"] = "جزئیات دانشجو";
@@ -8,28 +8,63 @@
 
 <dl class="row">
     <dt class="col-sm-2">شناسه</dt>
-    <dd class="col-sm-10">@Model.Id</dd>
+    <dd class="col-sm-10">@Model.Student.Id</dd>
 
     <dt class="col-sm-2">نام</dt>
-    <dd class="col-sm-10">@Model.User.FirstName @Model.User.LastName</dd>
+    <dd class="col-sm-10">@Model.Student.User.FirstName @Model.Student.User.LastName</dd>
 
     <dt class="col-sm-2">شناسه کاربری</dt>
-    <dd class="col-sm-10">@Model.UserId</dd>
+    <dd class="col-sm-10">@Model.Student.UserId</dd>
 
     <dt class="col-sm-2">تاریخ ثبت نام</dt>
-    <dd class="col-sm-10">
-        @Model.EnrollmentDate
-    </dd>
+    <dd class="col-sm-10">@Model.Student.EnrollmentDate</dd>
 </dl>
 
+<hr />
+
+<h2>بخش‌های ثبت‌نام‌شده</h2>
+
+@if (!Model.AssignedSections.Any())
+{
+    <p>این دانشجو هنوز هیچ بخشی را انتخاب نکرده است.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>شناسه بخش</th>
+                <th>درس</th>
+                <th>ترم / سال</th>
+                <th>کلاس / زمان</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sec in Model.AssignedSections)
+            {
+                <tr>
+                    <td>@sec.SectionId</td>
+                    <td>@sec.CourseDisplay</td>
+                    <td>@sec.Semester / @sec.Year</td>
+                    <td>@sec.ClassroomDisplay &nbsp;|&nbsp; @sec.TimeSlotDisplay</td>
+                    <td>
+                        <a asp-area="Admin"
+                           asp-controller="SectionsManagement"
+                           asp-action="UnassignStudent"
+                           asp-route-studentId="@Model.Student.Id"
+                           asp-route-sectionId="@sec.SectionId"
+                           class="btn btn-sm btn-danger">
+                            حذف
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
 <p>
-    <a asp-area="Admin"
-       asp-controller="StudentsManagement"
-       asp-action="Delete"
-       asp-route-id="@Model.Id"
-       class="btn btn-danger">
-        حذف
-    </a>
     <a asp-area="Admin"
        asp-controller="StudentsManagement"
        asp-action="Index"
