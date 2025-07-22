@@ -315,12 +315,34 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Info(int id)
         {
+            // 1. Load the section + its timeslot
             var section = await _context.Sections
                 .Include(s => s.TimeSlot)
                 .FirstOrDefaultAsync(s => s.Id == id);
+
             if (section == null)
                 return NotFound();
-            return View(section);
+
+            // 2. Load all takes for that section, including the Student → User
+            var takes = await _context.Takes
+                .Where(t => t.SectionId == id)
+                .Include(t => t.Student)
+                    .ThenInclude(s => s.User)
+                .ToListAsync();
+
+            // 3. Project into our viewmodel
+            var vm = new SectionInfoViewModel
+            {
+                Section = section,
+                EnrolledStudents = takes.Select(t => new EnrolledStudent
+                {
+                    StudentId = t.StudentId,
+                    FullName = $"{t.Student.User.FirstName} {t.Student.User.LastName}"
+                }).ToList()
+            };
+
+            return View(vm);
         }
+
     }
 }
