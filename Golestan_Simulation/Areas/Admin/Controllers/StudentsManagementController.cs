@@ -59,12 +59,12 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
                 {
                     if (await _registerServices.IsUserNameAvailableAsync(model.User.UserName))
                     {
-                        ModelState.AddModelError("UserName", "This user name is not available");
+                        ModelState.AddModelError("User.UserName", "This user name is not available");
                         return View(model);
                     }
                     if (await _registerServices.IsEmailAvailableAsync(model.User.Email))
                     {
-                        ModelState.AddModelError("Email", "This email is not available");
+                        ModelState.AddModelError("User.Email", "This email is not available");
                         return View(model);
                     }
 

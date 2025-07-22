@@ -6,9 +6,9 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Section</th>
+            <th>نام</th>
+            <th>ایمیل</th>
+            <th>واحد درسی</th>
             <th></th>  @* action column *@
         </tr>
     </thead>
@@ -16,7 +16,7 @@
         @if (!Model.Any())
         {
             <tr>
-                <td colspan="5" class="text-center">No students assigned to you yet.</td>
+                <td colspan="5" class="text-center">هیچ دانشجویی به شما تخصیص نیافته.</td>
             </tr>
         }
         else
@@ -37,7 +37,7 @@
                            asp-route-studentId="@take.StudentId"
                            asp-route-sectionId="@take.SectionId"
                            class="btn btn-sm btn-danger">
-                            Remove
+                            لغو
                         </a>
                     </td>
                 </tr>

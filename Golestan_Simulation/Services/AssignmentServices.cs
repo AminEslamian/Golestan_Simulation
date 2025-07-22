@@ -87,9 +87,9 @@ namespace Golestan_Simulation.Services
                 .Select(s => s.Classroom)
                 .First();
 
-            var takes = _context.Takes.Where(t => t.StudentId == sectionId);
+            var takes = _context.Takes.Where(t => t.SectionId == sectionId);
 
-            if(takes.Count() == classroom.Capacity)
+            if(takes.Count() >= classroom.Capacity)
                 return true;
             else
                 return false;
