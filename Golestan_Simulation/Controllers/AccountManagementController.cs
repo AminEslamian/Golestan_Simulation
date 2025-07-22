@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -28,8 +30,8 @@ namespace Golestan_Simulation.Controllers
         {
             if(User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var userId = User.FindFirst("UserId").Value;
-                var user = await _context.Users.FindAsync(int.Parse(userId));
+                var userId = int.Parse(User.FindFirst("UserId").Value);
+                var user = await _context.Users.FindAsync(userId);
 
                 var model = new UserViewModel
                 {
@@ -132,6 +134,28 @@ namespace Golestan_Simulation.Controllers
 
             }
             return View(user);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SwitchAccount(int accountId)
+        {
+            var userId = int.Parse(User.FindFirst("UserId").Value);
+
+            var userRole = await _context.UserRoles
+                .Include(s => s.User)
+                .Include(s => s.Role)
+                .SingleAsync(ur => ur.User.Id == userId);
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _authenticationServices.AuthenticateUserAsync(userRole, HttpContext, accountId);
+
+            if (User.FindFirst(ClaimTypes.Role).Value == "Instructor")
+                return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
+            else if (User.FindFirst(ClaimTypes.Role).Value == "Student")
+                return RedirectToAction("Index", "Dashboard", new { area = "Student" });
+
+            return NotFound();
         }
 
 

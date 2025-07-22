@@ -20,7 +20,7 @@ namespace Golestan_Simulation.Areas.Instructor.Controllers
         //this is actually the index!:
         public async Task<IActionResult> Showsections() // Shows students of the selected section
         {
-            var instructorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var instructorId = User.FindFirstValue("DefaultInstructorId");
 
             var sections = await _context.Sections
                 .Where(s => s.Teachs.Any(t => t.InstructorId.ToString() == instructorId))
