@@ -10,6 +10,7 @@
     <thead>
         <tr>
             <th>شناسه</th>
+            <th>درس</th>
             <th>عملیات</th>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
         {
             <tr>
                 <td>@c.Id</td>
+                <td>@c.Course.Name - @c.Course.Code</td>
                 <td>
                     <a asp-action="Delete" asp-route-id="@c.Id">حذف</a> |
                     <a asp-action="Info" asp-route-id="@c.Id">جزئیات</a>

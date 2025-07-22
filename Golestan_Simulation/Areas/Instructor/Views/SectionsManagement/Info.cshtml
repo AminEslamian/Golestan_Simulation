@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Golestan_Simulation.Models.Takes>
+
+@{
+    ViewData["Title"] = "Section Details";
+    var s = ViewBag.Section as Golestan_Simulation.Models.Sections;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (s != null)
+{
+    <h4>
+        @s.Course.Name
+        (Sem @s.Semester, @s.Year)
+    </h4>
+}
+<hr />
+
+@if (!Model.Any())
+{
+    <p class="text-warning">No students are enrolled in this section.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student Name</th>
+                <th>Email</th>
+                <th>Current Grade</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int row = 1;
+            }
+            @foreach (var take in Model)
+            {
+                <tr>
+                    <td>@row</td>
+                    <td>@take.Student.User.FirstName @take.Student.User.LastName</td>
+                    <td>@take.Student.User.Email</td>
+                    <td>@take.Grade</td>
+                    <td>
+                        <a asp-area="Instructor"
+                           asp-controller="SectionsManagement"
+                           asp-action="SetGrade"
+                           asp-route-studentId="@take.StudentId"
+                           asp-route-sectionId="@take.SectionId"
+                           class="btn btn-sm btn-primary">
+                            Set Grade
+                        </a>
+                    </td>
+                </tr>
+                row++;
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-area="Instructor"
+   asp-controller="SectionsManagement"
+   asp-action="ShowSections"
+   class="btn btn-secondary">
+    ← Back to My Sections
+</a>

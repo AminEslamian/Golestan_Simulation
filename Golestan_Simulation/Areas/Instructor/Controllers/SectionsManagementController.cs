@@ -53,5 +53,62 @@ namespace Golestan_Simulation.Areas.Instructor.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> SetGrade(int studentId, int sectionId)
+        {
+            var take = await _context.Takes
+                .Include(t => t.Student).ThenInclude(s => s.User)
+                .Include(t => t.Section).ThenInclude(s => s.Course)
+                .FirstOrDefaultAsync(t =>
+                    t.StudentId == studentId &&
+                    t.SectionId == sectionId);
+
+            if (take == null)
+                return NotFound();
+
+            return View(take);
+        }
+
+        [HttpPost, ActionName("SetGrade")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetGradeConfirmed(int studentId, int sectionId, byte grade)
+        {
+            var take = await _context.Takes
+                .FirstOrDefaultAsync(t =>
+                    t.StudentId == studentId &&
+                    t.SectionId == sectionId);
+
+            if (take == null)
+                return NotFound();
+
+            // update grade
+            take.Grade = grade;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Showsections));
+        }
+
+        public async Task<IActionResult> Info(int sectionId)
+        {
+            var instructorId = int.Parse(User.FindFirstValue("DefaultInstructorId"));
+
+            // verify this instructor actually teaches this section
+            bool teaches = await _context.Teaches
+                .AnyAsync(t => t.InstructorId == instructorId && t.SectionId == sectionId);
+            if (!teaches)
+                return Forbid();
+
+            // load all takes for this section, including student & course info
+            var takes = await _context.Takes
+                .Include(t => t.Student).ThenInclude(s => s.User)
+                .Include(t => t.Section).ThenInclude(s => s.Course)
+                .Where(t => t.SectionId == sectionId)
+                .ToListAsync();
+
+            // pass section metadata for header
+            ViewBag.Section = takes.FirstOrDefault()?.Section;
+
+            return View(takes);
+        }
     }
 }

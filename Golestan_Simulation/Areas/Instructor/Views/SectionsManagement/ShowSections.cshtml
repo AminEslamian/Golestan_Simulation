@@ -29,6 +29,15 @@ else
                     <td>@s.Semester</td>
                     <td>@s.Year</td>
                     <td>@s.ClassroomName</td>
+                    <td>
+                        <a asp-area="Instructor"
+                           asp-controller="SectionsManagement"
+                           asp-action="Info"
+                           asp-route-sectionId="@s.Id"
+                           class="btn btn-sm btn-primary">
+                            Details
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
