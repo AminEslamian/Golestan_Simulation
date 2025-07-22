@@ -191,14 +191,14 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         public async Task<IActionResult> AssignStudentToSection(int sectionId)
         {
             var assignedStudents = _context.Takes
-                .Where(t => t.StudentId == sectionId)
+                .Where(t => t.SectionId == sectionId)
                 .Include(t => t.Student)
                 .Select(t => t.Student);
 
             var vm = new TakesViewModel
             {
                 SectionId = sectionId,
-                Students = _context.Students.Where(s => !assignedStudents.Contains(s)).Select(s => new SelectListItem
+                Students = _context.Students.Where(s => assignedStudents.Contains(s) == false).Select(s => new SelectListItem
                 {
                     Value = s.Id.ToString(),
                     Text = $"{s.User.FirstName} {s.User.LastName} _ {s.Id}"
@@ -373,6 +373,8 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
                     FullName = $"{teach.Instructor.User.FirstName} {teach.Instructor.User.LastName}"
                 };
             }
+
+            ViewBag.ClassroomIsFull = _assignmentServices.ClassroomIsFull(id);
 
             return View(vm);
 
