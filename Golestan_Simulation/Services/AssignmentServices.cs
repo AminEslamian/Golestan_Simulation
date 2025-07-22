@@ -9,6 +9,7 @@ namespace Golestan_Simulation.Services
     {
         Task<bool> InstructorHasTimeConflictAsync(int sectionId, int instructorId);
         Task<bool> StudentHasTimeConflict(int sectionId, int studentId);
+        bool ClassroomIsFull(int sectionId);
     }
 
 
@@ -76,6 +77,22 @@ namespace Golestan_Simulation.Services
             }
 
             return false;
+        }
+
+        public bool ClassroomIsFull(int sectionId)
+        {
+            var classroom = _context.Sections
+                .Where(s => s.Id == sectionId)
+                .Include(s => s.Classroom)
+                .Select(s => s.Classroom)
+                .First();
+
+            var takes = _context.Takes.Where(t => t.StudentId == sectionId);
+
+            if(takes.Count() == classroom.Capacity)
+                return true;
+            else
+                return false;
         }
     }
 }
