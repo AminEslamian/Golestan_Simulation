@@ -40,7 +40,36 @@ namespace Golestan_Simulation.Controllers
                     CreatedAt = DateTime.Now
                 };
 
-                ViewBag.Role = User.FindFirst(ClaimTypes.Role).Value;
+                var role = User.FindFirst(ClaimTypes.Role).Value;
+
+                if(role == "Instructor")
+                {
+                    var intsructorId = int.Parse(User.FindFirst("DefaultInstructorId").Value);
+                    var otherAccounts = _context.Instructors.Where(i => i.UserId == userId)
+                    .Select(i => new SelectListItem
+                    {
+                        Value = i.Id.ToString(),
+                        Text = i.Id.ToString()
+                    });
+
+                    model.CurrentAccountId = intsructorId;
+                    model.OtherAccountsOfThisUser = otherAccounts;
+                }
+                else if(role == "Student")
+                {
+                    var studentId = int.Parse(User.FindFirst("DefaultStudentId").Value);
+                    var otherAccounts = _context.Students.Where(s => s.UserId == userId)
+                    .Select(i => new SelectListItem
+                    {
+                        Value = i.Id.ToString(),
+                        Text = i.Id.ToString()
+                    });
+
+                    model.CurrentAccountId = studentId;
+                    model.OtherAccountsOfThisUser = otherAccounts;
+                }
+
+                ViewBag.Role = role;
 
                 return View(model);
             }
@@ -74,7 +103,7 @@ namespace Golestan_Simulation.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userRole = await _authenticationServices.IsAccountExistingAsync(user, role);
+                var userRole = await _authenticationServices.FindAccount(user, role);
                 if (userRole == null)
                 {
                     ModelState.AddModelError("UsernameOrEmail", "No account found with this user name or email");
@@ -84,7 +113,7 @@ namespace Golestan_Simulation.Controllers
 
                 if (_authenticationServices.IsPasswordCorrect(userRole, user.RawPassword))
                 {
-                    await _authenticationServices.AuthenticateUserAsync(userRole, HttpContext);
+                    await _authenticationServices.AuthenticateUserAsync(userRole, HttpContext, null);
 
                     if (role == RolesEnum.Instructor)
                         return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
