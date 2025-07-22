@@ -17,13 +17,13 @@ namespace Golestan_Simulation.Areas.Instructor.Controllers
         }
         public async Task<IActionResult> ShowStudents()
         {
-            var instructorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var instructorId = int.Parse(User.FindFirstValue("DefaultInstructorId"));
 
             var takes = await _context.Takes
                 .Include(t => t.Student).ThenInclude(s => s.User)
                 .Include(t => t.Section).ThenInclude(s => s.Course)
                 .Where(t => t.Section.Teachs
-                    .Any(te => te.InstructorId.ToString() == instructorId))
+                    .Any(te => te.InstructorId == instructorId))
                 .ToListAsync();
 
             return View(takes);

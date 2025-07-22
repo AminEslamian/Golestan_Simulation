@@ -21,26 +21,37 @@ namespace Golestan_Simulation.Areas.Instructor.Controllers
         public async Task<IActionResult> Showsections() // Shows students of the selected section
         {
 
-            var instructorId = User.FindFirstValue("DefaultInstructorId");
+            var instructorId = int.Parse(User.FindFirstValue("DefaultInstructorId"));
 
 
-            var sections = await _context.Sections
-                .Where(s => s.Teachs.Any(t => t.InstructorId.ToString() == instructorId))
-                .Select(s => new
+            //var sections = await _context.Sections
+            //    .Include(s => s.Teachs)
+            //    .Where(s => s.Teachs.)
+            //    .Select(s => new
+            //    {
+            //        Id = s.Id,
+            //        CourseName = s.Course.Name,
+            //        Semester = s.Semester,
+            //        Year = s.Year,
+            //        ClassroomName = s.Classroom.Id + " - " + s.Classroom.Building + " - " + s.Classroom.RoomNumber,
+            //    })
+            //    .ToListAsync();
+            var sections = await _context.Teaches
+                .Include(t => t.Section).ThenInclude(s => s.Course)
+                .Include(t => t.Section).ThenInclude(s => s.Classroom)
+                .Where(t => t.InstructorId == instructorId)
+                .Select(t => new
                 {
-                    Id = s.Id,
-                    CourseName = s.Course.Name,
-                    Semester = s.Semester,
-                    Year = s.Year,
-                    ClassroomName = s.Classroom.Id + " - " + s.Classroom.Building + " - " + s.Classroom.RoomNumber,
-                })
-                .ToListAsync();
+                    Id = t.Section.Id,
+                    CourseName = t.Section.Course.Name,
+                    Semester = t.Section.Semester,
+                    Year = t.Section.Year,
+                    ClassroomName = $"{t.Section.Classroom.Id} {t.Section.Classroom.Building} - {t.Section.Classroom.RoomNumber}"
+                }).ToListAsync();
 
-            return View(sections);
+            ViewBag.Sections = sections;
+
+            return View();
         }
-
-
-
-
     }
 }

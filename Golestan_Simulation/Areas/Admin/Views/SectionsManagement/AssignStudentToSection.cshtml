@@ -9,7 +9,7 @@
     <input type="hidden" asp-for="Students" value=@Model.Students />
     <span asp-validation-for="StudentId" class="text-danger"></span>
 
-    <table class="table table-borderless">
+    @* <table class="table table-borderless">
         <tbody>
             @foreach (var student in Model.Students)
             {
@@ -24,11 +24,39 @@
                 </tr>
             }
         </tbody>
+    </table> *@
+    <table class="table">
+        <thead>
+            <tr>
+                <th>شناسه دانشجو</th>
+                <th>نام دانشجو</th>
+                <th>انتخاب</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td>@student.Value</td>
+                    <td>@student.Text</td>
+                    <td>
+                        <button type="button"
+                                class="btn btn-outline-primary select-btn"
+                                data-id="@student.Value">
+                            انتخاب
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
+
 
     <div class="text-center mt-4">
         <button type="submit" class="btn btn-success">انتخاب</button>
+        <a class="btn btn-secondary" asp-controller="SectionsManagement" asp-action="Index">بازگشت</a>
     </div>
+
 </form>
 
 @section Scripts {

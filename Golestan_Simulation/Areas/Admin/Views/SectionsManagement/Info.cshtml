@@ -68,42 +68,59 @@ else
 <hr />
 
 <h2>لیست دانشجویان ثبت‌نام‌شده</h2>
-@if (!Model.EnrolledStudents.Any())
-{
-    <p>هیچ دانشجویی در این بخش ثبت‌نام نکرده است.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>شناسه دانشجو</th>
-                <th>نام و نام خانوادگی</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in Model.EnrolledStudents)
-            {
+<div>
+    @if (!Model.EnrolledStudents.Any())
+    {
+        <p>هیچ دانشجویی در این بخش ثبت‌نام نکرده است.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@student.StudentId</td>
-                    <td>@student.FullName</td>
-                    <td>
-                        <a asp-area="Admin"
-                           asp-controller="SectionsManagement"
-                           asp-action="UnassignStudent"
-                           asp-route-studentId="@student.StudentId"
-                           asp-route-sectionId="@Model.Section.Id"
-                           class="btn btn-sm btn-danger">
-                            حذف
-                        </a>
-                    </td>
+                    <th>شناسه دانشجو</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var student in Model.EnrolledStudents)
+                {
+                    <tr>
+                        <td>@student.StudentId</td>
+                        <td>@student.FullName</td>
+                        <td>
+                            <a asp-area="Admin"
+                               asp-controller="SectionsManagement"
+                               asp-action="UnassignStudent"
+                               asp-route-studentId="@student.StudentId"
+                               asp-route-sectionId="@Model.Section.Id"
+                               class="btn btn-sm btn-danger">
+                                حذف
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    @if (ViewBag.ClassroomIsFull == false)
+    {
+        <!-- دکمه افزودن دانشجو -->
+        <div class="mt-3">
+            <a asp-area="Admin"
+                asp-controller="SectionsManagement"
+                asp-action="AssignStudentToSection"
+                asp-route-sectionId="@Model.Section.Id"
+                class="btn btn-success">
+                افزودن دانشجو
+            </a>
+        </div>
+    }
+</div>
 
+
+    
 <p>
     <a asp-area="Admin"
        asp-controller="SectionsManagement"

@@ -19,7 +19,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
         public async Task<IActionResult> Index()
         {
             // 1) pull the student id out of the auth cookie
-            var studentIdClaim = User.FindFirstValue("UserId");
+            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
             if (string.IsNullOrEmpty(studentIdClaim)
                 || !int.TryParse(studentIdClaim, out var studentId))
             {
@@ -92,7 +92,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
 
         public async Task<IActionResult> Scores()
         {
-            var studentIdClaim = User.FindFirstValue("UserId");
+            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
             if (string.IsNullOrEmpty(studentIdClaim) || !int.TryParse(studentIdClaim, out var studentId))
             {
                 return Forbid();

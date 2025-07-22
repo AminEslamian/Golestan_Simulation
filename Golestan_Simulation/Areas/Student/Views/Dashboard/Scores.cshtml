@@ -23,7 +23,11 @@
                 <td>@take.Section.Course.Name</td>
                 <td>@take.Grade</td>
                 <td>
-                    @if (isPassed)
+                    @if(take.Grade == 0)
+                    {
+                        <span class="text-success"></span>
+                    }
+                    else if (isPassed)
                     {
                         <span class="text-success">قبول</span>
                     }
