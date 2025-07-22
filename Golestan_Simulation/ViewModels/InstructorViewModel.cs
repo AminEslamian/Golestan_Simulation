@@ -5,9 +5,11 @@ namespace Golestan_Simulation.ViewModels
 {
     public class InstructorViewModel
     {
-        [Range(10, 10000000000, ErrorMessage="the value is out of the valid range")]
-        public decimal? Salary { get; set; }
+        [Range(10, 10000000000)]
+        [Required]
+        public decimal Salary { get; set; }
 
-        public DateOnly? HireDate { get; set; }
+        [Required]
+        public DateOnly HireDate { get; set; }
     }
 }

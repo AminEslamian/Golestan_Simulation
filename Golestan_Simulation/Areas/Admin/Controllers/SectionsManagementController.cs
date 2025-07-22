@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Golestan_Simulation.Areas.Admin.Controllers
 {
@@ -117,7 +118,7 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             await _context.Sections.AddAsync(newSection);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", nameof(DashboardController)); // Used nameof for compile-time safety
+            return RedirectToAction(nameof(Index)); // Used nameof for compile-time safety
         }
 
 
@@ -153,7 +154,7 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             await _context.Teaches.AddAsync(newTeachs);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -187,15 +188,20 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        public IActionResult AssignStudentToSection(int sectionId)
+        public async Task<IActionResult> AssignStudentToSection(int sectionId)
         {
+            var assignedStudents = _context.Takes
+                .Where(t => t.StudentId == sectionId)
+                .Include(t => t.Student)
+                .Select(t => t.Student);
+
             var vm = new TakesViewModel
             {
                 SectionId = sectionId,
-                Students = _context.Students.Select(i => new SelectListItem
+                Students = _context.Students.Where(s => !assignedStudents.Contains(s)).Select(s => new SelectListItem
                 {
-                    Value = i.Id.ToString(),
-                    Text = $"{i.User.FirstName} {i.User.LastName} _ {i.Id}"
+                    Value = s.Id.ToString(),
+                    Text = $"{s.User.FirstName} {s.User.LastName} _ {s.Id}"
                 })
             };
 
@@ -207,6 +213,11 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             if (await _assignmentServices.StudentHasTimeConflict(model.SectionId, model.StudentId))
             {
                 ModelState.AddModelError("StudentId", "The student schedule has time conflict");
+                return View(model);
+            }
+            if (_assignmentServices.ClassroomIsFull(model.SectionId))
+            {
+                ModelState.AddModelError("", "The class capacity is already done");
                 return View(model);
             }
 
