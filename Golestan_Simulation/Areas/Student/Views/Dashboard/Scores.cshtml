@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Golestan_Simulation.Models.Takes>
+
+@{
+    ViewData["Title"] = "نمرات شما";
+    var averageScore = Model.Any() ? Model.Average(t => t.Grade) : 0;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>درس</th>
+            <th>نمره</th>
+            <th>وضعیت</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var take in Model)
+        {
+            var isPassed = take.Grade >= 10;
+            <tr>
+                <td>@take.Section.Course.Name</td>
+                <td>@take.Grade</td>
+                <td>
+                    @if (isPassed)
+                    {
+                        <span class="text-success">قبول</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">مردود</span>
+                    }
+                </td>
+            </tr>
+        }
+        <tr>
+            <td><strong>میانگین کل</strong></td>
+            <td><strong>@averageScore.ToString("0.00")</strong></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>

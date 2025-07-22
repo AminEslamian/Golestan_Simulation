@@ -1,24 +1,20 @@
 ﻿@model Golestan_Simulation.Models.Takes
 
 @{
-    ViewData["Title"] = "تایید حذف";
+    ViewData["Title"] = "تأیید حذف واحد";
 }
 
-<h2>تایید حذف</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div class="alert alert-warning">
-    <p>آیا شما از حذف ثبت نام خود در درس زیر اطمینان دارید؟:</p>
-    <ul>
-        <li><strong>@Model.Student.User.LastName</strong></li>
-        <li>شناسه واحد درسی: @Model.SectionId</li>
-    </ul>
+    آیا از حذف درس
+    <strong>@Model.Section.Course.Name</strong>
+    (بخش @Model.Section.Id)
+    اطمینان دارید؟
 </div>
 
-<form asp-action="DeleteTake"
-      asp-route-studentId="@Model.StudentId"
-      asp-route-sectionId="@Model.StudentId"
-      method="post">
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-danger">بله, حذف شود</button>
-    <a asp-action="Index" class="btn btn-secondary">لغو</a>
+<form asp-action="DeleteTake" method="post">
+    <input type="hidden" name="sectionId" value="@Model.SectionId" />
+    <button type="submit" class="btn btn-danger">بله، حذف کن</button>
+    <a asp-action="Index" class="btn btn-secondary">بازگشت</a>
 </form>

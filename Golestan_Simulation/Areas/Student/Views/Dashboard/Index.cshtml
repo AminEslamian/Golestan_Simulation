@@ -23,13 +23,11 @@
                 <td>@take.Section.Id</td>
                 <td>@take.Grade</td>
                 <td>
-                    <form asp-action="DeleteTake" method="get" class="d-inline">
-                        <input type="hidden" name="studentId" value="@take.StudentId" />
-                        <input type="hidden" name="sectionId" value="@take.SectionId" />
-                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                            حذف
-                        </button>
-                    </form>
+                    <a asp-action="DeleteTake"
+                       asp-route-sectionId="@take.SectionId"
+                       class="btn btn-sm btn-outline-danger">
+                        حذف
+                    </a>
                 </td>
             </tr>
         }
