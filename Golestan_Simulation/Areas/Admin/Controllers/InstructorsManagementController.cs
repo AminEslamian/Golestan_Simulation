@@ -152,7 +152,7 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-      
+
         //public async Task<IActionResult> Edit(int id)
         //{
         //    var instructor = await _context.Instructors
@@ -201,12 +201,34 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         public async Task<IActionResult> Info(int id)
         {
             var instructor = await _context.Instructors
-                .Include(i => i.User) 
+                .Include(i => i.User)
                 .FirstOrDefaultAsync(i => i.Id == id);
+
             if (instructor == null)
                 return NotFound();
-            return View(instructor);
+
+            // Load the list of sections this instructor is assigned to
+            var assignedSections = await _context.Teaches
+                .Include(t => t.Section)
+                .Where(t => t.InstructorId == id)
+                .Select(t => new AssignedSectionViewModel
+                {
+                    SectionId = t.SectionId,
+                    CourseId = t.Section.CourseId,
+                    Semester = t.Section.Semester,
+                    Year = t.Section.Year
+                })
+                .ToListAsync();
+
+            var vm = new InstructorInfoViewModel
+            {
+                Instructor = instructor,
+                AssignedSections = assignedSections
+            };
+
+            return View(vm);
         }
+
 
         //// Optional: for confirmation page(if confirmed set the view page)
         //public async Task<IActionResult> Delete(int id)

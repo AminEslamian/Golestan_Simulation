@@ -180,12 +180,42 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Info(int id)
         {
-            var st = await _context.Students
+            // 1) load the student + their User
+            var student = await _context.Students
                 .Include(s => s.User)
                 .FirstOrDefaultAsync(s => s.Id == id);
-            if (st == null)
+
+            if (student == null)
                 return NotFound();
-            return View(st);
+
+            // 2) load all takes for that student, including the Section → Course, Classroom, TimeSlot
+            var takes = await _context.Takes
+                .Where(t => t.StudentId == id)
+                .Include(t => t.Section)
+                    .ThenInclude(s => s.Course)
+                .Include(t => t.Section)
+                    .ThenInclude(s => s.Classroom)
+                .Include(t => t.Section)
+                    .ThenInclude(s => s.TimeSlot)
+                .ToListAsync();
+
+            // 3) project into our VM
+            var vm = new StudentInfoViewModel
+            {
+                Student = student,
+                AssignedSections = takes.Select(t => new AssignedSection
+                {
+                    SectionId = t.SectionId,
+                    CourseDisplay = $"{t.Section.Course.Code} – {t.Section.Course.Name}",
+                    Semester = t.Section.Semester,
+                    Year = t.Section.Year,
+                    ClassroomDisplay = $"{t.Section.Classroom.Building} {t.Section.Classroom.RoomNumber}",
+                    TimeSlotDisplay = $"{t.Section.TimeSlot.Day} {t.Section.TimeSlot.StartTime:hh\\:mm}–{t.Section.TimeSlot.EndTime:hh\\:mm}"
+                })
+                .ToList()
+            };
+
+            return View(vm);
         }
     }
 }

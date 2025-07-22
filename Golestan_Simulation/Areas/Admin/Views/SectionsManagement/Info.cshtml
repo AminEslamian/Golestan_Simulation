@@ -1,4 +1,4 @@
-﻿@model Golestan_Simulation.Models.Sections
+﻿@model Golestan_Simulation.ViewModels.SectionInfoViewModel
 
 @{
     ViewData["Title"] = "جزئیات بخش";
@@ -8,42 +8,103 @@
 
 <dl class="row">
     <dt class="col-sm-2">شناسه</dt>
-    <dd class="col-sm-10">@Model.Id</dd>
+    <dd class="col-sm-10">@Model.Section.Id</dd>
 
     <dt class="col-sm-2">شناسه درس</dt>
-    <dd class="col-sm-10">@Model.CourseId</dd>
+    <dd class="col-sm-10">@Model.Section.CourseId</dd>
 
     <dt class="col-sm-2">ترم</dt>
-    <dd class="col-sm-10">@Model.Semester</dd>
+    <dd class="col-sm-10">@Model.Section.Semester</dd>
 
     <dt class="col-sm-2">سال</dt>
-    <dd class="col-sm-10">@Model.Year</dd>
+    <dd class="col-sm-10">@Model.Section.Year</dd>
 
     <dt class="col-sm-2">شناسه کلاس</dt>
-    <dd class="col-sm-10">@Model.ClassroomId</dd>
+    <dd class="col-sm-10">@Model.Section.ClassroomId</dd>
 
     <dt class="col-sm-2">روز</dt>
-    <dd class="col-sm-10">@Model.TimeSlot.Day</dd>
+    <dd class="col-sm-10">@Model.Section.TimeSlot.Day</dd>
 
     <dt class="col-sm-2">زمان شروع</dt>
-    <dd class="col-sm-10">
-        @Model.TimeSlot.StartTime
-    </dd>
+    <dd class="col-sm-10">@Model.Section.TimeSlot.StartTime</dd>
 
     <dt class="col-sm-2">زمان پایان</dt>
-    <dd class="col-sm-10">
-        @Model.TimeSlot.EndTime
-    </dd>
+    <dd class="col-sm-10">@Model.Section.TimeSlot.EndTime</dd>
 </dl>
 
-<p>
+<hr />
+
+<h2>استاد اختصاص‌یافته</h2>
+@if (Model.AssignedInstructor == null)
+{
+    <p>هیچ استادی برای این بخش تخصیص داده نشده است.</p>
     <a asp-area="Admin"
        asp-controller="SectionsManagement"
-       asp-action="Delete"
-       asp-route-id="@Model.Id"
-       class="btn btn-danger">
-        حذف
+       asp-action="AssignInstructorToSection"
+       asp-route-sectionId="@Model.Section.Id"
+       class="btn btn-sm btn-primary">
+        اختصاص استاد
     </a>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">شناسه استاد</dt>
+        <dd class="col-sm-10">@Model.AssignedInstructor.InstructorId</dd>
+
+        <dt class="col-sm-2">نام و نام خانوادگی</dt>
+        <dd class="col-sm-10">@Model.AssignedInstructor.FullName</dd>
+    </dl>
+    <a asp-area="Admin"
+       asp-controller="SectionsManagement"
+       asp-action="UnassignInstructor"
+       asp-route-instructorId="@Model.AssignedInstructor.InstructorId"
+       asp-route-sectionId="@Model.Section.Id"
+       class="btn btn-sm btn-warning">
+        لغو تخصیص
+    </a>
+}
+
+<hr />
+
+<h2>لیست دانشجویان ثبت‌نام‌شده</h2>
+@if (!Model.EnrolledStudents.Any())
+{
+    <p>هیچ دانشجویی در این بخش ثبت‌نام نکرده است.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>شناسه دانشجو</th>
+                <th>نام و نام خانوادگی</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.EnrolledStudents)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.FullName</td>
+                    <td>
+                        <a asp-area="Admin"
+                           asp-controller="SectionsManagement"
+                           asp-action="UnassignStudent"
+                           asp-route-studentId="@student.StudentId"
+                           asp-route-sectionId="@Model.Section.Id"
+                           class="btn btn-sm btn-danger">
+                            حذف
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<p>
     <a asp-area="Admin"
        asp-controller="SectionsManagement"
        asp-action="Index"
