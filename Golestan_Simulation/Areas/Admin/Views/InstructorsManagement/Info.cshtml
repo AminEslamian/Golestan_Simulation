@@ -1,4 +1,4 @@
-﻿@model Golestan_Simulation.Models.Instructors
+﻿@model Golestan_Simulation.ViewModels.InstructorInfoViewModel
 
 @{
     ViewData["Title"] = "جزئیات استاد";
@@ -8,23 +8,67 @@
 
 <dl class="row">
     <dt class="col-sm-2">نام</dt>
-    <dd class="col-sm-10">@Model.User.FirstName @Model.User.LastName</dd>
+    <dd class="col-sm-10">@Model.Instructor.User.FirstName @Model.Instructor.User.LastName</dd>
 
     <dt class="col-sm-2">ایمیل</dt>
-    <dd class="col-sm-10">@Model.User.Email</dd>
+    <dd class="col-sm-10">@Model.Instructor.User.Email</dd>
 
     <dt class="col-sm-2">حقوق</dt>
-    <dd class="col-sm-10">@Model.Salary</dd>
+    <dd class="col-sm-10">@Model.Instructor.Salary</dd>
 
     <dt class="col-sm-2">تاریخ استخدام</dt>
-    <dd class="col-sm-10">@Model.HireDate</dd>
+    <dd class="col-sm-10">@Model.Instructor.HireDate</dd>
 </dl>
+
+<hr />
+
+<h2>بخش‌های تخصیص‌یافته</h2>
+
+@if (!Model.AssignedSections.Any())
+{
+    <p>هیچ بخشی به این استاد تخصیص داده نشده است.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>شناسه بخش</th>
+                <th>شناسه درس</th>
+                <th>ترم</th>
+                <th>سال</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var s in Model.AssignedSections)
+        {
+            <tr>
+                <td>@s.SectionId</td>
+                <td>@s.CourseId</td>
+                <td>@s.Semester</td>
+                <td>@s.Year</td>
+                <td>
+                    <a asp-area="Admin"
+                       asp-controller="SectionsManagement"
+                       asp-action="UnassignInstructor"
+                       asp-route-instructorId="@Model.Instructor.Id"
+                       asp-route-sectionId="@s.SectionId"
+                       class="btn btn-sm btn-warning">
+                        لغو تخصیص
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
 
 <p>
     <a asp-area="Admin"
        asp-controller="InstructorsManagement"
        asp-action="Delete"
-       asp-route-id="@Model.Id"
+       asp-route-id="@Model.Instructor.Id"
        class="btn btn-danger">
         حذف
     </a>
