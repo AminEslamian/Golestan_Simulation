@@ -17,7 +17,8 @@ namespace Golestan_Simulation.Areas.Instructor.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> ShowSections()
+        //this is actually the index!:
+        public async Task<IActionResult> Showsections() // Shows students of the selected section
         {
             var instructorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -33,8 +34,9 @@ namespace Golestan_Simulation.Areas.Instructor.Controllers
                 })
                 .ToListAsync();
 
-            ViewBag.Sections = sections;
-            return View();
+            return View(sections);
         }
+
+
     }
 }

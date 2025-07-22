@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Golestan_Simulation.Models.Students>
+
+<h2>My Students</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="3" class="text-center">No students assigned to you yet.</td>
+            </tr>
+        }
+        else
+        {
+            var i = 1;
+            foreach (var student in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@student.User.FirstName @student.User.LastName</td>
+                    <td>@student.User.Email</td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>
