@@ -1,5 +1,6 @@
 ﻿using Golestan_Simulation.Data;
 using Golestan_Simulation.Models;
+using Golestan_Simulation.Services;
 using Golestan_Simulation.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
     public class ClassroomsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICreateClassroomService _classroomservice;
         public ClassroomsManagementController(ApplicationDbContext context)
         {
             _context = context;
@@ -36,6 +38,11 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateClassroom(ClassroomViewModel vm)
         {
+            if (await _classroomservice.IsClassroomAvailableAsync(vm.Building, vm.RoomNumber))
+            {
+                ModelState.AddModelError("Building", "This class is not available");
+                return View(vm);
+            }
             if (ModelState.IsValid)
             {
                 var newClass = new Classrooms
