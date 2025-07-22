@@ -118,7 +118,7 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
                     );
                 }
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", nameof(DashboardController));
+                return RedirectToAction(nameof(Index));
             }
             return View(model);
         }

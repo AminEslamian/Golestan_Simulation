@@ -20,8 +20,10 @@ namespace Golestan_Simulation.ViewModels
         public IEnumerable<SelectListItem>? Classrooms { get; set; }
 
         // for time-slot:
-        public string? Day { get; set; }
+        public string Day { get; set; } = null!;
+        [Required]
         public TimeSpan StartTime { get; set; }
+        [Required]
         public TimeSpan EndTime { get; set; }
 
     }

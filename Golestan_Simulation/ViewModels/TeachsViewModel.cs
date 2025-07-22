@@ -6,6 +6,6 @@ namespace Golestan_Simulation.ViewModels
     {
         public int InstructorId {  get; set; }
         public int SectionId {  get; set; }
-        public IEnumerable<SelectListItem> Instructors { get; set; }
+        public IEnumerable<SelectListItem>? Instructors { get; set; }
     }
 }

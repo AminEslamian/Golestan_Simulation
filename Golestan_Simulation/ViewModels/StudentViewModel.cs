@@ -4,6 +4,7 @@ namespace Golestan_Simulation.ViewModels
 {
     public class StudentViewModel
     {
-        public DateOnly? EnrollmentDate { get; set; }
+        [Required]
+        public DateOnly EnrollmentDate { get; set; }
     }
 }
