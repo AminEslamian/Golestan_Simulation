@@ -21,23 +21,31 @@
 
             <div id="new-user-section" style="display: none;">
                 <div class="form-group">
-                    <input asp-for=@Model.User.FirstName class="form-control" placeholder="نام"/>
+                    <label asp-for=@Model.User.FirstName class="control-label">نام</label>
+                    <input asp-for=@Model.User.FirstName class="form-control"/>
                     <span asp-validation-for=@Model.User.FirstName class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for=@Model.User.LastName class="form-control" placeholder="نام خانوادگی"/>
+                    <label asp-for=@Model.User.LastName class="control-label">نام خانوادگی</label>
+                    <input asp-for=@Model.User.LastName class="form-control"/>
                     <span asp-validation-for=@Model.User.LastName class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for=@Model.User.UserName class="form-control" placeholder="*نام کاربری"/>
+                    <label asp-for=@Model.User.UserName class="control-label">نام کاربری</label>
+                    <input asp-for=@Model.User.UserName class="form-control"/>
                     <span asp-validation-for=@Model.User.UserName class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for=@Model.User.RawPassword class="form-control" type="password" placeholder="*کلمه عبور"/>
+                    <label asp-for=@Model.User.RawPassword class="control-label">کلمه عبوری</label>
+                    <input asp-for=@Model.User.RawPassword class="form-control" id="passwordInput" type="password"/>
                     <span asp-validation-for=@Model.User.RawPassword class="text-danger"></span>
                 </div>
+                <div>
+                    <input type="checkbox" onclick="togglePassword()" /> نشان دادن کلمه عبور
+                </div>
                 <div class="form-group">
-                    <input asp-for=@Model.User.Email class="form-control" type="email" placeholder="ایمیل"/>
+                    <label asp-for=@Model.User.Email class="control-label">ایمیل</label>
+                    <input asp-for=@Model.User.Email class="form-control" type="email"/>
                     <span asp-validation-for=@Model.User.Email class="text-danger"></span>
                 </div>
             </div>
@@ -82,5 +90,12 @@
                 newUserSection.style.display = "none";
             }
         });
+        function togglePassword() {
+            var passwordField = document.getElementById("passwordInput");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+        // function setRoleAndSubmit(Role) {
+        //     document.getElementById("RoleInput").value = Role;
+        // }
     </script>
 }

@@ -1,7 +1,7 @@
 ﻿@model Golestan_Simulation.ViewModels.SectionInfoViewModel
 
 @{
-    ViewData["Title"] = "جزئیات بخش";
+    ViewData["Title"] = "جزئیات واحد درسی";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -37,7 +37,7 @@
 <h2>استاد اختصاص‌یافته</h2>
 @if (Model.AssignedInstructor == null)
 {
-    <p>هیچ استادی برای این بخش تخصیص داده نشده است.</p>
+    <p>هیچ استادی برای این واحد درسی تخصیص داده نشده است.</p>
     <a asp-area="Admin"
        asp-controller="SectionsManagement"
        asp-action="AssignInstructorToSection"
@@ -71,7 +71,7 @@ else
 <div>
     @if (!Model.EnrolledStudents.Any())
     {
-        <p>هیچ دانشجویی در این بخش ثبت‌نام نکرده است.</p>
+        <p>هیچ دانشجویی در این واحد درسی ثبت نام نکرده است.</p>
     }
     else
     {

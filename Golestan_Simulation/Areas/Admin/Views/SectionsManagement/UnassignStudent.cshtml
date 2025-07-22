@@ -8,7 +8,7 @@
     آیا از حذف این دانشجو از واحد درسی مطمئن هستید؟
 </h2>
 <div>
-    <form asp-action="UnassignInstructor">
+    <form asp-controller="SectionsManagement" asp-action="UnassignStudent">
         <input asp-for="StudentId" type="hidden" value=@Model.StudentId />
         <input asp-for="SectionId" type="hidden" value=@Model.SectionId />
         <input type="submit" value="حذف" class="btn btn-danger" />
