@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Golestan_Simulation.Models.Takes>
+
+<h2>My Students</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Section</th>
+            <th></th>  @* action column *@
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center">No students assigned to you yet.</td>
+            </tr>
+        }
+        else
+        {
+            var i = 1;
+            foreach (var take in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@take.Student.User.FirstName @take.Student.User.LastName</td>
+                    <td>@take.Student.User.Email</td>
+                    <td>
+                        @take.Section.Course.Name
+                        (Sem @take.Section.Semester, @take.Section.Year)
+                    </td>
+                    <td>
+                        <a asp-action="DeleteTake"
+                           asp-route-studentId="@take.StudentId"
+                           asp-route-sectionId="@take.SectionId"
+                           class="btn btn-sm btn-danger">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>

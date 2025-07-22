@@ -37,67 +37,90 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
         public IActionResult RegisterStudent()
         {
-            return View();
+            var model = new StudentUserViewModel
+            {
+                ExistingStudentUsers = _context.UserRoles
+                .Include(ur => ur.Role).Include(ur => ur.User)
+                .Where(ur => ur.Role.Name == RolesEnum.Student)
+                .Select(ur => new SelectListItem
+                {
+                    Value = ur.UserId.ToString(),
+                    Text = $"{ur.User.FirstName} {ur.User.LastName} - ({ur.User.UserName})"
+                })
+            };
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> RegisterStudent(StudentAccountViewModel studentAccount)
+        public async Task<IActionResult> RegisterStudent(StudentUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (await _registerServices.IsUserNameAvailableAsync(studentAccount.UserName))
+                if(model.IsNewUser == true)
                 {
-                    ModelState.AddModelError("UserName", "This user name is not available");
-                    return View(studentAccount);
-                }
-                if (await _registerServices.IsEmailAvailableAsync(studentAccount.Email))
-                {
-                    ModelState.AddModelError("Email", "This email is not available");
-                    return View(studentAccount);
-                }
-
-                var newUser = new Users
-                {
-                    CreatedAt = DateTime.Now,
-                    FirstName = studentAccount.FirstName,
-                    LastName = studentAccount.LastName,
-                    UserName = studentAccount.UserName,
-                    Email = studentAccount.Email,
-                    HashedPassword = _passHasher.HashPassword(studentAccount.RawPassword)
-                };
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
-
-                var role = _context.Roles.FirstOrDefault(r => r.Name == RolesEnum.Student);
-                if (role == null)
-                {
-                    role = new Roles
+                    if (await _registerServices.IsUserNameAvailableAsync(model.User.UserName))
                     {
-                        Name = RolesEnum.Student
+                        ModelState.AddModelError("UserName", "This user name is not available");
+                        return View(model);
+                    }
+                    if (await _registerServices.IsEmailAvailableAsync(model.User.Email))
+                    {
+                        ModelState.AddModelError("Email", "This email is not available");
+                        return View(model);
+                    }
+
+                    var newUser = new Users
+                    {
+                        CreatedAt = DateTime.Now,
+                        FirstName = model.User.FirstName,
+                        LastName = model.User.LastName,
+                        UserName = model.User.UserName,
+                        Email = model.User.Email,
+                        HashedPassword = _passHasher.HashPassword(model.User.RawPassword)
                     };
-                    _context.Roles.Add(role);
+                    _context.Users.Add(newUser);
                     await _context.SaveChangesAsync();
+
+                    var role = _context.Roles.FirstOrDefault(r => r.Name == RolesEnum.Student);
+                    if (role == null)
+                    {
+                        role = new Roles
+                        {
+                            Name = RolesEnum.Student
+                        };
+                        _context.Roles.Add(role);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    _context.UserRoles.Add(
+                        new UserRoles
+                        {
+                            UserId = newUser.Id,
+                            Role = role
+                        }
+                    );
+
+                    _context.Students.Add(
+                        new Students
+                        {
+                            UserId = newUser.Id,
+                            EnrollmentDate = model.Student.EnrollmentDate
+                        }
+                    );
                 }
-
-                _context.UserRoles.Add(
-                    new UserRoles
-                    {
-                        UserId = newUser.Id,
-                        Role = role
-                    }
-                );
-
-                _context.Students.Add(
-                    new Students
-                    {
-                        UserId = newUser.Id,
-                        EnrollmentDate = studentAccount.EnrollmentDate
-                    }
-                );
-
+                else
+                {
+                    _context.Students.Add(
+                        new Students
+                        {
+                            UserId = (int)model.SelectedUserId,
+                            EnrollmentDate = model.Student.EnrollmentDate
+                        }
+                    );
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", nameof(DashboardController));
             }
-            return View(studentAccount);
+            return View(model);
         }
 
         public async Task<IActionResult> Delete(int id)

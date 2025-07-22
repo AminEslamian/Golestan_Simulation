@@ -1,0 +1,32 @@
+﻿@model Golestan_Simulation.Models.Takes
+
+@{
+    ViewData["Title"] = "Remove Enrollment";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Are you sure you want to remove this student from the section?</h4>
+<hr />
+
+<dl class="row mb-3">
+    <dt class="col-sm-2">Student</dt>
+    <dd class="col-sm-10">
+        @Model.Student.User.FirstName @Model.Student.User.LastName
+    </dd>
+
+    <dt class="col-sm-2">Course</dt>
+    <dd class="col-sm-10">
+        @Model.Section.Course.Name
+        (Sem @Model.Section.Semester, @Model.Section.Year)
+    </dd>
+</dl>
+
+<form asp-action="DeleteTake" method="post">
+    <!-- Composite key fields -->
+    <input type="hidden" asp-for="StudentId" />
+    <input type="hidden" asp-for="SectionId" />
+
+    <button type="submit" class="btn btn-danger">Yes, remove</button>
+    <a asp-action="ShowStudents" class="btn btn-secondary ms-2">Cancel</a>
+</form>
