@@ -9,6 +9,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>شناسه</th>
             <th>نام درس</th>
             <th>کد درس</th>
             <th>تعداد واحد</th>
@@ -19,6 +20,7 @@
         @foreach (var c in Model)
         {
             <tr>
+                <td>@c.Id</td>
                 <td>@c.Name</td>
                 <td>@c.Code</td>
                 <td>@c.Unit</td>
