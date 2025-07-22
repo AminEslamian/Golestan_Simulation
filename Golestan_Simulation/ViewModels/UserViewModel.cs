@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Golestan_Simulation.ViewModels
 {
@@ -20,5 +21,7 @@ namespace Golestan_Simulation.ViewModels
         public string? Email { get; set; }
 
         public DateTime? CreatedAt { get; set; }
+        public IEnumerable<SelectListItem>? OtherAccountsOfThisUser {  get; set; }
+        public int? CurrentAccountId {  get; set; }
     }
 }

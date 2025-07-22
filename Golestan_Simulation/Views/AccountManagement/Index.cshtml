@@ -1,14 +1,13 @@
 ﻿@model Golestan_Simulation.ViewModels.UserViewModel;
 
 @{
-    ViewData["Title"] = "Account Page";
+    ViewData["Title"] = "حساب کاربری";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    <h4>@Model.UserName</h4>
-    <hr />
+    <h4>مشخصات کاربری</h4>
     <dl class="row">
         <dt class="col-sm-2">
             نام
@@ -41,6 +40,22 @@
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
     </dl>
+
+    <form asp-controller="AccountManagement" asp-action="SwitchAccount" method="post" class="mb-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label for="accountId" class="col-form-label">تغییر اکانت:</label>
+            </div>
+            <div class="col-auto">
+                <select name="accountId" asp-items=@Model.OtherAccountsOfThisUser class="form-select">
+                    <option value="">@Model.CurrentAccountId</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-warning">سوییچ اکانت</button>
+            </div>
+        </div>
+    </form>
 </div>
 <div>
     <a class="btn btn-secondary" asp-controller="AccountManagement" asp-action="Logout">خروج از حساب</a>

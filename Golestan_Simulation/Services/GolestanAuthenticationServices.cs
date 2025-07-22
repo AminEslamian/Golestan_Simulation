@@ -10,9 +10,9 @@ namespace Golestan_Simulation.Services
 {
     public interface IGolestanAuthenticationServices
     {
-        Task<UserRoles?> IsAccountExistingAsync(LoginViewModel account, RolesEnum roleName);
+        Task<UserRoles?> FindAccount(LoginViewModel account, RolesEnum roleName);
         bool IsPasswordCorrect(UserRoles userRoles, string rawPass);
-        Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext);
+        Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext, int? accountId);
     }
 
 
@@ -27,7 +27,7 @@ namespace Golestan_Simulation.Services
             _passHasher = passHasher;
         }
 
-        public async Task<UserRoles?> IsAccountExistingAsync(LoginViewModel account, RolesEnum roleName)
+        public async Task<UserRoles?> FindAccount(LoginViewModel account, RolesEnum roleName)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Golestan_Simulation.Services
 
             return isCorrect;
         }
-        public async Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext)
+        public async Task AuthenticateUserAsync(UserRoles userRole, HttpContext httpContext, int? accountId = null)
         {
             var claims = new List<Claim>
                 {
@@ -87,7 +87,14 @@ namespace Golestan_Simulation.Services
                     new Claim("UserId", userRole.UserId.ToString())
                 };
 
-            if (userRole.Role.Name == RolesEnum.Student)
+            if(accountId != null)
+            {
+                if(userRole.Role.Name == RolesEnum.Student)
+                    claims.Add(new Claim("DefaultStudentId", accountId.ToString()));
+                else if(userRole.Role.Name == RolesEnum.Instructor)
+                    claims.Add(new Claim("DefaultInstructorId", accountId.ToString()));
+            }
+            else if (userRole.Role.Name == RolesEnum.Student)
             {
                 var defaultStudentId = userRole.User.Students.First().Id;
 

@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -28,8 +30,8 @@ namespace Golestan_Simulation.Controllers
         {
             if(User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var userId = User.FindFirst("UserId").Value;
-                var user = await _context.Users.FindAsync(int.Parse(userId));
+                var userId = int.Parse(User.FindFirst("UserId").Value);
+                var user = await _context.Users.FindAsync(userId);
 
                 var model = new UserViewModel
                 {
@@ -40,7 +42,36 @@ namespace Golestan_Simulation.Controllers
                     CreatedAt = DateTime.Now
                 };
 
-                ViewBag.Role = User.FindFirst(ClaimTypes.Role).Value;
+                var role = User.FindFirst(ClaimTypes.Role).Value;
+
+                if(role == "Instructor")
+                {
+                    var intsructorId = int.Parse(User.FindFirst("DefaultInstructorId").Value);
+                    var otherAccounts = _context.Instructors.Where(i => i.UserId == userId)
+                    .Select(i => new SelectListItem
+                    {
+                        Value = i.Id.ToString(),
+                        Text = i.Id.ToString()
+                    });
+
+                    model.CurrentAccountId = intsructorId;
+                    model.OtherAccountsOfThisUser = otherAccounts;
+                }
+                else if(role == "Student")
+                {
+                    var studentId = int.Parse(User.FindFirst("DefaultStudentId").Value);
+                    var otherAccounts = _context.Students.Where(s => s.UserId == userId)
+                    .Select(i => new SelectListItem
+                    {
+                        Value = i.Id.ToString(),
+                        Text = i.Id.ToString()
+                    });
+
+                    model.CurrentAccountId = studentId;
+                    model.OtherAccountsOfThisUser = otherAccounts;
+                }
+
+                ViewBag.Role = role;
 
                 return View(model);
             }
@@ -74,7 +105,7 @@ namespace Golestan_Simulation.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userRole = await _authenticationServices.IsAccountExistingAsync(user, role);
+                var userRole = await _authenticationServices.FindAccount(user, role);
                 if (userRole == null)
                 {
                     ModelState.AddModelError("UsernameOrEmail", "No account found with this user name or email");
@@ -84,7 +115,7 @@ namespace Golestan_Simulation.Controllers
 
                 if (_authenticationServices.IsPasswordCorrect(userRole, user.RawPassword))
                 {
-                    await _authenticationServices.AuthenticateUserAsync(userRole, HttpContext);
+                    await _authenticationServices.AuthenticateUserAsync(userRole, HttpContext, null);
 
                     if (role == RolesEnum.Instructor)
                         return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
@@ -103,6 +134,28 @@ namespace Golestan_Simulation.Controllers
 
             }
             return View(user);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SwitchAccount(int accountId)
+        {
+            var userId = int.Parse(User.FindFirst("UserId").Value);
+
+            var userRole = await _context.UserRoles
+                .Include(s => s.User)
+                .Include(s => s.Role)
+                .SingleAsync(ur => ur.User.Id == userId);
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _authenticationServices.AuthenticateUserAsync(userRole, HttpContext, accountId);
+
+            if (User.FindFirst(ClaimTypes.Role).Value == "Instructor")
+                return RedirectToAction("Index", "Dashboard", new { area = "Instructor" });
+            else if (User.FindFirst(ClaimTypes.Role).Value == "Student")
+                return RedirectToAction("Index", "Dashboard", new { area = "Student" });
+
+            return NotFound();
         }
 
 
