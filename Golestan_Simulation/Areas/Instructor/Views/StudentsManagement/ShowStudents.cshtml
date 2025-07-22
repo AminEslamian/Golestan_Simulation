@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Golestan_Simulation.Models.Students>
+﻿@model IEnumerable<Golestan_Simulation.Models.Takes>
 
 <h2>My Students</h2>
 
@@ -8,24 +8,38 @@
             <th>#</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Section</th>
+            <th></th>  @* action column *@
         </tr>
     </thead>
     <tbody>
         @if (!Model.Any())
         {
             <tr>
-                <td colspan="3" class="text-center">No students assigned to you yet.</td>
+                <td colspan="5" class="text-center">No students assigned to you yet.</td>
             </tr>
         }
         else
         {
             var i = 1;
-            foreach (var student in Model)
+            foreach (var take in Model)
             {
                 <tr>
                     <td>@i</td>
-                    <td>@student.User.FirstName @student.User.LastName</td>
-                    <td>@student.User.Email</td>
+                    <td>@take.Student.User.FirstName @take.Student.User.LastName</td>
+                    <td>@take.Student.User.Email</td>
+                    <td>
+                        @take.Section.Course.Name
+                        (Sem @take.Section.Semester, @take.Section.Year)
+                    </td>
+                    <td>
+                        <a asp-action="DeleteTake"
+                           asp-route-studentId="@take.StudentId"
+                           asp-route-sectionId="@take.SectionId"
+                           class="btn btn-sm btn-danger">
+                            Remove
+                        </a>
+                    </td>
                 </tr>
                 i++;
             }
