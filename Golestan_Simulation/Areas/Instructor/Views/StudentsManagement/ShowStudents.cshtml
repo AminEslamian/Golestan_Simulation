@@ -1,6 +1,11 @@
 ﻿@model IEnumerable<Golestan_Simulation.Models.Takes>
 
-<h2>My Students</h2>
+@{
+    ViewData["Title"] = "My Students";
+    var i = 1;
+}
+
+<h2>@ViewData["Title"]</h2>
 
 <table class="table table-striped">
     <thead>
@@ -9,7 +14,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Section</th>
-            <th></th>  @* action column *@
+            <th>Actions</th>  
         </tr>
     </thead>
     <tbody>
@@ -21,19 +26,23 @@
         }
         else
         {
-            var i = 1;
             foreach (var take in Model)
             {
                 <tr>
                     <td>@i</td>
-                    <td>@take.Student.User.FirstName @take.Student.User.LastName</td>
+                    <td>
+                        @take.Student.User.FirstName
+                        @take.Student.User.LastName
+                    </td>
                     <td>@take.Student.User.Email</td>
                     <td>
                         @take.Section.Course.Name
                         (Sem @take.Section.Semester, @take.Section.Year)
                     </td>
                     <td>
-                        <a asp-action="DeleteTake"
+                        <a asp-area="Instructor"
+                           asp-controller="StudentsManagement"
+                           asp-action="DeleteTake"
                            asp-route-studentId="@take.StudentId"
                            asp-route-sectionId="@take.SectionId"
                            class="btn btn-sm btn-danger">

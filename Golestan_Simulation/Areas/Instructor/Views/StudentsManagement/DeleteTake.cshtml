@@ -5,7 +5,6 @@
 }
 
 <h2>@ViewData["Title"]</h2>
-
 <h4>Are you sure you want to remove this student from the section?</h4>
 <hr />
 
@@ -22,11 +21,16 @@
     </dd>
 </dl>
 
-<form asp-action="DeleteTake" method="post">
-    <!-- Composite key fields -->
-    <input type="hidden" asp-for="StudentId" />
-    <input type="hidden" asp-for="SectionId" />
+<form asp-action="DeleteTake"
+      asp-route-studentId="@Model.StudentId"
+      asp-route-sectionId="@Model.SectionId"
+      method="post">
+    @Html.AntiForgeryToken()
 
-    <button type="submit" class="btn btn-danger">Yes, remove</button>
-    <a asp-action="ShowStudents" class="btn btn-secondary ms-2">Cancel</a>
+    <button type="submit" class="btn btn-danger">
+        Yes, remove
+    </button>
+    <a asp-action="ShowStudents" class="btn btn-secondary ms-2">
+        Cancel
+    </a>
 </form>
