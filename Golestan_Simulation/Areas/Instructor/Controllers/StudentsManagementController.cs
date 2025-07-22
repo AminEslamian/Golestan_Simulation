@@ -30,27 +30,32 @@ namespace Golestan_Simulation.Areas.Instructor.Controllers
         }
 
 
-        // GET: Instructor/StudentsManagement/DeleteTake?studentId=123§ionId=456
         public async Task<IActionResult> DeleteTake(int studentId, int sectionId)
         {
-            var t = await _context.Takes
-                .Include(x => x.Student).ThenInclude(s => s.User)
-                .Include(x => x.Section).ThenInclude(s => s.Course)
-                .FirstOrDefaultAsync(x => x.StudentId == studentId && x.SectionId == sectionId);
-            if (t == null) return NotFound();
-            return View(t);
+            var take = await _context.Takes
+                .Include(t => t.Student).ThenInclude(s => s.User)
+                .Include(t => t.Section).ThenInclude(s => s.Course)
+                .FirstOrDefaultAsync(t => t.StudentId == studentId && t.SectionId == sectionId);
+
+            if (take == null)
+                return NotFound();
+
+            return View(take);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("DeleteTake")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteTake(int studentId, int sectionId, IFormCollection form)
+        public async Task<IActionResult> DeleteTakeConfirmed(int studentId, int sectionId)
         {
-            var t = await _context.Takes.FindAsync(studentId, sectionId);
-            if (t != null)
-            {
-                _context.Takes.Remove(t);
-                await _context.SaveChangesAsync();
-            }
+            var take = await _context.Takes
+                .FirstOrDefaultAsync(t => t.StudentId == studentId && t.SectionId == sectionId);
+
+            if (take == null)
+                return NotFound();
+
+            _context.Takes.Remove(take);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(ShowStudents));
         }
 
