@@ -27,9 +27,18 @@
                     <span asp-validation-for="Capacity" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> افزودن کلاس
-                </button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> افزودن کلاس
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="ClassroomsManagement"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        بازگشت
+                    </a>
+                </div>
             </form>
         </div>
     </div>

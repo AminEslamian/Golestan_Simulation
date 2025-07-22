@@ -1,4 +1,4 @@
-﻿@model Golestan_Simulation.ViewModels.StudentAccountViewModel
+﻿@model Golestan_Simulation.ViewModels.StudentUserViewModel
 
 @{
     ViewData["Title"] = "ثبت نام دانشجو";
@@ -9,34 +9,44 @@
         <form asp-controller="StudentsManagement" asp-action="RegisterStudent">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label">نام</label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <label>
+                    <input asp-for=@Model.IsNewUser type="checkbox" id="toggleNewUser" /> ساخت یوزر جدید
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label">نام خانوادگی</label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+
+            <div id="existing-user-section">
+                <label>انتخاب کاربر موجود</label>
+                <select asp-for=@Model.SelectedUserId asp-items=@Model.ExistingStudentUsers class="form-control"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label">نام کاربری*</label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+
+            <div id="new-user-section" style="display: none;">
+                <div class="form-group">
+                    <input asp-for=@Model.User.FirstName class="form-control" placeholder="نام"/>
+                    <span asp-validation-for=@Model.User.FirstName class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for=@Model.User.LastName class="form-control" placeholder="نام خانوادگی"/>
+                    <span asp-validation-for=@Model.User.LastName class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for=@Model.User.UserName class="form-control" placeholder="*نام کاربری"/>
+                    <span asp-validation-for=@Model.User.UserName class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for=@Model.User.RawPassword class="form-control" type="password" placeholder="*کلمه عبور"/>
+                    <span asp-validation-for=@Model.User.RawPassword class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for=@Model.User.Email class="form-control" type="email" placeholder="ایمیل"/>
+                    <span asp-validation-for=@Model.User.Email class="text-danger"></span>
+                </div>
             </div>
+
+            <hr />
             <div class="form-group">
-                <label asp-for="RawPassword" class="control-label">رمز عبور*</label>
-                <input asp-for="RawPassword" class="form-control" type="password" />
-                <span asp-validation-for="RawPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label">ایمیل</label>
-                <input asp-for="Email" class="form-control" type="email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EnrollmentDate" class="control-label">تاریخ ثبت نام</label>
-                <input asp-for="EnrollmentDate" class="form-control" type="date" />
-                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+                <label asp-for=@Model.Student.EnrollmentDate class="control-label">تاریخ ثبت نام</label>
+                <input asp-for=@Model.Student.EnrollmentDate class="form-control" type="date" />
+                <span asp-validation-for=@Model.Student.EnrollmentDate class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="ثبت نام" class="btn btn-primary" />
@@ -46,11 +56,31 @@
 </div>
 
 <div>
-    <a asp-controller="StudentManagement" asp-action="Index">بازگشت</a>
+    <a asp-area="Admin"
+       asp-controller="StudentsManagement"
+       asp-action="Index"
+       class="btn btn-primary mt-3">
+       بازگشت
+    </a>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        const toggleCheckbox = document.getElementById("toggleNewUser");
+        const existingSection = document.getElementById("existing-user-section");
+        const newUserSection = document.getElementById("new-user-section");
+
+        toggleCheckbox.addEventListener("change", function () {
+            if (this.checked) {
+                existingSection.style.display = "none";
+                newUserSection.style.display = "block";
+            } else {
+                existingSection.style.display = "block";
+                newUserSection.style.display = "none";
+            }
+        });
+    </script>
 }

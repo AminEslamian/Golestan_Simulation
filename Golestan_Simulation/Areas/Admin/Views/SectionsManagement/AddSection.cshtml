@@ -63,9 +63,18 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> ایجاد بخش
-                </button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> ایجاد بخش
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="SectionsManagement"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        بازگشت
+                    </a>
+                </div>
             </form>
         </div>
     </div>

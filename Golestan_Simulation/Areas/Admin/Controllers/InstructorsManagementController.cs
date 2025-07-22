@@ -38,72 +38,97 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
         }
 
 
-        public IActionResult RegisterInstructor()
+        public async Task<IActionResult> RegisterInstructor()
         {
-            return View();
+            var model = new InstructorUserViewModel
+            {
+                ExistingInstructorUsers = _context.UserRoles
+                .Include(ur => ur.Role).Include(ur => ur.User)
+                .Where(ur => ur.Role.Name == RolesEnum.Instructor)
+                .Select(ur => new SelectListItem
+                {
+                    Value = ur.UserId.ToString(),
+                    Text = $"{ur.User.FirstName} {ur.User.LastName} - ({ur.User.UserName})"
+                })
+            };
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> RegisterInstructor(InstructorAccountViewModel instructorAccount)
+        public async Task<IActionResult> RegisterInstructor(InstructorUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (await _registerServices.IsUserNameAvailableAsync(instructorAccount.UserName))
+                if(model.IsNewUser == true)
                 {
-                    ModelState.AddModelError("UserName", "This user name is not available");
-                    return View(instructorAccount);
-                }
-                if (await _registerServices.IsEmailAvailableAsync(instructorAccount.Email))
-                {
-                    ModelState.AddModelError("Email", "This email is not available");
-                    return View(instructorAccount);
-                }
-
-                var newUser = new Users
-                {
-                    CreatedAt = DateTime.Now,
-                    FirstName = instructorAccount.FirstName,
-                    LastName = instructorAccount.LastName,
-                    UserName = instructorAccount.UserName,
-                    Email = instructorAccount.Email,
-                    HashedPassword = _passHasher.HashPassword(instructorAccount.RawPassword)
-                };
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
-
-                var role = _context.Roles.FirstOrDefault(r => r.Name == RolesEnum.Instructor);
-                if (role == null)
-                {
-                    role = new Roles
+                    if (await _registerServices.IsUserNameAvailableAsync(model.User.UserName))
                     {
-                        Name = RolesEnum.Instructor
+                        ModelState.AddModelError("UserName", "This user name is not available");
+                        return View(model);
+                    }
+                    if (await _registerServices.IsEmailAvailableAsync(model.User.Email))
+                    {
+                        ModelState.AddModelError("Email", "This email is not available");
+                        return View(model);
+                    }
+
+                    var newUser = new Users
+                    {
+                        CreatedAt = DateTime.Now,
+                        FirstName = model.User.FirstName,
+                        LastName = model.User.LastName,
+                        UserName = model.User.UserName,
+                        Email = model.User.Email,
+                        HashedPassword = _passHasher.HashPassword(model.User.RawPassword)
                     };
-                    _context.Roles.Add(role);
+                    _context.Users.Add(newUser);
                     await _context.SaveChangesAsync();
+
+                    var role = _context.Roles.FirstOrDefault(r => r.Name == RolesEnum.Instructor);
+                    if (role == null)
+                    {
+                        role = new Roles
+                        {
+                            Name = RolesEnum.Instructor
+                        };
+                        _context.Roles.Add(role);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    _context.UserRoles.Add(
+                        new UserRoles
+                        {
+                            UserId = newUser.Id,
+                            Role = role
+                        }
+                    );
+
+                    _context.Instructors.Add(
+                        new Instructors
+                        {
+                            UserId = newUser.Id,
+                            Salary = model.Instructor.Salary,
+                            HireDate = model.Instructor.HireDate
+                        }
+                    );
                 }
-
-                _context.UserRoles.Add(
-                    new UserRoles
-                    {
-                        UserId = newUser.Id,
-                        Role = role
-                    }
-                );
-
-                _context.Instructors.Add(
-                    new Instructors
-                    {
-                        UserId = newUser.Id,
-                        Salary = instructorAccount.Salary,
-                        HireDate = instructorAccount.HireDate
-                    }
-                );
+                else
+                {
+                    _context.Instructors.Add(
+                        new Instructors
+                        {
+                            UserId = (int)model.SelectedUserId,
+                            Salary = model.Instructor.Salary,
+                            HireDate = model.Instructor.HireDate
+                        }
+                    );
+                }
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", nameof(DashboardController));
+                return RedirectToAction("Index", "Dashboard");
             }
 
-            return View(instructorAccount);
+            return View(model);
         }
 
 
