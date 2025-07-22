@@ -315,7 +315,7 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Info(int id)
         {
-            // 1. Load the section + its timeslot
+            // 1) Load section + timeslot
             var section = await _context.Sections
                 .Include(s => s.TimeSlot)
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -323,25 +323,48 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
             if (section == null)
                 return NotFound();
 
-            // 2. Load all takes for that section, including the Student → User
+            // 2) Load students
             var takes = await _context.Takes
                 .Where(t => t.SectionId == id)
                 .Include(t => t.Student)
                     .ThenInclude(s => s.User)
                 .ToListAsync();
 
-            // 3. Project into our viewmodel
+            // 3) Load the single assigned instructor, if any
+            var teach = await _context.Teaches
+                .Where(t => t.SectionId == id)
+                .Include(t => t.Instructor)
+                    .ThenInclude(i => i.User)
+                .FirstOrDefaultAsync();
+
+            // 4) Project into ViewModel
             var vm = new SectionInfoViewModel
             {
                 Section = section,
-                EnrolledStudents = takes.Select(t => new EnrolledStudent
+                EnrolledStudents = takes
+                .Select(t => new EnrolledStudent
                 {
                     StudentId = t.StudentId,
                     FullName = $"{t.Student.User.FirstName} {t.Student.User.LastName}"
-                }).ToList()
+                })
+                .ToList(),
+
+                // start off null:
+                AssignedInstructor = null
             };
 
+            // only overwrite if we actually have a teach record:
+            if (teach != null)
+            {
+                vm.AssignedInstructor = new EnrolledInstructor
+                {
+                    InstructorId = teach.InstructorId,
+                    FullName = $"{teach.Instructor.User.FirstName} {teach.Instructor.User.LastName}"
+                };
+            }
+
             return View(vm);
+
         }
 
     }
