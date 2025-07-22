@@ -28,7 +28,10 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sections.ToListAsync());
+            var sections = await _context.Sections
+                .Include(s => s.Course)
+                .ToListAsync();
+            return View(sections);
         }
 
 

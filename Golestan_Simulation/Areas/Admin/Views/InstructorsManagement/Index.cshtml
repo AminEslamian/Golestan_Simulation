@@ -9,6 +9,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>شناسه</th>
             <th>نام</th>
             <th>حقوق</th>
             <th>اعمال</th>
@@ -18,6 +19,7 @@
         @foreach (var c in Model)
         {
             <tr>
+                <td>@c.Id</td>
                 <td>@c.User.UserName @c.User.LastName</td>
                 <td>@c.Salary</td>
                 <td>
