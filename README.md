@@ -13,7 +13,7 @@ This repository contains the final project for our **Advanced Programming** cour
 - **Technologies**:  
   - ASP.NET Core MVC  
   - Entity Framework Core  
-  - SQL Server (or SQLite)  
+  - SQL Server
   - Bootstrap (for styling)
 
 ---
@@ -21,9 +21,9 @@ This repository contains the final project for our **Advanced Programming** cour
 ## 🏗️ Features
 
 - ✅ User authentication and role-based access (Student, instructors, Admin)  
-- ✅ Admin dashboard for managing users and classrooms  
-- ✅ Student portal to view courses, schedule, and grades  
-- ✅ instructors interface to manage classes and assign grades  
+- ✅ Admin dashboard for managing users, classrooms and courses
+- ✅ Student portal to view courses, check grades, and remove courses
+- ✅ instructors interface to manage classes and assign grades 
 - ✅ Responsive design using Bootstrap  
 - ✅ Code organized with MVC pattern and repository-service structure  
 
