@@ -14,9 +14,10 @@ namespace Golestan_Simulation.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ICreateClassroomService _classroomservice;
-        public ClassroomsManagementController(ApplicationDbContext context)
+        public ClassroomsManagementController(ApplicationDbContext context, ICreateClassroomService classroomservice)
         {
             _context = context;
+            _classroomservice = classroomservice;
         }
 
 
