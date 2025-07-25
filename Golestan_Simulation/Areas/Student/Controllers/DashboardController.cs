@@ -43,7 +43,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteTake(int sectionId)
         {
-            var studentIdClaim = User.FindFirstValue("UserId");
+            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
             if (string.IsNullOrEmpty(studentIdClaim)
                 || !int.TryParse(studentIdClaim, out var studentId))
             {
@@ -68,7 +68,7 @@ namespace Golestan_Simulation.Areas.Student.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteTake(int sectionId, IFormCollection form)
         {
-            var studentIdClaim = User.FindFirstValue("UserId");
+            var studentIdClaim = User.FindFirstValue("DefaultStudentId");
             if (string.IsNullOrEmpty(studentIdClaim)
                 || !int.TryParse(studentIdClaim, out var studentId))
             {
